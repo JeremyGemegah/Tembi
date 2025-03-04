@@ -1,25 +1,59 @@
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
-import {EyeOpen, MailIcon} from '../assets/icons/fieldIcons'
+import React, { useState } from 'react'
+import {EyeClosed, EyeOpen, Lock, MailIcon, Profile} from '../assets/icons/fieldIcons'
 
 
-const TextField = () => {
+const TextField = ({type='profile', state='normal', placeholder, handleTextChange, title}) => {
+    let borderColor ;
+    let iconColor;
+    let textColor;
+
+    const [showPassword, setShowPassword] = useState(false)
+    
+    switch (state) {
+        case 'error':
+            borderColor = '#F64669'
+            textColor = '#A3072B'
+            iconColor='#DD214F'
+            break;
+        case 'warning':
+            borderColor = '#F2A900'
+            textColor = '#C18700'
+            iconColor='#C18700'
+            break;
+        case 'success':
+            borderColor = '#00806E'
+            textColor = '#00806E'
+            iconColor='#00806E'
+            break;
+    
+        default:
+            borderColor = '#798AA3'
+            textColor = '#5D6C87'
+            iconColor='#5D6C87'
+            break;
+    }
+
   return (
     <View>
-      <Text>Full Name</Text>
-      <View className="border-[1px] border-neutral-60 rounded-full px-[16px] py-[12px]">
+      <Text className="pb-[8px] text-secondary-950 font-pregular text-[14px] font-normal tracking-[-0.42px]">{title}</Text>
+      <View className={`border-[1px] rounded-full px-[16px] py-[12px]`} style={{borderColor:borderColor}}>
         <View className="flex-row h-[20px] w-full items-center gap-[12px]">
         
-            <MailIcon style={{color:'red'}} />
+            { type ==='email'? (<MailIcon style={{color: iconColor}} />) : ( type === 'password'? (<Lock style={{color: iconColor}} />) : (<Profile style={{color: iconColor}} />))}
         
 
         <TextInput 
-         className="h-16 flex-1  text-left text-[16px] py-0 font-pregular  items-end content-end"
-         placeholder='eg. Enoch Bekor'
+         className={`h-16 flex-1  text-left text-[16px] py-0 font-pregular  items-end content-end`}
+         style={{color: textColor}}
+         placeholder= {placeholder}
          placeholderTextColor={'#5D6C87'}
+         onChangeText={handleTextChange}
+         secureTextEntry={type === 'password' && !showPassword}
         />
-
-        <EyeOpen />
+      {type === 'password' && (<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+        { showPassword? <EyeOpen style={{color: iconColor}} /> : <EyeClosed style={{color: iconColor}}/> }
+    </TouchableOpacity>)}
 
         </View>
       </View>

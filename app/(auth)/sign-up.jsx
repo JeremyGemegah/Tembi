@@ -13,7 +13,10 @@ const SignUp = () => {
           <Text>Let's Get You Started</Text>
           
           <View>
-            <TextField />
+            <TextField state={'normal'} type={'profile'} placeholder={'eg. Enoch Bekor'} title={'Full Name'} />
+            <TextField state={'normal'} type={'email'} placeholder={'eg. ebecks419@gmail.com'} title={'Email'} />
+            <TextField state={'normal'} type={'password'} placeholder={'minimum 8 characters'} title={'Password'} />
+            <TextField state={'normal'} type={'password'} placeholder={'minimum 8 characters'} title={'Confirm Password'} />
           </View>
         </View>
       </ScrollView>
