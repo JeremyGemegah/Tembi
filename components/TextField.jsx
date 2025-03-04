@@ -1,6 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react'
-import {EyeClosed, EyeOpen, Lock, MailIcon, Profile} from '../assets/icons/fieldIcons'
+import {EyeClosed, EyeOpen, Lock, MailIcon, Profile} from '../assets/icons/svgIcons'
 
 
 const TextField = ({type='profile', state='normal', placeholder, handleTextChange, title}) => {

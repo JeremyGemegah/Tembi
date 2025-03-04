@@ -3,6 +3,7 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
 import TextField from '../../components/TextField'
+import GoogleSigninButton from '../../components/GoogleSigninButton'
 
 
 const SignUp = () => {
@@ -17,6 +18,7 @@ const SignUp = () => {
             <TextField state={'normal'} type={'email'} placeholder={'eg. ebecks419@gmail.com'} title={'Email'} />
             <TextField state={'normal'} type={'password'} placeholder={'minimum 8 characters'} title={'Password'} />
             <TextField state={'normal'} type={'password'} placeholder={'minimum 8 characters'} title={'Confirm Password'} />
+            <GoogleSigninButton title={'Sign in with Google'}/>
           </View>
         </View>
       </ScrollView>
