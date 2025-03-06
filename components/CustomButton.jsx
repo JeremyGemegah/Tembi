@@ -14,11 +14,11 @@ const CustomButton = ({title,handlePress,containerStyles,textStyles,isLoading, t
           layout={layout}
           entering={FadeInDown.springify().damping(80).stiffness(200)}
           exiting={FadeOutUp.springify().damping(80).stiffness(200)}
-          key="secondTitle" className={`text-secondary-950 font-psemibold text-lg ${textStyles}` }>{SecondTitle}</Animated.Text>) : 
+          key="secondTitle" className={` ${textStyles}` }>{SecondTitle}</Animated.Text>) : 
           (<Animated.Text
             entering={FadeInDown.springify().damping(80).stiffness(200)}
             exiting={FadeOutUp.springify().damping(80).stiffness(200)}
-          key="title" className={`text-secondary-950 font-psemibold text-lg ${textStyles}` }>{title}</Animated.Text>) }
+          key="title" className={` ${textStyles}` }>{title}</Animated.Text>) }
     </TouchableOpacity>
   )
 }

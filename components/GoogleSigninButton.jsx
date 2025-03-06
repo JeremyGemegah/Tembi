@@ -7,7 +7,7 @@ const GoogleSigninButton = ({title, handlePress, isLoading, containerStyles,text
     <TouchableOpacity
         activeOpacity={0.7}
         onPress={handlePress}
-        className={`bg-white rounded-full min-h-[48px] justify-center items-center ${containerStyles} ${isLoading? 'opacity-50': ''} border-[1px] border-[#E0E0E0]`}
+        className={`bg-white rounded-full min-h-[48px] justify-center items-center ${containerStyles} ${isLoading? 'opacity-50': ''} border-[1px] border-[#E0E0E0] px-[13px]`}
         
         >
             <View className="flex-row items-center gap-[16px] ">

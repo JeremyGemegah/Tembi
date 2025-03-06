@@ -86,7 +86,7 @@ const OnboardingScreens = () => {
             decelerationRate="normal"
         />
         <View className="justify-start items-end absolute top-[30] right-0 ">
-                        <Text className="text-neutral-10 text-[16px] mr-[24px] mt-[16px] font-medium" onPress={() => router.replace('/sign-up')}>Skip</Text>
+                        <Text className="text-neutral-10 text-[16px] mr-[24px] mt-[16px] font-medium" onPress={() => router.replace('/home')}>Skip</Text>
                     </View>
 
         <View className="h-[160] pt-7 px-[16px]" style={{position:'absolute', left:0, right: 0, bottom:0}}>

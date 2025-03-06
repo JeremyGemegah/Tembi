@@ -1,4 +1,4 @@
-import Svg,{ Path, Circle, SvgXml } from "react-native-svg"
+import { SvgXml } from "react-native-svg"
 
 export  const MailIcon = ({style}) => {
     const xml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
@@ -59,6 +59,51 @@ export const GoogleLogo = ({style}) => {
   <path fill-rule="evenodd" clip-rule="evenodd" d="M9.5 18C11.93 18 13.9673 17.1941 15.4564 15.8195L12.5477 13.5613C11.7418 14.1013 10.7109 14.4204 9.5 14.4204C7.15591 14.4204 5.17182 12.8372 4.46409 10.71H1.45728V13.0418C2.93818 15.9831 5.98182 18 9.5 18Z" fill="#34A853"/>
   <path fill-rule="evenodd" clip-rule="evenodd" d="M4.46409 10.7101C4.28409 10.1701 4.18182 9.59325 4.18182 9.00007C4.18182 8.40689 4.28409 7.83007 4.46409 7.29007V4.95825H1.45727C0.847727 6.17325 0.5 7.5478 0.5 9.00007C0.5 10.4523 0.847727 11.8269 1.45727 13.0419L4.46409 10.7101Z" fill="#FBBC05"/>
   <path fill-rule="evenodd" clip-rule="evenodd" d="M9.5 3.57955C10.8214 3.57955 12.0077 4.03364 12.9405 4.92545L15.5218 2.34409C13.9632 0.891818 11.9259 0 9.5 0C5.98182 0 2.93818 2.01682 1.45728 4.95818L4.46409 7.29C5.17182 5.16273 7.15591 3.57955 9.5 3.57955Z" fill="#EA4335"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const BackIcon = ({style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
+  <path d="M9 1L1.70711 8.29289C1.37377 8.62623 1.20711 8.79289 1.20711 9C1.20711 9.20711 1.37377 9.37377 1.70711 9.70711L9 17" stroke="#2E3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+
+export const HomeIcon = ({color,fill,highlightColor,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+  <path d="M1.35139 12.2135C0.998371 9.91624 0.821861 8.76763 1.25617 7.74938C1.69047 6.73112 2.65403 6.03443 4.58114 4.64106L6.02099 3.6C8.41829 1.86667 9.61694 1 11 1C12.3831 1 13.5817 1.86667 15.979 3.6L17.4189 4.64106C19.346 6.03443 20.3095 6.73112 20.7438 7.74938C21.1781 8.76763 21.0016 9.91624 20.6486 12.2135L20.3476 14.1724C19.8471 17.4289 19.5969 19.0572 18.429 20.0286C17.2611 21 15.5537 21 12.1388 21H9.86119C6.44633 21 4.73891 21 3.571 20.0286C2.40309 19.0572 2.15287 17.4289 1.65243 14.1724L1.35139 12.2135Z" stroke=${color} fill=${fill} stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M9 17L13 17" stroke=${highlightColor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+
+export const RidesIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 18" fill="none">
+  <circle cx="5" cy="13" r="4" stroke=${color} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="17" cy="13" r="4" stroke=${color} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M5 13L9.37056 13C9.73022 13 10.0622 12.8069 10.2399 12.4942L14.5 5" stroke=${color} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M11 10L6 4M6 4L4 4M6 4H8" stroke=${color} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14.0511 1.90623L13.3257 2.09682L13.3267 2.10048L14.0511 1.90623ZM16.3015 13.1943C16.4087 13.5943 16.82 13.8317 17.2201 13.7244C17.6202 13.6171 17.8576 13.2058 17.7503 12.8057L16.3015 13.1943ZM18.2781 3.42627C18.3905 3.82495 18.8048 4.05703 19.2035 3.94464C19.6022 3.83225 19.8343 3.41796 19.7219 3.01928L18.2781 3.42627ZM13.3267 2.10048L16.3015 13.1943L17.7503 12.8057L14.7755 1.71198L13.3267 2.10048ZM14.7947 0.25C14.445 0.25 13.9254 0.302423 13.5679 0.693366C13.1754 1.1227 13.216 1.67949 13.3257 2.09682L14.7765 1.71564C14.7619 1.66009 14.7549 1.61959 14.7519 1.59211C14.7489 1.56455 14.7504 1.5548 14.75 1.55897C14.7495 1.56389 14.7466 1.58437 14.7341 1.61391C14.7279 1.62856 14.7199 1.64431 14.7096 1.6604C14.6993 1.67651 14.6876 1.69169 14.6749 1.70558C14.649 1.73395 14.6239 1.75143 14.6072 1.7609C14.5914 1.76983 14.5851 1.77054 14.5945 1.76789C14.6039 1.7652 14.6245 1.76043 14.6595 1.7565C14.6942 1.7526 14.7388 1.75 14.7947 1.75V0.25ZM19.7219 3.01928C19.3708 1.77396 18.5762 1.05062 17.6224 0.667334C16.7171 0.303499 15.6813 0.25 14.7947 0.25V1.75C15.6584 1.75 16.444 1.81037 17.0631 2.05916C17.6338 2.28849 18.0668 2.67655 18.2781 3.42627L19.7219 3.01928Z" fill=${color}/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+
+export const AccountIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+  <circle cx="11" cy="11" r="10" stroke=${color} stroke-width="1.5"/>
+  <path d="M6.5 16C8.8317 13.5578 13.1432 13.4428 15.5 16M13.4951 8.5C13.4951 9.88071 12.3742 11 10.9915 11C9.60885 11 8.48797 9.88071 8.48797 8.5C8.48797 7.11929 9.60885 6 10.9915 6C12.3742 6 13.4951 7.11929 13.4951 8.5Z" stroke=${color} stroke-width="1.5" stroke-linecap="round"/>
 </svg>`
     return(
         <SvgXml xml={xml} style={style} />

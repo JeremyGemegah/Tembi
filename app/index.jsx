@@ -19,13 +19,13 @@ export default function App(){
                     style={{position:'absolute', height:500, left: 0,right:0, bottom:0}}
                 />
                 <View className="flex-1 justify-end items-center w-full px-4">
-                    <Text className="text-primary-10 text-[18px] mb-0 leading-none">
+                    <Text className="text-primary-10 text-[18px] mb-0 p-0 ">
                         Welcome to
                     </Text>
-                    <Text className="text-[48px] text-[#fbfcfe] leading-none mt-4 font-comfortaa">Bee
-                        <Text className="text-primary-50">Cycle</Text>
+                    <Text className="text-[48px] mt-0 font-comfortaa text-primary-50 p-0">
+                       Tembi
                     </Text>
-                    <Text className="text-[#fbfcfe] mt-2 text-[14px] font-normal font-pregular px-5 text-center">Eco-friendly, secure, and convenient bicycle rides</Text>
+                    <Text className="text-[#fbfcfe] mt-2 text-[14px] font-normal font-pregular px-5 text-center text-primary-10">Eco-friendly, secure, and convenient bicycle rides</Text>
                 <CustomButton title={'Get Started'} containerStyles={'w-full mt-7'} handlePress={() => router.push('/onboarding-screens')} />
                     <Text className="text-[#e9f0f4] text-[12px] font-light my-6">Already have an account? <Text className="text-primary-50" onPress={() => router.push('/sign-in')}>Sign In</Text></Text>
                 </View>
