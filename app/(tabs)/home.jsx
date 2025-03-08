@@ -1,12 +1,13 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import MapView from 'react-native-maps'
 
 const Home = () => {
   return (
-    <SafeAreaView>
-    <View>
-      <Text className="text-3xl">Home</Text>
+    <SafeAreaView style={{}}>
+    <View className=" w-full h-full"  >
+      <MapView style={StyleSheet.absoluteFill} />
     </View>
     </SafeAreaView>
   )

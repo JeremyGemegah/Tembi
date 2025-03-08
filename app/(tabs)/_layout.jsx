@@ -1,7 +1,10 @@
-import { View, Text, Pressable } from 'react-native'
-import React from 'react'
+import { View, Text, Pressable, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
 import { Tabs } from 'expo-router'
-import { AccountIcon, HomeIcon, RidesIcon } from '../../assets/icons/svgIcons'
+import { AccountIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon } from '../../assets/icons/svgIcons'
+import { router } from 'expo-router'
+import { useCameraPermissions } from 'expo-camera'
+import ScanCode from '../../components/ScanCode'
 
 //Icons for the various tabs
 const HomeTabIcon = ({color,name,focused, highlightColor}) => {
@@ -38,8 +41,54 @@ const AccountTabIcon = ({color,name, focused}) => {
 }
 
 const TabsLayout = () => {
+    const [modalVisible, setModalVisible] = useState(false)
+    const [permission, requestPermission] = useCameraPermissions()
+    const isPermissionGranted = Boolean(permission?.granted)
+
+    const onModalClose = () => {
+        setModalVisible(false)
+    }
+
+    const openModal = () => {
+        setModalVisible(true)
+    }
+
+    const getPermissions = async () => {
+        if(permission?.granted){
+            return openModal()
+
+        }
+        try {
+            await requestPermission() 
+            .then((permission) => {
+                if (permission.granted) openModal()
+            })
+       
+            
+        } catch (error) {
+            console.log("could  not open camera")
+        }
+               
+
+    }
+
     const TabHighlightColor = '#F2A900'
   return (
+    <View className="flex-1" style={{position:'relative'}}>
+
+    <View style={{position:'absolute', zIndex:1, bottom:100, right:16}} className="flex gap-4">
+        <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" >
+            <LocationIcon />
+        </TouchableOpacity>
+        <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" onPress={() => getPermissions()}>
+            <QRIcon />
+        </TouchableOpacity>
+        </View>
+
+        <ScanCode visibility={modalVisible} onClose={onModalClose} />
+    
+   
+
     <Tabs 
         screenOptions={{
             tabBarActiveTintColor:'#002520'
@@ -47,7 +96,12 @@ const TabsLayout = () => {
             ,tabBarShowLabel:false
             ,animation:'shift'
             ,tabBarStyle:{
-                height: 84
+                height: 84,
+                borderTopColor:'#E9F0F4',
+                borderTopLeftRadius: 24,
+                borderTopEndRadius: 24,
+                borderTopWidth:1,
+                position:'absolute'
             },
             tabBarButton: (props) => (
                 <Pressable 
@@ -60,6 +114,9 @@ const TabsLayout = () => {
         }}
         
     >
+         
+
+
 
         {/* home tab */}
         <Tabs.Screen 
@@ -67,7 +124,7 @@ const TabsLayout = () => {
             options={{
                 title:'Home',
                 headerShown: false,
-                tabBarIcon: ({color,name, focused}) => (
+                tabBarIcon: ({color, focused}) => (
                     <HomeTabIcon color={color} name={'Home'} focused={focused} highlightColor={TabHighlightColor}/>
                 )
             }}
@@ -79,7 +136,7 @@ const TabsLayout = () => {
             options={{
                 title:'Rides',
                 headerShown: false,
-                tabBarIcon: ({color,name, focused}) => (
+                tabBarIcon: ({color, focused}) => (
                     <RidesTabIcon color={color} name={'Rides'} focused={focused} />
                 )
             }}
@@ -91,13 +148,14 @@ const TabsLayout = () => {
             options={{
                 title:'Account',
                 headerShown: false,
-                tabBarIcon: ({color,name, focused}) => (
+                tabBarIcon: ({color, focused}) => (
                     <AccountTabIcon color={color} name={'Account'} focused={focused} />
                 )
             }}
         />
 
     </Tabs>
+    </View>
   )
 }
 
