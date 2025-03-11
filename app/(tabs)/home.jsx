@@ -1,13 +1,53 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React,{useRef, useState, useEffect} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import MapView from 'react-native-maps'
+import MapView, { PROVIDER_GOOGLE ,Marker} from 'react-native-maps'
+import * as Location from 'expo-location'
+
 
 const Home = () => {
+
+  const initial_position ={"latitude": 6.673174393359494, "latitudeDelta": 0.04, "longitude": -1.5720686875283718, "longitudeDelta": 0.02, "zoom": 10}
+    
+    const [currentLocation, setCurrentLocation] = useState(null);
+    const [initialRegion, setInitialRegion] = useState(null);
+    
+
+    useEffect(() => {
+    const getLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setCurrentLocation(location.coords);
+
+      setInitialRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.00005,
+        longitudeDelta: 0.00005,
+      });
+    };
+
+    getLocation();
+  }, []);
+
+const goToUserLocation = () => {
+  mapRef.current?.animateToRegion(KNUST)
+}  
+
+const mapRef = useRef()
   return (
     <SafeAreaView style={{}}>
-    <View className=" w-full h-full"  >
-      <MapView style={StyleSheet.absoluteFill} />
+    <View className=" w-full h-full "  >
+   
+        <MapView style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation showsMyLocationButton={false}  >
+          
+        </MapView>
+      
     </View>
     </SafeAreaView>
   )

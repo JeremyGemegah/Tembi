@@ -45,6 +45,8 @@ const TabsLayout = () => {
     const [permission, requestPermission] = useCameraPermissions()
     const isPermissionGranted = Boolean(permission?.granted)
 
+    
+
     const onModalClose = () => {
         setModalVisible(false)
     }
@@ -77,10 +79,10 @@ const TabsLayout = () => {
     <View className="flex-1" style={{position:'relative'}}>
 
     <View style={{position:'absolute', zIndex:1, bottom:100, right:16}} className="flex gap-4">
-        <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" >
+        <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}} >
             <LocationIcon />
         </TouchableOpacity>
-        <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" onPress={() => getPermissions()}>
+        <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" onPress={() => getPermissions()} style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}}>
             <QRIcon />
         </TouchableOpacity>
         </View>
@@ -101,7 +103,8 @@ const TabsLayout = () => {
                 borderTopLeftRadius: 24,
                 borderTopEndRadius: 24,
                 borderTopWidth:1,
-                position:'absolute'
+                position:'absolute',
+               
             },
             tabBarButton: (props) => (
                 <Pressable 
@@ -113,6 +116,7 @@ const TabsLayout = () => {
               
         }}
         
+ 
     >
          
 

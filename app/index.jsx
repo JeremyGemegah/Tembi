@@ -26,7 +26,7 @@ export default function App(){
                        Tembi
                     </Text>
                     <Text className="text-[#fbfcfe] mt-2 text-[14px] font-normal font-pregular px-5 text-center text-primary-10">Eco-friendly, secure, and convenient bicycle rides</Text>
-                <CustomButton title={'Get Started'} containerStyles={'w-full mt-7'} handlePress={() => router.push('/onboarding-screens')} />
+                <CustomButton title={'Get Started'} containerStyles={'w-full mt-7 bg-primary-50 '} handlePress={() => router.push('/onboarding-screens')} />
                     <Text className="text-[#e9f0f4] text-[12px] font-light my-6">Already have an account? <Text className="text-primary-50" onPress={() => router.push('/sign-in')}>Sign In</Text></Text>
                 </View>
             </ImageBackground>
