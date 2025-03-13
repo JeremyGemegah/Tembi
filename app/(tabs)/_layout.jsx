@@ -1,10 +1,11 @@
-import { View, Text, Pressable, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Pressable, TouchableOpacity, Animated } from 'react-native'
+import React, { useEffect, useState,useRef } from 'react'
 import { Tabs } from 'expo-router'
 import { AccountIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon } from '../../assets/icons/svgIcons'
-import { router } from 'expo-router'
 import { useCameraPermissions } from 'expo-camera'
 import ScanCode from '../../components/ScanCode'
+import { EventEmitter } from 'expo'
+import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
 
 //Icons for the various tabs
 const HomeTabIcon = ({color,name,focused, highlightColor}) => {
@@ -29,6 +30,8 @@ const RidesTabIcon = ({color,name,focused}) => {
     )
 }
 
+const myeventEmitter = new EventEmitter()
+
 const AccountTabIcon = ({color,name, focused}) => {
     return(
         <View className=" gap-2 items-center justify-start h-full">
@@ -40,10 +43,27 @@ const AccountTabIcon = ({color,name, focused}) => {
     )
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 const TabsLayout = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const [permission, requestPermission] = useCameraPermissions()
-    const isPermissionGranted = Boolean(permission?.granted)
+    const scaleAnim = useRef(new Animated.Value(1)).current; 
+   
+    
+    useEffect(() => {
+      const navigateAction = myeventEmitter.addListener('customTabPress', (e) => {
+        Animated.timing(scaleAnim, {
+            toValue: e === 'Home' ? 1 : 0, // Scale down when tab is not focused
+            duration: 300, // Smooth animation duration
+            useNativeDriver: true,
+          }).start();
+      })
+    
+      return () => navigateAction.remove()
+      
+    }, [])
+    
 
     
 
@@ -79,12 +99,18 @@ const TabsLayout = () => {
     <View className="flex-1" style={{position:'relative'}}>
 
     <View style={{position:'absolute', zIndex:1, bottom:100, right:16}} className="flex gap-4">
-        <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}} >
-            <LocationIcon />
-        </TouchableOpacity>
-        <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" onPress={() => getPermissions()} style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}}>
-            <QRIcon />
-        </TouchableOpacity>
+        <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
+            <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}} onPress={() => customEventEmitter.emit('FindLocationFired')}>
+                <LocationIcon />
+            </TouchableOpacity>
+        </Animated.View>
+
+
+        <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
+            <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" onPress={() => getPermissions()} style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}}>
+                <QRIcon />
+            </TouchableOpacity>
+        </Animated.View>
         </View>
 
         <ScanCode visibility={modalVisible} onClose={onModalClose} />
@@ -109,9 +135,14 @@ const TabsLayout = () => {
             tabBarButton: (props) => (
                 <Pressable 
                     {...props}
+                    onPress={(e) => {
+                        myeventEmitter.emit('customTabPress',props.accessibilityLargeContentTitle)
+                        props.onPress?.(e)
+                    }}
                     android_ripple={{ color: 'transparent'}}
                 />
-            )
+            ),
+            
                         
               
         }}
@@ -132,6 +163,7 @@ const TabsLayout = () => {
                     <HomeTabIcon color={color} name={'Home'} focused={focused} highlightColor={TabHighlightColor}/>
                 )
             }}
+            
         />
         
        {/*  rides tab */}

@@ -3,6 +3,7 @@ import React,{useRef, useState, useEffect} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView, { PROVIDER_GOOGLE ,Marker} from 'react-native-maps'
 import * as Location from 'expo-location'
+import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
 
 
 const Home = () => {
@@ -14,6 +15,10 @@ const Home = () => {
     
 
     useEffect(() => {
+
+      
+
+
     const getLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -23,31 +28,55 @@ const Home = () => {
 
       let location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location.coords);
+      mapRef.current.animateToRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+        })
 
       setInitialRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.00005,
-        longitudeDelta: 0.00005,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
       });
     };
 
+
+
     getLocation();
+
+    
+
+   
   }, []);
 
-const goToUserLocation = () => {
-  mapRef.current?.animateToRegion(KNUST)
-}  
+  useEffect(() => {
+    
+    const listener = customEventEmitter.addListener('FindLocationFired', async () => {
+      await Location.getCurrentPositionAsync({})
+      .then((location) => {
+        mapRef.current.animateToRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+        })
+      })
+    }) 
+
+    return () => {listener.remove()}
+  },[])
 
 const mapRef = useRef()
   return (
     <SafeAreaView style={{}}>
     <View className=" w-full h-full "  >
    
-        <MapView style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation showsMyLocationButton={false}  >
+        <MapView ref={mapRef} style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation showsMyLocationButton={false}   >
           
         </MapView>
-      
     </View>
     </SafeAreaView>
   )
