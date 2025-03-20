@@ -178,3 +178,35 @@ export const KeypadIcon = ({color,style}) => {
         <SvgXml xml={xml} style={style} />
     )
 }
+
+
+export const SearchIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+  <path d="M16.5 16.5L21 21" stroke="#002520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19 10C19 5.02944 14.9706 1 10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C14.9706 19 19 14.9706 19 10Z" stroke="#002520" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+
+export const HeartIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none">
+  <path d="M18.4626 1.99415C15.7809 0.349229 13.4404 1.01211 12.0344 2.06801C11.4578 2.50096 11.1696 2.71743 11 2.71743C10.8304 2.71743 10.5422 2.50096 9.96565 2.06801C8.55962 1.01211 6.21909 0.349229 3.53744 1.99415C0.0180686 4.15294 -0.778279 11.2749 7.33953 17.2834C8.88572 18.4278 9.65881 19 11 19C12.3412 19 13.1143 18.4278 14.6605 17.2834C22.7783 11.2749 21.9819 4.15294 18.4626 1.99415Z" stroke="#002520" stroke-width="1.5" stroke-linecap="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+
+export const BellIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+  <path d="M1.52992 13.7696C1.31727 15.1636 2.268 16.1312 3.43205 16.6134C7.89481 18.4622 14.1052 18.4622 18.5679 16.6134C19.732 16.1312 20.6827 15.1636 20.4701 13.7696C20.3394 12.9129 19.6932 12.1995 19.2144 11.5029C18.5873 10.5793 18.525 9.57183 18.5249 8.5C18.5249 4.35786 15.1559 1 11 1C6.84413 1 3.47513 4.35786 3.47513 8.5C3.47503 9.57183 3.41272 10.5793 2.78561 11.5029C2.30684 12.1995 1.66061 12.9129 1.52992 13.7696Z" stroke="#002520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M7 18C7.45849 19.7252 9.07553 21 11 21C12.9245 21 14.5415 19.7252 15 18" stroke="#002520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}

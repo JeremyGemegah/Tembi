@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "bikehive-uno",
-    "slug": "bikehive-uno",
+    "name": "Tembi",
+    "slug": "Tembi",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true
     },
@@ -16,7 +16,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.gemegs.bikehiveuno"
+      "config":{
+        "googleMaps":{
+          "apiKey": "AIzaSyAeyi0XeQSbqEMzKVvpFmuNpwkyVhk4W_Y"
+        }
+      },
+      "package": "com.gemegs.tembi"
     },
     "web": {
       "bundler": "metro",
@@ -43,8 +48,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "72fbf7a2-112e-4a7d-a345-b2e3176707fd"
+        "projectId": "fd4d540d-1ae2-4f47-82fd-0ed28e691da4"
       }
-    }
+    },
+    "owner": "gemegs"
   }
 }

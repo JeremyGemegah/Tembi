@@ -1,11 +1,12 @@
 import { View, Text, Pressable, TouchableOpacity, Animated } from 'react-native'
 import React, { useEffect, useState,useRef } from 'react'
 import { Tabs } from 'expo-router'
-import { AccountIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon } from '../../assets/icons/svgIcons'
+import { AccountIcon, BellIcon, HeartIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon, SearchIcon } from '../../assets/icons/svgIcons'
 import { useCameraPermissions } from 'expo-camera'
 import ScanCode from '../../components/ScanCode'
 import { EventEmitter } from 'expo'
 import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
+import { Image } from 'react-native'
 
 //Icons for the various tabs
 const HomeTabIcon = ({color,name,focused, highlightColor}) => {
@@ -97,6 +98,46 @@ const TabsLayout = () => {
     const TabHighlightColor = '#F2A900'
   return (
     <View className="flex-1" style={{position:'relative'}}>
+
+        <View style={{flexDirection:'row', justifyContent:'space-between',width:'100%', marginTop:50, position:'absolute', top:0, zIndex:1, paddingLeft:16, alignItems:'center',paddingTop:12}}>{/* top buttons */}
+            <View>
+            <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
+                <TouchableOpacity  className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20, width:48, height:48, overflow:'hidden', justifyContent:'center', alignItems:'center'}}>
+                    <Image 
+                    source={require('../../assets/images/profile.jpg')}
+                    resizeMode='contain'
+                    style={{width:58, height:58}}
+                   
+                    
+                    />
+                    
+                </TouchableOpacity>
+                <View style={{width:12, height: 12, position: 'absolute', bottom:'-1%', right:0, zIndex:2}} className="bg-[#6ACE13] rounded-full border-neutral-10 border-[1px]"></View>
+            </Animated.View>
+            </View>
+
+
+            <View style={{flexDirection:'row', gap:8, paddingRight: 16}}>
+            <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
+                <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}}>  
+                    <SearchIcon />
+                </TouchableOpacity>
+            </Animated.View>
+
+            <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
+               <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}}>
+                <HeartIcon />
+               </TouchableOpacity>
+            </Animated.View>
+            
+            <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
+                <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}}>
+                    <BellIcon/>
+                </TouchableOpacity>
+                <View style={{width:24, height: 24, position: 'absolute', top:'-20%', right:'-10%', zIndex:2, justifyContent:'center', alignItems:'center'}} className="bg-primary-50 rounded-full "><Text>3</Text></View>
+            </Animated.View>
+            </View>
+        </View>
 
     <View style={{position:'absolute', zIndex:1, bottom:100, right:16}} className="flex gap-4">
         <Animated.View style={{transform: [{ scale: scaleAnim }]}}>

@@ -95,7 +95,7 @@ const OnboardingScreens = () => {
                 <Animated.View key={index} className={` h-[8px]   rounded-full ${current === index? 'bg-primary-50' : 'bg-primary-90'} transition-all duration-300`} style={{width: current === index? 20 : 8}} layout={_layoutTransition} ></Animated.View>
             ))}
             </Animated.View>
-            <CustomButton title={'Next'} transition={true} layout={_layoutTransition} SecondTitle='Start Riding' queue={current === 2} handlePress={current !== 2? () => autoRotate(true) : () =>   router.replace('/sign-up') } containerStyles={"bg-primary-50 "} />
+            <CustomButton title={'Next'} transition={true} layout={_layoutTransition} SecondTitle='Start Riding' queue={current === 2}  containerStyles={"bg-primary-50 "} />
         </View>
     </SafeAreaView>
   )

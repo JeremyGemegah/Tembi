@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView, { PROVIDER_GOOGLE ,Marker} from 'react-native-maps'
 import * as Location from 'expo-location'
 import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
+import CustomMarker from '../../components/customMarker'
 
 
 const Home = () => {
@@ -74,8 +75,21 @@ const mapRef = useRef()
     <SafeAreaView style={{}}>
     <View className=" w-full h-full "  >
    
-        <MapView ref={mapRef} style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation showsMyLocationButton={false}   >
+        <MapView ref={mapRef} style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation={true} showsMyLocationButton={false}   >
+           <Marker 
+            coordinate={{
+              latitude: 6.6726,
+              longitude: -1.5729999
+            }}
+            tracksViewChanges={false}
+            >
+           
+            <CustomMarker/>
+            
           
+           
+            
+           </Marker>
         </MapView>
     </View>
     </SafeAreaView>
