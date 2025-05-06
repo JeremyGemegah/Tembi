@@ -1,6 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react'
-import {EyeClosed, EyeOpen, Lock, MailIcon, Profile} from '../assets/icons/svgIcons'
+import {EyeClosed, EyeOpen, Lock, MailIcon, PhoneIcon, Profile} from '../assets/icons/svgIcons'
 
 
 const TextField = ({type='profile', state='normal', placeholder, handleTextChange, title}) => {
@@ -40,7 +40,7 @@ const TextField = ({type='profile', state='normal', placeholder, handleTextChang
       <View className={`border-[1px] rounded-full px-[16px] py-[12px]`} style={{borderColor:borderColor}}>
         <View className="flex-row h-[20px] w-full items-center gap-[12px]">
         
-            { type ==='email'? (<MailIcon style={{color: iconColor}} />) : ( type === 'password'? (<Lock style={{color: iconColor}} />) : (<Profile style={{color: iconColor}} />))}
+            { type ==='email'? (<MailIcon style={{color: iconColor}} />) : ( type === 'password'? (<Lock style={{color: iconColor}} />) : (type === 'profile'? (<Profile style={{color: iconColor}} />) : <PhoneIcon color={iconColor} />))}
         
 
         <TextInput 

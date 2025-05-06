@@ -1,11 +1,24 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React,{useRef, useState, useEffect} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView, { PROVIDER_GOOGLE ,Marker} from 'react-native-maps'
 import * as Location from 'expo-location'
 import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
 import CustomMarker from '../../components/customMarker'
+import DockerDetails from '../../components/dockerDetailsModal'
 
+const markers = [
+  {
+    id: 0,
+    latitude: 6.6726,
+    longitude: -1.5729999
+},
+  {
+    id: 1,
+    latitude: 6.6759,
+    longitude: -1.5729999
+  }
+]
 
 const Home = () => {
 
@@ -13,7 +26,11 @@ const Home = () => {
     
     const [currentLocation, setCurrentLocation] = useState(null);
     const [initialRegion, setInitialRegion] = useState(null);
-    
+    const [selectedMarker, setSelectedMarker] = useState(null)
+
+    const handleMarkerSelect = (markerId) => {
+        setSelectedMarker(markerId)
+    }    
 
     useEffect(() => {
 
@@ -76,21 +93,24 @@ const mapRef = useRef()
     <View className=" w-full h-full "  >
    
         <MapView ref={mapRef} style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation={true} showsMyLocationButton={false}   >
-           <Marker 
-            coordinate={{
-              latitude: 6.6726,
-              longitude: -1.5729999
-            }}
-            tracksViewChanges={false}
-            >
            
-            <CustomMarker/>
+           {markers.map((marker, index) => (
+              <Marker key={index}
+              
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude
+              }}
+              onPress={() => handleMarkerSelect(marker.id)}
+              tracksViewChanges={selectedMarker === marker.id}
+              >
             
-          
-           
-            
-           </Marker>
+              <CustomMarker focus={selectedMarker === marker.id} />
+              
+             </Marker>
+           ))}
         </MapView>
+        
     </View>
     </SafeAreaView>
   )

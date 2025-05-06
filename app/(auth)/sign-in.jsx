@@ -19,7 +19,7 @@ const SignIn = () => {
           <Text className="text-[14px] text-neutral-70">Sign in to your account</Text>
           </View>
           
-          <View className="flex-1 gap-[16px]">
+          <View className="flex-1 gap-[16px]"> 
 
             <TextField state={'normal'} type={'email'} placeholder={'eg. ebecks419@gmail.com'} title={'Email'} />
             <TextField state={'normal'} type={'password'} placeholder={'minimum 8 characters'} title={'Password'} />
