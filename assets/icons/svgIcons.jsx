@@ -19,8 +19,9 @@ export const Profile = ({style}) => {
         <SvgXml xml={xml} style={style} />
     )
 }
-export const Lock = ({style}) => {
-     const xml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+export const Lock = ({color,style}) => {
+    const mycolor = color || "#000000"
+     const xml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color=${mycolor} fill="none">
     <path d="M13.9928 15L14 15M10 15L10.0072 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
     <path d="M5 15C5 11.134 8.13401 8 12 8C15.866 8 19 11.134 19 15C19 18.866 15.866 22 12 22C8.13401 22 5 18.866 5 15Z" stroke="currentColor" stroke-width="1.5" />
     <path d="M16.5 9.5V6.5C16.5 4.01472 14.4853 2 12 2C9.51472 2 7.5 4.01472 7.5 6.5V9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -328,6 +329,102 @@ export const SuccessIcon = ({color,style}) => {
     const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
   <path d="M16 2.33782C14.5291 1.48697 12.8214 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21C16.5228 21 21 16.5228 21 11C21 10.3151 20.9311 9.64622 20.8 9" stroke="#449C0A" stroke-width="1.5" stroke-linecap="round"/>
   <path d="M7 11.5C7 11.5 8.5 11.5 10.5 15C10.5 15 16.0588 5.83333 21 4" stroke="#449C0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const SunIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+  <path d="M16 11C16 13.7614 13.7614 16 11 16C8.23858 16 6 13.7614 6 11C6 8.23858 8.23858 6 11 6C13.7614 6 16 8.23858 16 11Z" stroke="#00806E" stroke-width="1.5"/>
+  <path d="M11 1V2.5M11 19.5V21M18.0708 18.0713L17.0101 17.0106M4.98926 4.98926L3.9286 3.9286M21 11H19.5M2.5 11H1M18.0713 3.92871L17.0106 4.98937M4.98975 17.0107L3.92909 18.0714" stroke="#00806E" stroke-width="1.5" stroke-linecap="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const NightIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+  <path d="M20.5 13.0784C19.3003 13.7189 17.9301 14.0821 16.4751 14.0821C11.7491 14.0821 7.91792 10.2509 7.91792 5.52485C7.91792 4.06986 8.28105 2.69968 8.92163 1.5C4.66765 2.49698 1.5 6.31513 1.5 10.8731C1.5 16.1899 5.8101 20.5 11.1269 20.5C15.6849 20.5 19.503 17.3324 20.5 13.0784Z" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const TermsIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" viewBox="0 0 20 22" fill="none">
+  <path d="M7 21C7.35984 21 8.69078 20.3926 10.0494 19.1778M10.0494 19.1778C11.2078 18.1419 12.3863 16.6643 13 14.7452C14.3333 10.5753 6.33333 14.7452 9 18.2201C9.32811 18.6476 9.68145 18.9601 10.0494 19.1778ZM10.0494 19.1778C11.6521 20.1259 13.5311 19.274 14.8041 18.2944C15.1932 17.995 15.3877 17.8453 15.5038 17.8919C15.62 17.9385 15.6878 18.2064 15.8236 18.7422C16.2581 20.4569 17.5415 21.841 19 19.6105" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 12L18 6.89072C18 5.17637 18 4.31919 17.732 3.63459C17.3013 2.53399 16.3902 1.66585 15.2352 1.25535C14.5168 1 13.6173 1 11.8182 1C8.66981 1 7.09563 1 5.83836 1.44686C3.81714 2.16523 2.22281 3.68448 1.46894 5.61052C1 6.80859 0.999999 8.30864 0.999999 11.3088L0.999999 13.8859C0.999998 16.9936 0.999998 18.5474 1.8477 19.6265C2.09058 19.9356 2.37862 20.2101 2.70307 20.4416C3.07016 20.7034 3.48961 20.8804 4 21" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M1 11C1 9.15905 2.49238 7.66667 4.33333 7.66667C4.99912 7.66667 5.78404 7.78333 6.43137 7.60988C7.00652 7.45576 7.45576 7.00652 7.60988 6.43136C7.78333 5.78404 7.66667 4.99912 7.66667 4.33333C7.66667 2.49238 9.15905 1 11 1" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const ShieldIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+  <path d="M10.9982 1C7.99043 1 6.04018 3.01899 3.73371 3.7549C2.79589 4.05413 2.32697 4.20374 2.1372 4.41465C1.94743 4.62556 1.89186 4.93375 1.78072 5.55013C0.591434 12.146 3.1909 18.244 9.39029 20.6175C10.0564 20.8725 10.3894 21 11.0015 21C11.6135 21 11.9466 20.8725 12.6126 20.6175C18.8116 18.2439 21.4086 12.146 20.219 5.55013C20.1078 4.93364 20.0522 4.6254 19.8624 4.41449C19.6726 4.20358 19.2037 4.05405 18.2659 3.75499C15.9585 3.01915 14.0061 1 10.9982 1Z" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8 12C8 12 9 12 10 14C10 14 13.1765 9 16 8" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const SmartphoneIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22" fill="none">
+  <path d="M2 5C2.08715 3.58055 2.32629 2.67665 2.98247 2.02513C4.01491 1 5.67661 1 9 1C12.3234 1 13.9851 1 15.0175 2.02513C15.6737 2.67665 15.9128 3.58055 16 5M16 17C15.9128 18.4194 15.6737 19.3233 15.0175 19.9749C13.9851 21 12.3234 21 9 21C5.67661 21 4.01491 21 2.98247 19.9749C2.32629 19.3233 2.08715 18.4194 2 17" stroke="#00806E" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M8 18H10" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14.5 8L16.0332 9.58579C16.6777 10.2525 17 10.5858 17 11C17 11.4142 16.6777 11.7475 16.0332 12.4142L14.5 14" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M3.5 8L1.96682 9.58579C1.32228 10.2525 1 10.5858 1 11C1 11.4142 1.32227 11.7475 1.96682 12.4142L3.5 14" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const LicenseIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" viewBox="0 0 20 22" fill="none">
+  <path d="M10.5294 1C14.5225 1 16.519 1 17.7595 2.17157C19 3.34315 19 5.22876 19 9V13C19 16.7712 19 18.6569 17.7595 19.8284C16.519 21 14.5225 21 10.5294 21H9.47059C5.47751 21 3.48098 21 2.24049 19.8284C1 18.6569 1 16.7712 1 13L1 9C1 5.22876 1 3.34315 2.24049 2.17157C3.48098 1 5.47752 1 9.47059 1L10.5294 1Z" stroke="#00806E" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M6 6H14" stroke="#00806E" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M6 11H14" stroke="#00806E" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M6 16L10 16" stroke="#00806E" stroke-width="1.5" stroke-linecap="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const LogoutIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" viewBox="0 0 20 22" fill="none">
+  <path d="M5.02331 4.5C2.59826 6.11238 1 8.86954 1 12C1 16.9706 5.02944 21 10 21C14.9706 21 19 16.9706 19 12C19 8.86954 17.4017 6.11238 14.9767 4.5" stroke="#DD214F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10 1V9" stroke="#DD214F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const EmailIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none">
+  <path d="M6 6.5L8.94202 8.23943C10.6572 9.25352 11.3428 9.25352 13.058 8.23943L16 6.5" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M1.01577 11.4756C1.08114 14.5412 1.11383 16.0739 2.24496 17.2094C3.37608 18.3448 4.95033 18.3843 8.09883 18.4634C10.0393 18.5122 11.9607 18.5122 13.9012 18.4634C17.0497 18.3843 18.6239 18.3448 19.7551 17.2094C20.8862 16.0739 20.9189 14.5412 20.9842 11.4756C21.0053 10.4899 21.0053 9.51008 20.9842 8.52439C20.9189 5.45886 20.8862 3.92609 19.7551 2.79066C18.6239 1.65523 17.0497 1.61568 13.9012 1.53657C11.9607 1.48781 10.0393 1.48781 8.09882 1.53656C4.95033 1.61566 3.37608 1.65521 2.24495 2.79065C1.11382 3.92608 1.08114 5.45885 1.01576 8.52438C0.994745 9.51007 0.994745 10.4899 1.01577 11.4756Z" stroke="#00806E" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const UploadImageIcon = ({color,style}) => {
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+  <path d="M12 2.00231C11.5299 2 11.0307 2 10.5 2C6.02166 2 3.78249 2 2.39124 3.39124C1 4.78249 1 7.02166 1 11.5C1 15.9783 1 18.2175 2.39124 19.6088C3.78249 21 6.02166 21 10.5 21C14.9783 21 17.2175 21 18.6088 19.6088C19.9472 18.2703 19.998 16.147 19.9999 12" stroke="#5D6C87" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M1 13.1354C1.61902 13.0455 2.24484 13.0011 2.87171 13.0027C5.52365 12.9466 8.11064 13.7729 10.1711 15.3342C12.082 16.7821 13.4247 18.7749 14 21" stroke="#5D6C87" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20 15.8962C18.8246 15.3009 17.6088 14.9988 16.3862 15.0001C14.5345 14.9928 12.7015 15.6733 11 17" stroke="#5D6C87" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M16 3.5C16.4915 2.9943 17.7998 1 18.5 1M21 3.5C20.5085 2.9943 19.2002 1 18.5 1M18.5 1V9" stroke="#5D6C87" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`
     return(
         <SvgXml xml={xml} style={style} />

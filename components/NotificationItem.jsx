@@ -4,7 +4,7 @@ import { BillIcon, HornIcon, ReminderIcon, SuccessIcon } from "../assets/icons/s
 const parseHighlights = (text,color) => {
     const parts = text.split(/(\*\*[^*]+\*\*)/g);
     return (
-        <Text className="font-pregular text-[14px]">
+        <Text className="font-pregular text-[14px] text-wrap" style={{flexWrap:'wrap', flexShrink: 1}}>
             {
             parts.map((part, index) => {
       if (part.startsWith('**') && part.endsWith('**')) {
@@ -14,7 +14,7 @@ const parseHighlights = (text,color) => {
           </Text>
         );
       }
-      return <Text key={index}>{part}</Text>;
+      return <Text key={index} className="text-wrap" style={{flexWrap:'wrap', flexShrink: 1}}>{part}</Text>;
     })
     }</Text>)
   };
@@ -43,13 +43,13 @@ const NotificationItem = ({type,message,time}) => {
     }
     return(
 
-        <View className="p-[12px] rounded-[16px] border-neutral-30 border-[1px] flex-row gap-[12px]">
-            <View >{icon}</View>
+        <View className="box-content p-[12px] rounded-[16px] border-neutral-30 border-[1px]  gap-[12px]" style={{flexDirection:'row', backgroundColor: type == 4? '#002520' : null}} >
+            <View className="p-[12px] rounded-[12px] border-neutral-30 border-[1px] self-start bg-[#F5F8FA]" >{icon}</View>
             <View>
-        
-                {type == 4? <Text className="font-pregular text-[14px]">{message}</Text> : parseHighlights(message, color)}
             
-            <Text>
+                {type == 4? <Text className="font-pregular text-[14px] text-neutral-10">{message}</Text> : <Text className="text-balance"  >{parseHighlights(message, color)}</Text>}
+            
+            <Text style={{color: type == 4? '#A8B9CA': '#5D6C87'}}>
                 {time}
             </Text>
             </View>

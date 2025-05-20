@@ -1,6 +1,8 @@
-import { ScrollView, Text,View } from "react-native"
+import { ScrollView, Text,View, TouchableOpacity } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import NotificationItem from "../../../components/NotificationItem"
+import { BackIcon } from "../../../assets/icons/svgIcons"
+import { router } from "expo-router"
 
 
 /* "payment"=1 "reminder"=2 "success"=3 "alert"=4 */
@@ -70,13 +72,33 @@ const older = messages.slice(3)
 const Notifications = () => {
     return(
         <SafeAreaView>
-        <ScrollView className="h-full bg-neutral-10" >
-        <Text>Notifications</Text>
-        <View className="pb-[100] px-[16px] gap-[8px]">
-        {messages.map((item,index) => (
+        <ScrollView className="h-full bg-neutral-10 w-full" >
+     
+        <View  className="flex-row">
+            <TouchableOpacity onPress={() => router.back()} className="w-16 h-16 items-center justify-center">
+                <BackIcon/>
+            </TouchableOpacity>
+            <View className="justify-center">
+            <Text className="text-[18px] leading-[3.3] font-pregular line-3">Notifications</Text>
+            </View>
+        </View>
+
+        <View className="pb-[100] px-[16px] mt-[16px] gap-[24px]">
+        <View className="gap-[8px]">
+        <Text className="pl-[8px] font-pregular text-neutral-70">Today</Text>
+        {today.length > 0 ? today.map((item,index) => (
+            <NotificationItem type={item.type} key={index} message={item.message} time={item.time} />
+        )) : <Text className="pl-[8px] font-pregular text-neutral-70 text-[14px] text-center">No notifications today</Text>}
+        </View>
+        
+        {older.length > 0 && (<View className="gap-[8px]">
+        <Text className="pl-[8px] font-pregular text-neutral-70">Older</Text>
+        {older.map((item,index) => (
             <NotificationItem type={item.type} key={index} message={item.message} time={item.time} />
         ))}
+        </View>)}
         </View>
+        
         </ScrollView>
         </SafeAreaView>
     )

@@ -225,6 +225,7 @@ const TabsLayout = () => {
             options={{
                 title:'Account',
                 headerShown: false,
+                resetOnBlur: true,
                 tabBarIcon: ({color, focused}) => (
                     <AccountTabIcon color={color} name={'Account'} focused={focused} />
                 )
