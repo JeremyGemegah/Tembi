@@ -14,7 +14,7 @@ const FavouriteListing = ({title,distance,bikes}) => {
                     </View>
                     <View className="flex-row">
                         <Text className="text-[12px] text-neutral-70 font-plight">{distance}m away </Text>
-                        <Text></Text>
+                        <Text className="text-neutral-70">• </Text>
                         <Text className="font-plight text-[12px] " style={{ color: bikes > 6? "#449C0A" : ( bikes > 2? "#CE7100" : "#DD214F" ) }} >{bikes} Bike{bikes > 1? "s" : null} Available</Text>
                     </View>
                 </View>

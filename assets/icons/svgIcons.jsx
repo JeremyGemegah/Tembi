@@ -113,13 +113,14 @@ export const AccountIcon = ({color,style}) => {
 
 
 export const LocationIcon = ({color,style}) => {
+    const mycolor = color || "#002520"
     const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M20.5137 12C20.5137 16.6944 16.7081 20.5 12.0137 20.5C7.31925 20.5 3.51367 16.6944 3.51367 12C3.51367 7.30558 7.31925 3.5 12.0137 3.5C16.7081 3.5 20.5137 7.30558 20.5137 12Z" stroke="#002520" stroke-width="1.5"/>
-  <path d="M22.5 12H20.5" stroke="#002520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M3.5 12H1.5" stroke="#141B34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12 1.5L12 3.5" stroke="#141B34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12 20.5V22.5" stroke="#141B34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M15 12C15 13.6569 13.6568 15 12 15C10.3431 15 8.99995 13.6569 8.99995 12C8.99995 10.3431 10.3431 9 12 9C13.6568 9 15 10.3431 15 12Z" stroke="#141B34" stroke-width="1.5"/>
+  <path d="M20.5137 12C20.5137 16.6944 16.7081 20.5 12.0137 20.5C7.31925 20.5 3.51367 16.6944 3.51367 12C3.51367 7.30558 7.31925 3.5 12.0137 3.5C16.7081 3.5 20.5137 7.30558 20.5137 12Z" stroke=${mycolor} stroke-width="1.5"/>
+  <path d="M22.5 12H20.5" stroke=${mycolor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M3.5 12H1.5" stroke=${mycolor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 1.5L12 3.5" stroke=${mycolor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 20.5V22.5" stroke=${mycolor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M15 12C15 13.6569 13.6568 15 12 15C10.3431 15 8.99995 13.6569 8.99995 12C8.99995 10.3431 10.3431 9 12 9C13.6568 9 15 10.3431 15 12Z" stroke=${mycolor} stroke-width="1.5"/>
 </svg>`
     return(
         <SvgXml xml={xml} style={style} />
@@ -225,12 +226,13 @@ export const ArrowRight = ({color,style}) => {
 }
 
 export const BillIcon = ({color,style}) => {
+    const mycolor = color || "#00806E" 
     const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none">
-<path d="M21 9.5V4.11397C21 3.32299 21 2.92751 20.8059 2.51966C20.6952 2.28705 20.443 1.97064 20.241 1.81079C19.8868 1.53051 19.5912 1.46281 19 1.3274C18.0803 1.11675 17.0659 1 16 1C14.0829 1 12.3325 1.37764 11 2C9.66746 2.62236 7.91707 3 6 3C4.93408 3 3.91969 2.88325 3 2.6726C2.04003 2.45273 1 3.12914 1 4.11397V14.886C1 15.677 1 16.0725 1.19412 16.4803C1.30483 16.7129 1.55696 17.0294 1.75898 17.1892C2.11319 17.4695 2.4088 17.5372 3 17.6726C3.91969 17.8833 4.93408 18 6 18C7.46884 18 8.83983 17.7783 10 17.3947" stroke="#00806E" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M13 17C13 17 14 17 15 19C15 19 18.1765 14 21 13" stroke="#00806E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M13.5 9.5C13.5 10.8807 12.3807 12 11 12C9.61929 12 8.5 10.8807 8.5 9.5C8.5 8.11929 9.61929 7 11 7C12.3807 7 13.5 8.11929 13.5 9.5Z" stroke="#00806E" stroke-width="1.5"/>
-<path d="M4.5 10.5L4.5 10.509" stroke="#00806E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M17.5 8.49219L17.5 8.50117" stroke="#00806E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M21 9.5V4.11397C21 3.32299 21 2.92751 20.8059 2.51966C20.6952 2.28705 20.443 1.97064 20.241 1.81079C19.8868 1.53051 19.5912 1.46281 19 1.3274C18.0803 1.11675 17.0659 1 16 1C14.0829 1 12.3325 1.37764 11 2C9.66746 2.62236 7.91707 3 6 3C4.93408 3 3.91969 2.88325 3 2.6726C2.04003 2.45273 1 3.12914 1 4.11397V14.886C1 15.677 1 16.0725 1.19412 16.4803C1.30483 16.7129 1.55696 17.0294 1.75898 17.1892C2.11319 17.4695 2.4088 17.5372 3 17.6726C3.91969 17.8833 4.93408 18 6 18C7.46884 18 8.83983 17.7783 10 17.3947" stroke=${mycolor} stroke-width="1.5" stroke-linecap="round"/>
+<path d="M13 17C13 17 14 17 15 19C15 19 18.1765 14 21 13" stroke=${mycolor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.5 9.5C13.5 10.8807 12.3807 12 11 12C9.61929 12 8.5 10.8807 8.5 9.5C8.5 8.11929 9.61929 7 11 7C12.3807 7 13.5 8.11929 13.5 9.5Z" stroke=${mycolor} stroke-width="1.5"/>
+<path d="M4.5 10.5L4.5 10.509" stroke=${mycolor} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17.5 8.49219L17.5 8.50117" stroke=${mycolor} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 
 `
@@ -425,6 +427,55 @@ export const UploadImageIcon = ({color,style}) => {
   <path d="M1 13.1354C1.61902 13.0455 2.24484 13.0011 2.87171 13.0027C5.52365 12.9466 8.11064 13.7729 10.1711 15.3342C12.082 16.7821 13.4247 18.7749 14 21" stroke="#5D6C87" stroke-width="1.5" stroke-linejoin="round"/>
   <path d="M20 15.8962C18.8246 15.3009 17.6088 14.9988 16.3862 15.0001C14.5345 14.9928 12.7015 15.6733 11 17" stroke="#5D6C87" stroke-width="1.5" stroke-linejoin="round"/>
   <path d="M16 3.5C16.4915 2.9943 17.7998 1 18.5 1M21 3.5C20.5085 2.9943 19.2002 1 18.5 1M18.5 1V9" stroke="#5D6C87" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const LocationMarkerIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 12 16" fill="none">
+  <path d="M2.66669 12C1.4474 12.2745 0.666687 12.6962 0.666687 13.1691C0.666687 13.9962 3.0545 14.6667 6.00002 14.6667C8.94554 14.6667 11.3334 13.9962 11.3334 13.1691C11.3334 12.6962 10.5526 12.2745 9.33335 12" stroke=${mycolor} stroke-linecap="round"/>
+  <path d="M6.83825 11.6621C6.61339 11.8786 6.31286 11.9997 6.00008 11.9997C5.68731 11.9997 5.38677 11.8786 5.16192 11.6621C3.10285 9.66686 0.34344 7.43803 1.68912 4.20216C2.41672 2.45256 4.16328 1.33301 6.00008 1.33301C7.83689 1.33301 9.58345 2.45256 10.311 4.20216C11.655 7.43395 8.9024 9.67374 6.83825 11.6621Z" fill=${mycolor} stroke=${mycolor}/>
+  <path d="M7.66665 5.99967C7.66665 6.92015 6.92045 7.66634 5.99998 7.66634C5.07951 7.66634 4.33331 6.92015 4.33331 5.99967C4.33331 5.0792 5.07951 4.33301 5.99998 4.33301C6.92045 4.33301 7.66665 5.0792 7.66665 5.99967Z" fill="#002520"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const CancelIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 16 20" fill="none">
+  <path d="M15.0005 1.5L1.00049 15.5M1.00049 1.5L15.0005 15.5" stroke="#5D6C87" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const WalkIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 16 18" fill="none">
+  <path d="M12.1666 2.75C12.1666 3.44036 11.607 4 10.9166 4C10.2263 4 9.66663 3.44036 9.66663 2.75C9.66663 2.05964 10.2263 1.5 10.9166 1.5C11.607 1.5 12.1666 2.05964 12.1666 2.75Z" fill="#5D6C87" stroke="#5D6C87" stroke-width="1.5"/>
+  <path d="M8.72487 5.66455C8.45366 5.66451 8.18219 5.66516 8 5.66731L6.94242 7.29915C6.36097 8.19632 6.07024 8.64491 6.05891 9.1159C6.05386 9.32569 6.08848 9.53455 6.16094 9.73149C6.32362 10.1736 6.74352 10.5044 7.58333 11.1661L10.5 6.7307C10.4065 6.66056 10.3053 6.55511 10.2068 6.43741C9.86302 6.02664 9.69112 5.82126 9.52352 5.74296C9.35592 5.66466 9.14557 5.66462 8.72487 5.66455Z" fill="#5D6C87"/>
+  <path d="M10.5 16.5002L9.94658 14.3202C9.76342 13.5987 9.38459 12.9399 8.8506 12.414L7.58333 11.1661M3 8.29402C3.83333 6.65257 5.11472 5.70143 8 5.66731M8 5.66731C8.18219 5.66516 8.45366 5.66451 8.72487 5.66455C9.14557 5.66462 9.35592 5.66466 9.52352 5.74296C9.69112 5.82126 9.86302 6.02664 10.2068 6.43741C10.3053 6.55511 10.4065 6.66056 10.5 6.7307M8 5.66731L6.94242 7.29915C6.36097 8.19632 6.07024 8.64491 6.05891 9.1159C6.05386 9.32569 6.08848 9.53455 6.16094 9.73149C6.32362 10.1736 6.74352 10.5044 7.58333 11.1661M10.5 6.7307C11.4623 7.45229 12.9689 7.74291 14.6667 5.83212M10.5 6.7307L7.58333 11.1661" stroke="#5D6C87" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M1.33325 13.7754L1.89844 13.9098C3.33877 14.2525 4.83596 13.5972 5.49992 12.3335" stroke="#5D6C87" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const RateIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+  <path d="M8.00004 12.0002C7.11168 12.4151 5.94475 12.6668 4.66671 12.6668C3.95609 12.6668 3.27983 12.589 2.66671 12.4486C2.27257 12.3583 2.0755 12.3132 1.83936 12.1263C1.70468 12.0197 1.53659 11.8088 1.46278 11.6537C1.33337 11.3818 1.33337 11.1182 1.33337 10.5908L1.33337 3.40948C1.33337 2.75292 2.02673 2.30198 2.66671 2.44857C3.27983 2.589 3.95609 2.66683 4.66671 2.66683C5.94475 2.66683 7.11168 2.41507 8.00004 2.00016C8.8884 1.58525 10.0553 1.3335 11.3334 1.3335C12.044 1.3335 12.7202 1.41133 13.3334 1.55176C13.7275 1.64204 13.9246 1.68717 14.1607 1.87402C14.2954 1.98059 14.4635 2.19153 14.5373 2.34661C14.6667 2.6185 14.6667 2.88216 14.6667 3.40948L14.6667 10.5908C14.6667 11.2474 13.9734 11.6983 13.3334 11.5518C12.7202 11.4113 12.044 11.3335 11.3334 11.3335C10.0553 11.3335 8.8884 11.5853 8.00004 12.0002Z" fill="#5D6C87" stroke="#5D6C87"/>
+  <path d="M1.33337 14.0003C2.22173 14.4152 3.38866 14.667 4.66671 14.667C5.94475 14.667 7.11168 14.4152 8.00004 14.0003C8.8884 13.5854 10.0553 13.3337 11.3334 13.3337C12.6114 13.3337 13.7783 13.5854 14.6667 14.0003" stroke="#5D6C87" stroke-linecap="round"/>
+  <path d="M9.66671 7.00016C9.66671 7.92064 8.92052 8.66683 8.00004 8.66683C7.07957 8.66683 6.33337 7.92064 6.33337 7.00016C6.33337 6.07969 7.07957 5.3335 8.00004 5.3335C8.92052 5.3335 9.66671 6.07969 9.66671 7.00016Z" fill="#FBFCFE"/>
+  <path d="M3.66675 7.66699L3.66675 7.67298" stroke="#5D6C87" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12.3334 6.32812L12.3334 6.33411" stroke="#5D6C87" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`
     return(
         <SvgXml xml={xml} style={style} />

@@ -169,8 +169,10 @@ const TabsLayout = () => {
                 borderTopColor:'#E9F0F4',
                 borderTopLeftRadius: 24,
                 borderTopEndRadius: 24,
-                borderTopWidth:1,
-                position:'absolute',
+                borderTopWidth:1
+                
+                ,zIndex:2
+                
                
             },
             tabBarButton: (props) => (

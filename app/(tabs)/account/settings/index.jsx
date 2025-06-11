@@ -4,10 +4,16 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
 import { ArrowRight, BellIcon, SettingsIcon, BackIcon, Lock, SunIcon, NightIcon, EmailIcon, LicenseIcon, TermsIcon, ShieldIcon, SmartphoneIcon, LogoutIcon } from '../../../../assets/icons/svgIcons'
 import { Link,router } from 'expo-router'
+import CustomSwitch from '../../../../components/customSwitch'
+import CustomRadio from '../../../../components/Customradio'
 
 const Settings = () => {
-    const [isEnabled, setIsEnabled] = useState(false)
-    const toggleSwitch = () => setIsEnabled(previous => !previous)
+      const [pnotifications,setPnotifications] = useState(false)
+      const [enotifications,setEnotifications] = useState(false)
+      const [isLight,setIsLight] = useState(false)
+      const [isDark,setIsDark] = useState(false)
+      const [isSystemDefault,setIsSystemDefault] = useState(false)
+    
   return (
     <SafeAreaView>
     <ScrollView>
@@ -41,9 +47,9 @@ const Settings = () => {
       <Text className="font-pregular text-[14px] text-[#5D6C87] tracking-[-0.42px] uppercase px-[28px]">theme</Text>
       
       <View className="px-[36px] gap-[8px]">
-        <Pressable  className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><SunIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Light</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable>
-        <Pressable  className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><NightIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Dark</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable>
-        <Pressable className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><SettingsIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">System Default</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable>
+        <Pressable  className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><SunIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Light</Text><View style={{ marginLeft:'auto'}}><CustomRadio isActive={isLight} setIsActive={setIsLight} /></View></Pressable>
+        <Pressable  className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><NightIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Dark</Text><View style={{ marginLeft:'auto'}}><CustomRadio isActive={isDark} setIsActive={setIsDark} /></View></Pressable>
+        <Pressable className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><SettingsIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">System Default</Text><View style={{ marginLeft:'auto'}}><CustomRadio isActive={isSystemDefault} setIsActive={setIsSystemDefault} /></View></Pressable>
      
       </View>
 
@@ -55,13 +61,9 @@ const Settings = () => {
       <Text className="font-pregular text-[14px] text-[#5D6C87] tracking-[-0.42px] uppercase px-[28px]">Notification</Text>
       
       <View className="px-[36px] gap-[8px]">
-        <View className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><BellIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Push Notifications</Text><View style={{ marginLeft:'auto'}}><Switch 
-            trackColor={{true: '#00806E', false:'#D3DFE7'}}
-            thumbColor={'#FBFCFE'}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-        /></View></View>
-        <View className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><EmailIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Email Notifications</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></View>
+        <View className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><BellIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Push Notifications</Text><View  style={{position:'relative', marginLeft:'auto'}}><CustomSwitch isOn={pnotifications} setIsOn={setPnotifications} /></View>
+        </View>
+        <View className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><EmailIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Email Notifications</Text><View  style={{position:'relative', marginLeft:'auto'}}><CustomSwitch isOn={enotifications} setIsOn={setEnotifications} /></View></View>
 
      
       </View>

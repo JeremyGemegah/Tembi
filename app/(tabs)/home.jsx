@@ -6,6 +6,7 @@ import * as Location from 'expo-location'
 import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
 import CustomMarker from '../../components/customMarker'
 import DockerDetails from '../../components/dockerDetailsModal'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 const markers = [
   {
@@ -27,8 +28,10 @@ const Home = () => {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [initialRegion, setInitialRegion] = useState(null);
     const [selectedMarker, setSelectedMarker] = useState(null)
+    const modal = useRef()
 
     const handleMarkerSelect = (markerId) => {
+        modal.current.scrollTo(500)
         setSelectedMarker(markerId)
     }    
 
@@ -89,6 +92,7 @@ const Home = () => {
 
 const mapRef = useRef()
   return (
+      <GestureHandlerRootView style={{flex:1}}>
     <SafeAreaView style={{}}>
     <View className=" w-full h-full "  >
    
@@ -110,9 +114,10 @@ const mapRef = useRef()
              </Marker>
            ))}
         </MapView>
-        
+        <DockerDetails ref={modal} />
     </View>
     </SafeAreaView>
+    </GestureHandlerRootView>
   )
 }
 

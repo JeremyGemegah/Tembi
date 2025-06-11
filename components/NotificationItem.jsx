@@ -22,7 +22,7 @@ const parseHighlights = (text,color) => {
 const NotificationItem = ({type,message,time}) => {
     let icon
     let color
-    switch (type) {
+    switch (type) { 
         case 1:
             icon = <BillIcon/>
             color = '#449C0A'
@@ -45,7 +45,7 @@ const NotificationItem = ({type,message,time}) => {
 
         <View className="box-content p-[12px] rounded-[16px] border-neutral-30 border-[1px]  gap-[12px]" style={{flexDirection:'row', backgroundColor: type == 4? '#002520' : null}} >
             <View className="p-[12px] rounded-[12px] border-neutral-30 border-[1px] self-start bg-[#F5F8FA]" >{icon}</View>
-            <View>
+            <View style={{flex: 1}}>
             
                 {type == 4? <Text className="font-pregular text-[14px] text-neutral-10">{message}</Text> : <Text className="text-balance"  >{parseHighlights(message, color)}</Text>}
             

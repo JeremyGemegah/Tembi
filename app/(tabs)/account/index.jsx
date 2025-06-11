@@ -58,7 +58,7 @@ const Account = () => {
       
       <View className="px-[36px] gap-[8px]">
       <Link href="/account/report" push asChild><Pressable className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><WarningIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Report issue</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable></Link>
-        <View className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><InfoIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Help center</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></View>
+       <Link href="/account/help" push asChild><Pressable className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><InfoIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Help center</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable></Link>
 
      
       </View>
