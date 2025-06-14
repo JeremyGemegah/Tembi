@@ -18,6 +18,8 @@ module.exports = {
           90: '#302200',
           100: '#181100'
         },
+        success: '#449C0A',
+        critical: '#DD214F',
         secondary:{
           50: '#e5fffc',
           100: '#b3fff5',

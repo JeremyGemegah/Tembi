@@ -7,6 +7,7 @@ import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
 import CustomMarker from '../../components/customMarker'
 import DockerDetails from '../../components/dockerDetailsModal'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import ReserveBike from '../../components/reserveBike'
 
 const markers = [
   {
@@ -29,11 +30,17 @@ const Home = () => {
     const [initialRegion, setInitialRegion] = useState(null);
     const [selectedMarker, setSelectedMarker] = useState(null)
     const modal = useRef()
+    const ReserveBikeModal = useRef()
 
     const handleMarkerSelect = (markerId) => {
         modal.current.scrollTo(500)
         setSelectedMarker(markerId)
     }    
+
+    const openReserveBike =() => {
+      
+      ReserveBikeModal.current.scrollTo()
+    }
 
     useEffect(() => {
 
@@ -114,7 +121,8 @@ const mapRef = useRef()
              </Marker>
            ))}
         </MapView>
-        <DockerDetails ref={modal} />
+        <DockerDetails ref={modal} reservebike={openReserveBike} />
+        <ReserveBike ref={ReserveBikeModal} />
     </View>
     </SafeAreaView>
     </GestureHandlerRootView>

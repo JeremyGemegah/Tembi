@@ -481,3 +481,51 @@ export const RateIcon = ({color,style}) => {
         <SvgXml xml={xml} style={style} />
     )
 }
+
+export const DirectionsIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 12 14" fill="none">
+  <path d="M1.2791 1.95951C1.64073 1.48768 1.82154 1.25176 2.06873 1.12588C2.31591 1 2.59835 1 3.16323 1H4.77366C5.35175 1 5.64079 1 5.82037 1.19526C5.99996 1.39052 5.99996 1.70479 5.99996 2.33333V5H3.16323C2.59835 5 2.31591 5 2.06873 4.87412C1.82154 4.74824 1.64073 4.51232 1.2791 4.04049L1.13585 3.85358C0.823033 3.44544 0.666626 3.24137 0.666626 3C0.666626 2.75863 0.823033 2.55456 1.13585 2.14642L1.2791 1.95951Z" stroke="#1A73E9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10.7209 5.293C10.3592 4.82117 10.1784 4.58526 9.93123 4.45938C9.68405 4.3335 9.40161 4.3335 8.83673 4.3335H6V8.3335H8.83673C9.40161 8.3335 9.68405 8.3335 9.93123 8.20761C10.1784 8.08173 10.3592 7.84582 10.7209 7.37399L10.8641 7.18707C11.1769 6.77893 11.3333 6.57486 11.3333 6.3335C11.3333 6.09213 11.1769 5.88806 10.8641 5.47992L10.7209 5.293Z" stroke="#1A73E9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6 12.9998L6 1.6665" stroke="#1A73E9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M4 13H8" stroke="#1A73E9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const CriticalIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+  <path d="M2.54785 5.45512C4.15696 2.60783 4.96152 1.18418 6.06555 0.817711C6.67292 0.616102 7.32717 0.616102 7.93453 0.817711C9.03856 1.18418 9.84312 2.60783 11.4522 5.45512C13.0614 8.30242 13.8659 9.72606 13.6246 10.8861C13.4918 11.5242 13.1647 12.1031 12.6901 12.5396C11.8274 13.3332 10.2183 13.3332 7.00004 13.3332C3.78181 13.3332 2.17269 13.3332 1.31002 12.5396C0.835427 12.1031 0.508301 11.5242 0.375523 10.8861C0.13417 9.72606 0.938729 8.30242 2.54785 5.45512Z" fill="#DD214F"/>
+  <path d="M6.99474 9.6665H7.00073" stroke="#E9F0F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M7 7.6665L7 4.99984" stroke="#E9F0F4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const VideoIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="19" viewBox="0 0 22 19" fill="none">
+  <path d="M1 8.5C1 5.20017 1 3.55025 2.02513 2.52513C3.05025 1.5 4.70017 1.5 8 1.5H9C12.2998 1.5 13.9497 1.5 14.9749 2.52513C16 3.55025 16 5.20017 16 8.5V10.5C16 13.7998 16 15.4497 14.9749 16.4749C13.9497 17.5 12.2998 17.5 9 17.5H8C4.70017 17.5 3.05025 17.5 2.02513 16.4749C1 15.4497 1 13.7998 1 10.5V8.5Z" fill="#2E3748" stroke="#2E3748" stroke-width="1.5"/>
+  <path d="M16 6.40585L16.1259 6.30196C18.2417 4.55623 19.2996 3.68336 20.1498 4.10482C21 4.52628 21 5.92355 21 8.71808V10.2819C21 13.0765 21 14.4737 20.1498 14.8952C19.2996 15.3166 18.2417 14.4438 16.1259 12.698L16 12.5941" stroke="#2E3748" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="10.5" cy="7" r="1.5" fill="#FBFCFE"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const LocationAlternativeIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+  <path d="M9.33341 7.33333C9.33341 8.622 8.28875 9.66667 7.00008 9.66667C5.71142 9.66667 4.66675 8.622 4.66675 7.33333C4.66675 6.04467 5.71142 5 7.00008 5C8.28875 5 9.33341 6.04467 9.33341 7.33333Z" stroke="#5D6C87"/>
+  <path d="M7 1.3335C10.247 1.3335 13 4.02215 13 7.28401C13 10.5978 10.2022 12.9233 7.618 14.5046C7.42967 14.6109 7.2167 14.6668 7 14.6668C6.7833 14.6668 6.57033 14.6109 6.382 14.5046C3.8026 12.9079 1 10.6093 1 7.28401C1 4.02215 3.75296 1.3335 7 1.3335Z" stroke="#5D6C87"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
