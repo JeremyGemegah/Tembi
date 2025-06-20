@@ -170,7 +170,6 @@ const TabsLayout = () => {
                 borderTopLeftRadius: 24,
                 borderTopEndRadius: 24,
                 borderTopWidth:1
-                
                 ,zIndex:2
                 
                

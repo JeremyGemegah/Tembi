@@ -3,6 +3,7 @@ import React from 'react'
 import Animated,{FadeInDown, FadeOutUp} from 'react-native-reanimated'
 
 const CustomButton = ({title,handlePress,containerStyles,textStyles,isLoading, transition,queue, SecondTitle="no second text",animated=true,Icon,disabled, visible=true, layout={}}) => {
+ 
   return (
     <TouchableOpacity
     activeOpacity={0.7}
@@ -22,7 +23,7 @@ const CustomButton = ({title,handlePress,containerStyles,textStyles,isLoading, t
             exiting={animated? FadeOutUp.springify().damping(80).stiffness(200) : undefined}
           key="title" ><View style={{ flexDirection:'row', alignItems:'center'}}><View style={{paddingRight:12}}>{Icon && <Icon />}</View><Text style={{display: visible? 'flex': 'none', justifyContent:'center', alignItems:'center'}} className={`font-pregular ${textStyles} ` }>{title}</Text></View></Animated.Text>) }
     </TouchableOpacity>
-  )
-}
+  )}
+
 
 export default CustomButton

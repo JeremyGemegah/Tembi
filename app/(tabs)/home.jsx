@@ -127,7 +127,7 @@ const Home = () => {
 const mapRef = useRef()
   return (
       <GestureHandlerRootView >
-    <SafeAreaView style={{flex:1}}>
+    <SafeAreaView>
     <View className=" w-full h-full "  >
    
         <MapView ref={mapRef} style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation={true} showsMyLocationButton={false}   >
