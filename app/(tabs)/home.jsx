@@ -29,17 +29,44 @@ const Home = () => {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [initialRegion, setInitialRegion] = useState(null);
     const [selectedMarker, setSelectedMarker] = useState(null)
+    const [getDirectionsActive, setGetDirectionsActive] = useState(false)
+    const [reservationActive, setReservationActive] = useState(false)
     const modal = useRef()
     const ReserveBikeModal = useRef()
 
     const handleMarkerSelect = (markerId) => {
-        modal.current.scrollTo(500)
-        setSelectedMarker(markerId)
-    }    
+      if(reservationActive){
+        ReserveBikeModal?.current.scrollTo()
+      }else{
 
-    const openReserveBike =() => {
+        modal.current.scrollTo(500)
+      }
+        setSelectedMarker(markerId)
+    }   
+    
+    const getDirections = () => {
+      setGetDirectionsActive(true)
+      ReserveBikeModal?.current.scrollDown()
+      modal?.current.scrollPartial()
+    }
+
+    const openReserveBike = () => {
+      modal?.current.scrollDown()
+      ReserveBikeModal?.current.scrollTo()
+    }
+
+    const onArrive = () => {
+      //change variables
+      setGetDirectionsActive(false)
       
-      ReserveBikeModal.current.scrollTo()
+      //open right modal
+      if(reservationActive){
+        ReserveBikeModal?.current.scrollTo()
+        modal?.current.scrollDown()
+      }else{
+        modal?.current.scrollTo()
+        ReserveBikeModal?.current.scrollDown()
+      }
     }
 
     useEffect(() => {
@@ -99,8 +126,8 @@ const Home = () => {
 
 const mapRef = useRef()
   return (
-      <GestureHandlerRootView style={{flex:1}}>
-    <SafeAreaView style={{}}>
+      <GestureHandlerRootView >
+    <SafeAreaView style={{flex:1}}>
     <View className=" w-full h-full "  >
    
         <MapView ref={mapRef} style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation={true} showsMyLocationButton={false}   >
@@ -121,8 +148,8 @@ const mapRef = useRef()
              </Marker>
            ))}
         </MapView>
-        <DockerDetails ref={modal} reservebike={openReserveBike} />
-        <ReserveBike ref={ReserveBikeModal} />
+        <DockerDetails ref={modal} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive}  />
+        <ReserveBike ref={ReserveBikeModal} getDirections={getDirections} reservationActive={reservationActive} setReservationActive={setReservationActive} />
     </View>
     </SafeAreaView>
     </GestureHandlerRootView>

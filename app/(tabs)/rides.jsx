@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
 import RideItem from '../../components/Rideitem'
 import RideDetails from '../../components/Ridedetails'
+import CircleTimer from '../../components/circleTimer'
 
 
 const Rides = () => {
@@ -107,7 +108,7 @@ const Rides = () => {
                 <RideItem key={index} place={item.name} time={item.time} date={item.date} price={item.price} onPress={()=> openModal(item.name)}/>
               ))}
             </View>
-            
+          
           </View>
         </View>
         <RideDetails visibility={modalVisible} onClose={onClose} title={selectedRide} />

@@ -433,12 +433,13 @@ export const UploadImageIcon = ({color,style}) => {
     )
 }
 
-export const LocationMarkerIcon = ({color,style}) => {
+export const LocationMarkerIcon = ({color,style,dotcolor}) => {
     const mycolor = color || "#FBFCFE"
+    const mydotcolor = dotcolor || "#002520"
     const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 12 16" fill="none">
   <path d="M2.66669 12C1.4474 12.2745 0.666687 12.6962 0.666687 13.1691C0.666687 13.9962 3.0545 14.6667 6.00002 14.6667C8.94554 14.6667 11.3334 13.9962 11.3334 13.1691C11.3334 12.6962 10.5526 12.2745 9.33335 12" stroke=${mycolor} stroke-linecap="round"/>
   <path d="M6.83825 11.6621C6.61339 11.8786 6.31286 11.9997 6.00008 11.9997C5.68731 11.9997 5.38677 11.8786 5.16192 11.6621C3.10285 9.66686 0.34344 7.43803 1.68912 4.20216C2.41672 2.45256 4.16328 1.33301 6.00008 1.33301C7.83689 1.33301 9.58345 2.45256 10.311 4.20216C11.655 7.43395 8.9024 9.67374 6.83825 11.6621Z" fill=${mycolor} stroke=${mycolor}/>
-  <path d="M7.66665 5.99967C7.66665 6.92015 6.92045 7.66634 5.99998 7.66634C5.07951 7.66634 4.33331 6.92015 4.33331 5.99967C4.33331 5.0792 5.07951 4.33301 5.99998 4.33301C6.92045 4.33301 7.66665 5.0792 7.66665 5.99967Z" fill="#002520"/>
+  <path d="M7.66665 5.99967C7.66665 6.92015 6.92045 7.66634 5.99998 7.66634C5.07951 7.66634 4.33331 6.92015 4.33331 5.99967C4.33331 5.0792 5.07951 4.33301 5.99998 4.33301C6.92045 4.33301 7.66665 5.0792 7.66665 5.99967Z" fill=${mydotcolor}/>
 </svg>`
     return(
         <SvgXml xml={xml} style={style} />
@@ -524,6 +525,56 @@ export const LocationAlternativeIcon = ({color,style}) => {
     const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
   <path d="M9.33341 7.33333C9.33341 8.622 8.28875 9.66667 7.00008 9.66667C5.71142 9.66667 4.66675 8.622 4.66675 7.33333C4.66675 6.04467 5.71142 5 7.00008 5C8.28875 5 9.33341 6.04467 9.33341 7.33333Z" stroke="#5D6C87"/>
   <path d="M7 1.3335C10.247 1.3335 13 4.02215 13 7.28401C13 10.5978 10.2022 12.9233 7.618 14.5046C7.42967 14.6109 7.2167 14.6668 7 14.6668C6.7833 14.6668 6.57033 14.6109 6.382 14.5046C3.8026 12.9079 1 10.6093 1 7.28401C1 4.02215 3.75296 1.3335 7 1.3335Z" stroke="#5D6C87"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const UnlockIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="22" viewBox="0 0 17 22" fill="none">
+  <path d="M1.5 14C1.5 10.134 4.63401 7 8.5 7C12.366 7 15.5 10.134 15.5 14C15.5 17.866 12.366 21 8.5 21C4.63401 21 1.5 17.866 1.5 14Z" stroke="#002520" stroke-width="1.5"/>
+  <path d="M4 8.5V5.5C4 3.01472 6.01472 1 8.5 1C10.0602 1 11.435 1.79401 12.2422 3" stroke="#002520" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M8.5 15V13" stroke="#002520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const InfoIconAlt = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+  <path d="M18.3334 9.99967C18.3334 5.3973 14.6025 1.66634 10.0001 1.66634C5.39771 1.66634 1.66675 5.3973 1.66675 9.99967C1.66675 14.602 5.39771 18.333 10.0001 18.333C14.6025 18.333 18.3334 14.602 18.3334 9.99967Z" stroke="#5D6C87" stroke-width="1.5"/>
+  <path d="M10.202 14.1665V9.99984C10.202 9.607 10.202 9.41058 10.0799 9.28854C9.95791 9.1665 9.76149 9.1665 9.36865 9.1665" stroke="#5D6C87" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9.99349 6.6665H10.001" stroke="#5D6C87" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const DeleteIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+  <path d="M12 3.6665L11.5868 10.3499C11.4813 12.0575 11.4285 12.9113 11.0005 13.5251C10.7889 13.8286 10.5164 14.0847 10.2005 14.2772C9.56141 14.6665 8.70599 14.6665 6.99516 14.6665C5.28208 14.6665 4.42554 14.6665 3.78604 14.2765C3.46987 14.0836 3.19733 13.827 2.98579 13.5231C2.55792 12.9082 2.5063 12.0532 2.40307 10.3433L2 3.6665" stroke="#A8B9CA" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M9.70382 3.66683H4.36862L4.7724 2.781L4.77241 2.781C5.06709 2.13453 5.21443 1.8113 5.4782 1.60894C5.53666 1.56409 5.59873 1.52417 5.66379 1.48958C5.95732 1.3335 6.31255 1.3335 7.02302 1.3335C7.71608 1.3335 8.06261 1.3335 8.35135 1.4833C8.4154 1.51652 8.47664 1.5549 8.53448 1.59803C8.79522 1.79251 8.94638 2.10433 9.2487 2.72798L9.70382 3.66683Z" fill="#A8B9CA"/>
+  <path d="M1 3.66683H13M9.70382 3.66683L9.2487 2.72798C8.94638 2.10433 8.79522 1.79251 8.53448 1.59803C8.47664 1.5549 8.4154 1.51652 8.35135 1.4833C8.06261 1.3335 7.71608 1.3335 7.02302 1.3335C6.31255 1.3335 5.95732 1.3335 5.66379 1.48958C5.59873 1.52417 5.53666 1.56409 5.4782 1.60894C5.21443 1.8113 5.06709 2.13453 4.7724 2.781L4.36862 3.66683" stroke="#A8B9CA" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M5.33325 11L5.33325 7" stroke="#A8B9CA" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M8.66675 11L8.66675 7" stroke="#A8B9CA" stroke-width="1.2" stroke-linecap="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const CautionIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="38" viewBox="0 0 40 38" fill="none">
+  <path d="M6.64342 14.3659C11.4708 5.82397 13.8844 1.55303 17.1965 0.453621C19.0186 -0.151207 20.9814 -0.151207 22.8035 0.453621C26.1156 1.55303 28.5292 5.82397 33.3566 14.3659C38.1839 22.9077 40.5976 27.1787 39.8736 30.6587C39.4752 32.5732 38.4938 34.3097 37.0701 35.6194C34.4821 38 29.6547 38 20 38C10.3453 38 5.51794 38 2.92993 35.6194C1.50616 34.3097 0.52478 32.5732 0.126447 30.6587C-0.597612 27.1787 1.81607 22.9077 6.64342 14.3659Z" fill="#DD214F"/>
+  <path d="M19.984 27H20.002" stroke="#FBFCFE" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20 21L20 13" stroke="#FBFCFE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`
     return(
         <SvgXml xml={xml} style={style} />

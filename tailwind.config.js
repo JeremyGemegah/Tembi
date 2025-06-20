@@ -19,7 +19,11 @@ module.exports = {
           100: '#181100'
         },
         success: '#449C0A',
-        critical: '#DD214F',
+        critical: { 
+          60: '#F64669',
+          70:'#DD214F',
+          80: '#A3072B'
+        },
         secondary:{
           50: '#e5fffc',
           100: '#b3fff5',

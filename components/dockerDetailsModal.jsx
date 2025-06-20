@@ -23,6 +23,12 @@ const DockerDetails = forwardRef((props,ref) => {
     useImperativeHandle(ref, () => ({
       scrollTo: () => {
         scrollTo(-SCREEN_HEIGHT/3)
+      },
+      scrollDown: () => {
+        scrollTo(SCREEN_HEIGHT)
+      },
+      scrollPartial: () => {
+        scrollTo(-SCREEN_HEIGHT/5)
       }
       
     }))
@@ -65,6 +71,7 @@ const DockerDetails = forwardRef((props,ref) => {
       translateY.value = withSpring(destination, {damping: 10})
     }
     
+    
   
     
     
@@ -76,23 +83,24 @@ const DockerDetails = forwardRef((props,ref) => {
         <View style={styles.line} className='bg-neutral-50' />
         <View className='mt-[16px] mx-[16px] gap-[16px]'>
           <View>
-          <View className='flex-row justify-between items-center w-full '>
+          <View className='flex-row justify-between items-center w-full mb-[8px] '>
             <View style={{ width: '70%'}}>
-              <Text className='font-pregular text-[18px] text-secondary-950'>Parade Grounds Station</Text>
-              <View className='flex-row items-center gap-[4px]'><WalkIcon /><Text className='text-neutral-70'>300 m | 4 min walk</Text></View>
+              <View className='flex-row gap-[8px] '>{ props.directionsActive? (<><WalkIcon /><Text className='font-pregular text-[18px] text-secondary-950'>4 min</Text></>) : (<Text className='font-pregular text-[18px] text-secondary-950'>Parade Grounds Station</Text>)}</View>
+              <View className='flex-row items-center gap-[4px]'>{!props.directionsActive && <WalkIcon />}<Text className='text-neutral-70'>300 m {props.directionsActive? 'left ● Arrival at 12:34 pm' : '| 4 min walk'}</Text></View>
             </View>
 
             <View className='flex-row items-center gap-[8px] '>
-              <TouchableOpacity className='bg-neutral-30 p-[8px] rounded-full' onPress={makeFavourite}><HeartIcon color={favourite? '#DD214F': '#5D6C87'} secondary={favourite? '#DD214F': ''} /></TouchableOpacity>
-              <TouchableOpacity className='bg-neutral-30 p-[8px] rounded-full' onPress={() => scrollTo(0)}><CancelIcon /></TouchableOpacity>
+              <TouchableOpacity className='bg-neutral-30 p-[8px] rounded-full' style={[styles.getDirectionsInactive(props.directionsActive)]} onPress={makeFavourite}><HeartIcon color={favourite? '#DD214F': '#5D6C87'} secondary={favourite? '#DD214F': ''} /></TouchableOpacity>
+              <TouchableOpacity className='bg-neutral-30 p-[8px] rounded-full' ><CancelIcon /></TouchableOpacity>
             </View>
 
             
           </View>
-          <View className='flex-row items-center mt-[8px] justify-start'><View style={{backgroundColor: opened? '#449C0A' : '#DD214F'}} className='px-[12px] py-[2px] items-center text-center rounded-full'><Text className='text-neutral-10 font-pregular text-[10px]'>{opened? 'Open': 'closed'}</Text></View><Text className='font-pregular text-neutral-90'> ● </Text><Text className='font-pregular text-[12px] text-neutral-90'>Closes 10 pm</Text></View>
+          <Text className='font-pregular text-[16px] text-primary-60' style={[styles.getDirectionsInactive(!props.directionsActive)]}>To Parade Grounds Station</Text>
+          <View className='flex-row items-center justify-start' ><View style={{backgroundColor: opened? '#449C0A' : '#DD214F'}} className='px-[12px] py-[2px] items-center text-center rounded-full'><Text className='text-neutral-10 font-pregular text-[10px]'>{opened? 'Open': 'closed'}</Text></View><Text className='font-pregular text-neutral-90'> ● </Text><Text className='font-pregular text-[12px] text-neutral-90'>Closes 10 pm</Text></View>
           </View>
 
-          <View >
+          <View style={[styles.getDirectionsInactive(props.directionsActive)]}>
             <View className='flex-row  w-full px-[8px] py-[12px] border-[1px] border-neutral-30 rounded-[12px]'>
               <View className='pr-[12px]'>
                 <View className='flex-row items-center gap-[8px] '><RidesIcon color={critical? '#DD214F': '#449C0A'} /><Text className='font-pregular text-[14px] items-center' style={{color: critical? '#DD214F': '#449C0A'}} >Bicycles Available</Text></View>
@@ -113,8 +121,9 @@ const DockerDetails = forwardRef((props,ref) => {
               </View>
             </View>
           </View>
-
-          <TouchableOpacity className='p-[8px] rounded-[12px] border-[1px] border-neutral-30 flex-row gap-[8px]' style={{display: videoNotification? 'flex': 'none'}}>
+        
+        <View style={[styles.getDirectionsInactive(props.directionsActive)]}>
+          <TouchableOpacity className='p-[8px] rounded-[12px] border-[1px] border-neutral-30 flex-row gap-[8px]' style={[{display: videoNotification? 'flex': 'none'}]}>
             <View className='justify-center'><View className='p-[8px] rounded-[8px] border-[1px] border-neutral-30 bg-neutral-20 justify-center items-center'><VideoIcon/></View></View>
             <View className='flex-1'>
               <Text className='font-pregular text-[14px] text-neutral-90'>How to Unlock bike</Text>
@@ -123,15 +132,20 @@ const DockerDetails = forwardRef((props,ref) => {
             <View className='justify-center' ><TouchableOpacity onPress={seenvideo} className='items-center justify-center '><CancelIcon /></TouchableOpacity></View>
 
           </TouchableOpacity>
+          </View>
 
 
-          <View className='gap-[8px]'>
+          <View className='gap-[8px]' style={[styles.getDirectionsInactive(props.directionsActive)]}>
             <View className='flex-row w-full gap-[8px]'>
-             <View style={{width:'auto', flexGrow:2}} ><CustomButton title={'Get Directions'} textStyles={'text-[#1A73E9]'} containerStyles={'bg-[#DBE8F9] '} Icon={() => <DirectionsIcon />} /></View>
+             <View style={{width:'auto', flexGrow:2}} ><CustomButton title={'Get Directions'} textStyles={'text-[#1A73E9]'} containerStyles={'bg-[#DBE8F9] '} Icon={() => <DirectionsIcon />} handlePress={props.getDirections} /></View>
              <View style={{width:'auto', flexGrow:2}} ><CustomButton title={'Report issue'} textStyles={'text-neutral-90'} containerStyles={'bg-neutral-30'} Icon={() => <CriticalIcon />} /></View>
             </View>
 
             <CustomButton title={'Reserve a Bike'} containerStyles={'bg-primary-50'} Icon={() => <RidesIcon color={'#002520'} />} handlePress={props.reservebike}/>
+          </View>
+
+          <View style={[styles.getDirectionsInactive(!props.directionsActive)]}>
+              <CustomButton title={"I've Arrived"} containerStyles={'bg-primary-50'} visible={props.directionsActive} handlePress={props.onArrive} />
           </View>
         </View>
     </Animated.View>
@@ -157,7 +171,10 @@ const styles = StyleSheet.create({
     ,borderRadius: 20
     ,alignSelf:'center'
     ,marginVertical: 10
-  }
+  },
+  getDirectionsInactive: active => ({
+    display: active? 'none' : 'flex'
+  })
 })
 
 export default DockerDetails
