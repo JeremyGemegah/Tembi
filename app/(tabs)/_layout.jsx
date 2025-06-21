@@ -7,6 +7,7 @@ import ScanCode from '../../components/ScanCode'
 import { EventEmitter } from 'expo'
 import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
 import { Image } from 'react-native'
+import { useLocalSearchParams } from 'expo-router'
 
 //Icons for the various tabs
 const HomeTabIcon = ({color,name,focused, highlightColor}) => {
@@ -48,6 +49,7 @@ const AccountTabIcon = ({color,name, focused}) => {
 
 const TabsLayout = () => {
     const [modalVisible, setModalVisible] = useState(false)
+    const [modalOpened, setModalOpened] = useState(false)
     const [permission, requestPermission] = useCameraPermissions()
     const scaleAnim = useRef(new Animated.Value(1)).current; 
    
@@ -55,13 +57,22 @@ const TabsLayout = () => {
     useEffect(() => {
       const navigateAction = myeventEmitter.addListener('customTabPress', (e) => {
         Animated.timing(scaleAnim, {
+            // change native display property too *****************************************************************
             toValue: e === 'Home' ? 1 : 0, // Scale down when tab is not focused
             duration: 300, // Smooth animation duration
             useNativeDriver: true,
           }).start();
       })
+
+      const modalOpenedListener = customEventEmitter.addListener('modalOpened', (options) => {
+        setModalOpened(options.isOpen)
+        
+      })
     
-      return () => navigateAction.remove()
+      return () => {
+        navigateAction.remove()
+        modalOpenedListener.remove()
+    }
       
     }, [])
     
@@ -96,6 +107,8 @@ const TabsLayout = () => {
     }
 
     const TabHighlightColor = '#F2A900'
+
+
   return (
     <View className="flex-1" style={{position:'relative'}}>
 
@@ -139,7 +152,7 @@ const TabsLayout = () => {
             </View>
         </View>
 
-    <View style={{position:'absolute', zIndex:1, bottom:100, right:16}} className="flex gap-4">
+    <View style={{position:'absolute', zIndex:1, bottom:100, right:16, display: modalOpened? 'none': 'flex'}} className="flex gap-4">
         <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
             <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}} onPress={() => customEventEmitter.emit('FindLocationFired')}>
                 <LocationIcon />
@@ -159,7 +172,7 @@ const TabsLayout = () => {
    
 
     <Tabs 
-        screenOptions={{
+        screenOptions={ ({route}) => ({
             tabBarActiveTintColor:'#002520'
             ,tabBarInactiveTintColor:'#5D6C87'
             ,tabBarShowLabel:false
@@ -169,7 +182,9 @@ const TabsLayout = () => {
                 borderTopColor:'#E9F0F4',
                 borderTopLeftRadius: 24,
                 borderTopEndRadius: 24,
-                borderTopWidth:1
+                borderTopWidth:1,
+                position: 'absolute'
+                ,display: modalOpened? 'none': 'flex'
                 ,zIndex:2
                 
                
@@ -180,6 +195,7 @@ const TabsLayout = () => {
                     onPress={(e) => {
                         myeventEmitter.emit('customTabPress',props.accessibilityLargeContentTitle)
                         props.onPress?.(e)
+                        
                     }}
                     android_ripple={{ color: 'transparent'}}
                 />
@@ -187,7 +203,7 @@ const TabsLayout = () => {
             
                         
               
-        }}
+        })}
         
  
     >

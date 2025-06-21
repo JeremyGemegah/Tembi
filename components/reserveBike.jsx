@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
 import React,{forwardRef, useEffect, useImperativeHandle, useState, useRef} from 'react'
-import Animated,{ useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import Animated,{ runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { BillIcon, CancelIcon, CautionIcon, CriticalIcon, DeleteIcon, DirectionsIcon, HeartIcon, InfoIcon, InfoIconAlt, LocationAlternativeIcon, LocationIcon, LocationMarkerIcon, RateIcon, RidesIcon, UnlockIcon, VideoIcon, WalkIcon } from '../assets/icons/svgIcons'
 import CustomButton from './CustomButton'
@@ -12,7 +12,7 @@ import DialogueModal from './dialogueModal'
 
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window')
-const MAX_TRANSLATE_Y = SCREEN_HEIGHT /1.2
+const MAX_TRANSLATE_Y = SCREEN_HEIGHT /1.35
 const MIN_TRANSLATE_Y = SCREEN_HEIGHT /5
 
 const ReserveBike = forwardRef((props,ref) => {
@@ -26,10 +26,12 @@ const ReserveBike = forwardRef((props,ref) => {
 
     useImperativeHandle(ref, () => ({
       scrollTo: () => {
-        scrollTo(-SCREEN_HEIGHT/3)
+        scrollTo(-MAX_TRANSLATE_Y)
+        props.setReservationModalActive(true)
       },
       scrollDown: () => {
         scrollTo(SCREEN_HEIGHT)
+        props.setReservationModalActive(false)
       }
       
     }))
@@ -55,17 +57,24 @@ const ReserveBike = forwardRef((props,ref) => {
     .onEnd(e => {
       if(translateY.value > -MIN_TRANSLATE_Y){
         translateY.value = withSpring(SCREEN_HEIGHT)
+        runOnJS(props.setReservationModalActive)(false)
+        runOnJS(props.modalRegister)()
       }
       if(translateY.value < -MIN_TRANSLATE_Y){
         translateY.value = withSpring(-MAX_TRANSLATE_Y)
       }
     })
 
-
+    const closeModal = () => {
+      props.setReservationModalActive(false)
+      props.modalRegister()
+      scrollTo(0)
+      console.log('modal closed')
+    }
  
     const scrollTo = (destination) => {
       'worklet'
-      translateY.value = withSpring(destination, {damping: 10})
+      translateY.value = withSpring(destination, {damping: 15})
     }
 
     const selectOffer = (price) => {
@@ -81,12 +90,14 @@ const ReserveBike = forwardRef((props,ref) => {
   const unlockBike = () => {
     cancelReservation()
     scrollTo(SCREEN_HEIGHT)
+    props.setReservationActive(false)
   }
     
   const cancelReservation = () => {
     timerRef.current?.stopAnim()
     setReservationActive(false)
     props.setReservationActive(false)
+    
   }
 
   const endReservation = () => {
@@ -136,7 +147,7 @@ const ReserveBike = forwardRef((props,ref) => {
 
             <View className='flex-row items-center  '>
               
-              <TouchableOpacity onPress={() => scrollTo(0)}><CancelIcon /></TouchableOpacity>
+              <TouchableOpacity onPress={closeModal}><CancelIcon /></TouchableOpacity>
             </View>
 
             

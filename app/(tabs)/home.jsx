@@ -9,6 +9,8 @@ import DockerDetails from '../../components/dockerDetailsModal'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import ReserveBike from '../../components/reserveBike'
 
+
+
 const markers = [
   {
     id: 0,
@@ -31,10 +33,16 @@ const Home = () => {
     const [selectedMarker, setSelectedMarker] = useState(null)
     const [getDirectionsActive, setGetDirectionsActive] = useState(false)
     const [reservationActive, setReservationActive] = useState(false)
+    const [dockerDetailsActive, setDockerDetailsActive] = useState(false) // helps to track if the dockerdetails bottomsheet is being show
+    const [reservationModalActive, setReservationModalActive] = useState(false) // helps to track if the reservation bottomsheet is being shown
     const modal = useRef()
     const ReserveBikeModal = useRef()
+  
+
 
     const handleMarkerSelect = (markerId) => {
+      //this should be a toggle effect rather **************************************************************
+      customEventEmitter.emit('modalOpened',{isOpen: true})
       if(reservationActive){
         ReserveBikeModal?.current.scrollTo()
       }else{
@@ -67,6 +75,16 @@ const Home = () => {
         modal?.current.scrollTo()
         ReserveBikeModal?.current.scrollDown()
       }
+    }
+
+    const checkForReservationModalDisplayed = () => {
+        customEventEmitter.emit('modalOpened',{isOpen: dockerDetailsActive})
+     
+    }
+
+    const checkForDockerModalDisplayed = () => {
+        customEventEmitter.emit('modalOpened',{isOpen: reservationModalActive})
+     
     }
 
     useEffect(() => {
@@ -148,8 +166,8 @@ const mapRef = useRef()
              </Marker>
            ))}
         </MapView>
-        <DockerDetails ref={modal} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive}  />
-        <ReserveBike ref={ReserveBikeModal} getDirections={getDirections} reservationActive={reservationActive} setReservationActive={setReservationActive} />
+        <DockerDetails ref={modal} modalRegister={checkForDockerModalDisplayed} setDockerDetailsActive={setDockerDetailsActive} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive}  />
+        <ReserveBike ref={ReserveBikeModal} modalRegister={checkForReservationModalDisplayed} setReservationModalActive={setReservationModalActive} getDirections={getDirections} reservationActive={reservationActive} setReservationActive={setReservationActive} />
     </View>
     </SafeAreaView>
     </GestureHandlerRootView>

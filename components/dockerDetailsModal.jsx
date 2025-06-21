@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
 import React,{forwardRef, useEffect, useImperativeHandle, useState} from 'react'
-import Animated,{ useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import Animated,{ runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { BillIcon, CancelIcon, CriticalIcon, DirectionsIcon, HeartIcon, RateIcon, RidesIcon, VideoIcon, WalkIcon } from '../assets/icons/svgIcons'
 import CustomButton from './CustomButton'
@@ -8,9 +8,10 @@ import CustomButton from './CustomButton'
 
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window')
-const MAX_TRANSLATE_Y = SCREEN_HEIGHT /1
+const MAX_TRANSLATE_Y = SCREEN_HEIGHT /1.26
 const MIN_TRANSLATE_Y = SCREEN_HEIGHT /5
 
+//fix the height of modal dynamically **********************************************************************************************
 const DockerDetails = forwardRef((props,ref) => {
     const [modal, setModal] = useState(true)
     const translateY = useSharedValue(0)
@@ -22,13 +23,16 @@ const DockerDetails = forwardRef((props,ref) => {
 
     useImperativeHandle(ref, () => ({
       scrollTo: () => {
-        scrollTo(-SCREEN_HEIGHT/3)
+        scrollTo(-MAX_TRANSLATE_Y)
+        props.setDockerDetailsActive(true)
       },
       scrollDown: () => {
         scrollTo(SCREEN_HEIGHT)
+        props.setDockerDetailsActive(false)
       },
       scrollPartial: () => {
-        scrollTo(-SCREEN_HEIGHT/5)
+        scrollTo(-SCREEN_HEIGHT/3,100)
+        props.setDockerDetailsActive(true)
       }
       
     }))
@@ -58,17 +62,24 @@ const DockerDetails = forwardRef((props,ref) => {
     .onEnd(e => {
       if(translateY.value > -MIN_TRANSLATE_Y){
         translateY.value = withSpring(SCREEN_HEIGHT)
+        runOnJS(props.setDockerDetailsActive)(false)
+        runOnJS(props.modalRegister)()
       }
       if(translateY.value < -MIN_TRANSLATE_Y){
         translateY.value = withSpring(-MAX_TRANSLATE_Y)
       }
     })
 
+    const closeModal = () => {
+      props.setDockerDetailsActive(false)
+      props.modalRegister()
+      scrollTo(0)
+    }
 
  
-    const scrollTo = (destination) => {
+    const scrollTo = (destination,damping=15) => {
       'worklet'
-      translateY.value = withSpring(destination, {damping: 10})
+      translateY.value = withSpring(destination, {damping: damping})
     }
     
     
@@ -91,7 +102,7 @@ const DockerDetails = forwardRef((props,ref) => {
 
             <View className='flex-row items-center gap-[8px] '>
               <TouchableOpacity className='bg-neutral-30 p-[8px] rounded-full' style={[styles.getDirectionsInactive(props.directionsActive)]} onPress={makeFavourite}><HeartIcon color={favourite? '#DD214F': '#5D6C87'} secondary={favourite? '#DD214F': ''} /></TouchableOpacity>
-              <TouchableOpacity className='bg-neutral-30 p-[8px] rounded-full' ><CancelIcon /></TouchableOpacity>
+              <TouchableOpacity className='bg-neutral-30 p-[8px] rounded-full' onPress={closeModal} ><CancelIcon /></TouchableOpacity>
             </View>
 
             
