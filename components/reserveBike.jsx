@@ -16,7 +16,7 @@ const MAX_TRANSLATE_Y = SCREEN_HEIGHT /1.2
 const MIN_TRANSLATE_Y = SCREEN_HEIGHT /5
 
 const ReserveBike = forwardRef((props,ref) => {
-    const [offers, setOffers] = useState([{price: 0, time: 15,active: true},{price: 0.5, time: 30,active: false},{price: 1, time: 45,active: false}])
+    const [offers, setOffers] = useState([{price: 0, time: 1,active: true},{price: 0.5, time: 30,active: false},{price: 1, time: 45,active: false}])
     const timeInSeconds = offers.find( item => item.active === true).time * 60
     const timerRef = useRef()
     const [reservationActive, setReservationActive] = useState(false)
@@ -85,6 +85,11 @@ const ReserveBike = forwardRef((props,ref) => {
     
   const cancelReservation = () => {
     timerRef.current?.stopAnim()
+    setReservationActive(false)
+    props.setReservationActive(false)
+  }
+
+  const endReservation = () => {
     setReservationActive(false)
     props.setReservationActive(false)
   }
@@ -171,7 +176,7 @@ const ReserveBike = forwardRef((props,ref) => {
               <View style={[{width:'45%' , flexShrink:0, flexGrow: 1}, styles.reservationActiveStyles(reservationActive)]} className='justify-center'>
                 <View className='items-end'><InfoIconAlt /></View>
                 <View className='' style={{ width:'100%'}}>
-                  <CircleTimer radius={66} max={timeInSeconds} ref={timerRef} />
+                  <CircleTimer radius={66} max={timeInSeconds} endReservation={endReservation} ref={timerRef} />
                 </View>
                 
               </View>

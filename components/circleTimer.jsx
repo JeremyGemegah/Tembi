@@ -13,7 +13,8 @@ const CircleTimer = forwardRef(({
     color = '#6ACE13',
     textColor='#449C0A',
     delay = 100,
-    max = 100
+    max = 100,
+    endReservation
 },ref) => {
 
     const animatedValue = useRef( new Animated.Value(0)).current
@@ -45,12 +46,13 @@ const CircleTimer = forwardRef(({
             useNativeDriver: true
         })
         
-        initialAnimRef.current.start(() => {
+        initialAnimRef.current.start((finished) => {
             let current = max
             countdownInterval.current = setInterval(() => {
                 current -=1 
                 if(current < 0) {
-                    clearInterval(interval)
+                    endReservation()
+                    clearInterval(countdownInterval.current)
                     return;
                 }
                 animatedValue.setValue(current)
