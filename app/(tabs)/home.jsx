@@ -9,6 +9,7 @@ import DockerDetails from '../../components/dockerDetailsModal'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import ReserveBike from '../../components/reserveBike'
 import UnlockSuccessModal from '../../components/unlockSuccessModal'
+import { Dimensions } from 'react-native'
 
 
 
@@ -26,6 +27,7 @@ const markers = [
 ]
 
 const Home = () => {
+ 
 
   const initial_position ={"latitude": 6.673174393359494, "latitudeDelta": 0.04, "longitude": -1.5720686875283718, "longitudeDelta": 0.02, "zoom": 10}
     
@@ -190,3 +192,6 @@ const mapRef = useRef()
 }
 
 export default Home
+
+
+

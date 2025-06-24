@@ -121,7 +121,7 @@ const ReserveBike = forwardRef((props,ref) => {
       setDialogueVisible(false)
       cancelReservation()
     } else{
-
+      setDialogueVisible(false)
     }
   }
     
