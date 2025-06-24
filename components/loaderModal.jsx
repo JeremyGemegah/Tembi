@@ -1,6 +1,7 @@
 import { View, Text,Modal } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Loader from './Loader'
 
 const LoaderModal = ({visibility,Title, content,Icon,titleStyles}) => {
   return (
@@ -13,7 +14,7 @@ const LoaderModal = ({visibility,Title, content,Icon,titleStyles}) => {
                     <Text className='text-neutral-70 font-pregular text-[14px]' style={{textAlign:'center'}}>{content}</Text>
                     </View>
                    
-                        <View className='items-center mb-[8px]'>{Icon && <Icon />}</View>
+                        <Loader />
                 </View>
             </View>
         </SafeAreaView>
