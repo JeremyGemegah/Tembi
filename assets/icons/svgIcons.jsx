@@ -183,9 +183,10 @@ export const KeypadIcon = ({color,style}) => {
 
 
 export const SearchIcon = ({color,style}) => {
+    const mycolor = color || "#002520"
     const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-  <path d="M16.5 16.5L21 21" stroke="#002520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M19 10C19 5.02944 14.9706 1 10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C14.9706 19 19 14.9706 19 10Z" stroke="#002520" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M16.5 16.5L21 21" stroke=${mycolor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19 10C19 5.02944 14.9706 1 10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C14.9706 19 19 14.9706 19 10Z" stroke=${mycolor} stroke-width="1.5" stroke-linejoin="round"/>
 </svg>`
     return(
         <SvgXml xml={xml} style={style} />
@@ -576,6 +577,43 @@ export const CautionIcon = ({color,style}) => {
   <path d="M19.984 27H20.002" stroke="#FBFCFE" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M20 21L20 13" stroke="#FBFCFE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const TimeIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="16" viewBox="0 0 15 16" fill="none">
+  <path d="M7.22046 8.76785L5.1665 4.6665L8.7796 7.51958C9.29325 7.92519 9.29588 8.69796 8.78498 9.10699C8.27409 9.51602 7.51246 9.35092 7.22046 8.76785Z" stroke="#C18700" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M3.1665 3.2134C1.93226 4.42608 1.1665 6.11597 1.1665 7.98511C1.1665 11.6753 4.15127 14.6668 7.83317 14.6668C11.5151 14.6668 14.4998 11.6753 14.4998 7.98511C14.4998 4.74953 12.2052 2.05111 9.15799 1.43532C8.60066 1.32269 8.32199 1.26638 8.07758 1.46688C7.83317 1.66738 7.83317 1.9915 7.83317 2.63973V3.3079" stroke="#C18700" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const ArrowIcon = ({color,style}) => {
+    const mycolor = color || "#FBFCFE"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="21" height="14" viewBox="0 0 21 14" fill="none">
+  <path d="M19.1667 6.99951L1.66675 6.99951" stroke="#002520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14.4998 1.1665L19.626 6.29273C19.9593 6.62606 20.126 6.79273 20.126 6.99984C20.126 7.20694 19.9593 7.37361 19.626 7.70694L14.4998 12.8332" stroke="#002520" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}
+
+export const LoaderIcon = ({color,style,secondaryColor,fill}) => {
+    const mycolor = color || "rgba(242, 169, 0, 1)"
+    const secColor = secondaryColor || "rgba(242, 169, 0, 0)"
+    const myfill ="#F2A900"
+    const xml = `<svg  width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <g clip-path="url(#paint0_angular_1004_3725_clip_path)" data-figma-skip-parse="true"><g transform="matrix(0 0.024 -0.024 0 24 24)"><foreignObject x="-1041.67" y="-1041.67" width="2083.33" height="2083.33"><div xmlns="http://www.w3.org/1999/xhtml" style="background:conic-gradient(from 90deg,rgba(242, 169, 0, 1) 0deg,rgba(242, 169, 0, 0) 360deg);height:100%;width:100%;opacity:1"></div></foreignObject></g></g><path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24ZM7.97565 24C7.97565 32.85 15.15 40.0244 24 40.0244C32.85 40.0244 40.0244 32.85 40.0244 24C40.0244 15.15 32.85 7.97565 24 7.97565C15.15 7.97565 7.97565 15.15 7.97565 24Z" data-figma-gradient-fill="{&quot;type&quot;:&quot;GRADIENT_ANGULAR&quot;,&quot;stops&quot;:[{&quot;color&quot;:{&quot;r&quot;:0.94901961088180542,&quot;g&quot;:0.66274511814117432,&quot;b&quot;:0.0,&quot;a&quot;:1.0},&quot;position&quot;:0.0},{&quot;color&quot;:{&quot;r&quot;:0.94901961088180542,&quot;g&quot;:0.66274511814117432,&quot;b&quot;:0.0,&quot;a&quot;:0.0},&quot;position&quot;:1.0}],&quot;stopsVar&quot;:[{&quot;color&quot;:{&quot;r&quot;:0.94901961088180542,&quot;g&quot;:0.66274511814117432,&quot;b&quot;:0.0,&quot;a&quot;:1.0},&quot;position&quot;:0.0},{&quot;color&quot;:{&quot;r&quot;:0.94901961088180542,&quot;g&quot;:0.66274511814117432,&quot;b&quot;:0.0,&quot;a&quot;:0.0},&quot;position&quot;:1.0}],&quot;transform&quot;:{&quot;m00&quot;:2.9391524462044029e-15,&quot;m01&quot;:-48.0,&quot;m02&quot;:48.0,&quot;m10&quot;:48.0,&quot;m11&quot;:2.9391524462044029e-15,&quot;m12&quot;:-2.9391524462044029e-15},&quot;opacity&quot;:1.0,&quot;blendMode&quot;:&quot;NORMAL&quot;,&quot;visible&quot;:true}"/>
+  <circle cx="24" cy="44" r="4" fill="#F2A900"/>
+  <defs>
+    <clipPath id="paint0_angular_1004_3725_clip_path"><path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24ZM7.97565 24C7.97565 32.85 15.15 40.0244 24 40.0244C32.85 40.0244 40.0244 32.85 40.0244 24C40.0244 15.15 32.85 7.97565 24 7.97565C15.15 7.97565 7.97565 15.15 7.97565 24Z"/></clipPath></defs>
+    </svg>`
     return(
         <SvgXml xml={xml} style={style} />
     )

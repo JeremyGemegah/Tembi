@@ -69,7 +69,6 @@ const ReserveBike = forwardRef((props,ref) => {
       props.setReservationModalActive(false)
       props.modalRegister()
       scrollTo(0)
-      console.log('modal closed')
     }
  
     const scrollTo = (destination) => {
@@ -91,6 +90,7 @@ const ReserveBike = forwardRef((props,ref) => {
     cancelReservation()
     scrollTo(SCREEN_HEIGHT)
     props.setReservationActive(false)
+    props.modalRegister()
   }
     
   const cancelReservation = () => {

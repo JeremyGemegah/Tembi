@@ -1,5 +1,5 @@
-import { View, Text, Pressable, TouchableOpacity, Animated } from 'react-native'
-import React, { useEffect, useState,useRef } from 'react'
+import { View, Text, Pressable, TouchableOpacity, Animated, Dimensions } from 'react-native'
+import React, { useEffect, useState,useRef, createContext, useContext } from 'react'
 import { Tabs } from 'expo-router'
 import { AccountIcon, BellIcon, HeartIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon, SearchIcon } from '../../assets/icons/svgIcons'
 import { useCameraPermissions } from 'expo-camera'
@@ -21,6 +21,11 @@ const HomeTabIcon = ({color,name,focused, highlightColor}) => {
     )
 }
 
+const GlobalContext = createContext()
+
+const {height: SCREEN_HEIGHT} = Dimensions.get('screen')
+
+
 const RidesTabIcon = ({color,name,focused}) => {
     return(
         <View className=" gap-2  items-center justify-start h-full">
@@ -32,6 +37,7 @@ const RidesTabIcon = ({color,name,focused}) => {
     )
 }
 
+export const useGlobal = () => useContext(GlobalContext)
 const myeventEmitter = new EventEmitter()
 
 const AccountTabIcon = ({color,name, focused}) => {
@@ -102,7 +108,7 @@ const TabsLayout = () => {
         } catch (error) {
             console.log("could  not open camera")
         }
-               
+        
 
     }
 
@@ -110,6 +116,8 @@ const TabsLayout = () => {
 
 
   return (
+
+    <GlobalContext.Provider value={{SCREEN_HEIGHT}} >
     <View className="flex-1" style={{position:'relative'}}>
 
         <View style={{flexDirection:'row', justifyContent:'space-between',width:'100%', marginTop:50, position:'absolute', top:0, zIndex:1, paddingLeft:16, alignItems:'center',paddingTop:12}}>{/* top buttons */}
@@ -251,6 +259,7 @@ const TabsLayout = () => {
 
     </Tabs>
     </View>
+    </GlobalContext.Provider>
   )
 }
 

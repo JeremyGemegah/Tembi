@@ -6,6 +6,8 @@ import { FlashLightIcon, KeypadIcon, QuestionIcon } from '../assets/icons/svgIco
 import CustomButton from './CustomButton'
 import Svg,{Rect,Defs,Mask,Path} from 'react-native-svg'
 import { StyleSheet } from 'react-native'
+import DialogueModal from './dialogueModal'
+import { customEventEmitter } from './eventEmitters/eventEmitter'
 
 const { width, height: screenHeight } = Dimensions.get('window');
 
@@ -13,7 +15,22 @@ const { width, height: screenHeight } = Dimensions.get('window');
 const ScanCode = ({visibility, onClose}) => {
     const [flashMode, setFlashMode] = useState(false)
     const [modalHeight, setModalHeight] = useState(screenHeight);
+    const [manualEnter, setManualEnter] = useState(false);
+    const [dockerCode, setDockerCode] = useState('');
    
+    const onDialogueResponse = (res) => {
+        if(res){
+          //open next modal
+          customEventEmitter.emit('DockerCodeAccepted')
+          setManualEnter(false)
+          onClose()
+          setDockerCode('')
+        }else {
+          //close dialogue box
+          setManualEnter(false)
+          setDockerCode('')
+        }
+    }
 
     useEffect(() => {
     
@@ -96,11 +113,12 @@ const ScanCode = ({visibility, onClose}) => {
                     
                 </View>
                 <Text className="text-neutral-10 py-[16px] text-center font-pregular">OR</Text>
-                <CustomButton title={"Enter code manually"} containerStyles={"bg-neutral-10"} animated={false} Icon={() => <KeypadIcon />} />
+                <CustomButton title={"Enter code manually"} containerStyles={"bg-neutral-10"} animated={false} Icon={() => <KeypadIcon />} handlePress={() => setManualEnter(true)} />
              </View>
              </View>
           
         </CameraView>
+        <DialogueModal visibility={manualEnter} Title={'Enter code'} centered={true} content={'Please type in the code located below the QR Code'} affirmText={'Confirm'} negativeText={'Cancel'} titleStyles={'text-neutral-90 font-pmedium text-[16px]'} negativeButtonContainerStyles={'border-[1px] border-neutral-50'} affirmButtonContainerStyles={'bg-primary-50'} affirmTextStyles={'font-pregular text-[12px] leading-2'} negativeTextStyles={'text-neutral-70 text-[12px]'} textInput={dockerCode} setTextInput={setDockerCode} onResponse={onDialogueResponse}  />
       </Modal>
     </View>
   )

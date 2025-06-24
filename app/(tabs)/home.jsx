@@ -8,6 +8,7 @@ import CustomMarker from '../../components/customMarker'
 import DockerDetails from '../../components/dockerDetailsModal'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import ReserveBike from '../../components/reserveBike'
+import UnlockSuccessModal from '../../components/unlockSuccessModal'
 
 
 
@@ -35,6 +36,8 @@ const Home = () => {
     const [reservationActive, setReservationActive] = useState(false)
     const [dockerDetailsActive, setDockerDetailsActive] = useState(false) // helps to track if the dockerdetails bottomsheet is being show
     const [reservationModalActive, setReservationModalActive] = useState(false) // helps to track if the reservation bottomsheet is being shown
+    const [rideActive, setRideActive] = useState(false) // tracks whether a ride is in progress
+    const [unlockModal, setUnlockModal] = useState(false) // tracks whether the modal for docker code acception is opened
     const modal = useRef()
     const ReserveBikeModal = useRef()
   
@@ -87,6 +90,8 @@ const Home = () => {
      
     }
 
+    
+
     useEffect(() => {
 
       
@@ -137,9 +142,18 @@ const Home = () => {
         longitudeDelta: 0.005,
         })
       })
-    }) 
+    })
+    
+    const scanCode = customEventEmitter.addListener('DockerCodeAccepted',() => {
+      setUnlockModal(true)
+      setRideActive(true)
+      modal.current.startTimer()
+    })
 
-    return () => {listener.remove()}
+    return () => {
+      listener.remove()
+    scanCode.remove()
+  }
   },[])
 
 const mapRef = useRef()
@@ -166,8 +180,9 @@ const mapRef = useRef()
              </Marker>
            ))}
         </MapView>
-        <DockerDetails ref={modal} modalRegister={checkForDockerModalDisplayed} setDockerDetailsActive={setDockerDetailsActive} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive}  />
+        <DockerDetails ref={modal} setRideActive={setRideActive} modalRegister={checkForDockerModalDisplayed} setDockerDetailsActive={setDockerDetailsActive} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive} rideActive={rideActive}  />
         <ReserveBike ref={ReserveBikeModal} modalRegister={checkForReservationModalDisplayed} setReservationModalActive={setReservationModalActive} getDirections={getDirections} reservationActive={reservationActive} setReservationActive={setReservationActive} />
+        <UnlockSuccessModal visibility={unlockModal} onClose={() => {setUnlockModal(false); modal.current.scrollTo(500); customEventEmitter.emit('modalOpened',{isOpen: true})}} />
     </View>
     </SafeAreaView>
     </GestureHandlerRootView>
