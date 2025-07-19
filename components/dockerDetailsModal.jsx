@@ -28,7 +28,7 @@ const DockerDetails = forwardRef((props,ref) => {
   const [opened, setOpened] = useState(true)
   const [sliderWidth, setSliderWidth] = useState()
   const [favourite, setFavourite] = useState(false)
-  const [critical, setCritical] = useState(false)
+
   const [count, setCount] = useState(0)
   const [videoNotification, setVideoNotification] = useState(true)
   const MAX_TRANSLATE_X = sliderWidth - 52
@@ -196,6 +196,7 @@ const DockerDetails = forwardRef((props,ref) => {
       setRideComplete(false)
     }
   
+    let critical = props.docker && (props.docker.bikes_count < 1)? true : false
     
     
 
@@ -270,7 +271,7 @@ const DockerDetails = forwardRef((props,ref) => {
           <View>
           <View className='flex-row justify-between items-center w-full mb-[8px] '>
             <View style={{ width: '70%'}}>
-              <View className='flex-row gap-[8px] '>{ props.directionsActive? (<><WalkIcon /><Text className='font-pregular text-[18px] text-secondary-950'>4 min</Text></>) : (<Text className='font-pregular text-[18px] text-secondary-950'>Parade Grounds Station</Text>)}</View>
+              <View className='flex-row gap-[8px] '>{ props.directionsActive? (<><WalkIcon /><Text className='font-pregular text-[18px] text-secondary-950'>4 min</Text></>) : (<Text className='font-pregular text-[18px] text-secondary-950'>{props.docker?.name}</Text>)}</View>
               <View className='flex-row items-center gap-[4px]'>{!props.directionsActive && <WalkIcon />}<Text className='text-neutral-70'>300 m {props.directionsActive? 'left ● Arrival at 12:34 pm' : '| 4 min walk'}</Text></View>
             </View>
 
@@ -281,7 +282,7 @@ const DockerDetails = forwardRef((props,ref) => {
 
             
           </View>
-          <Text className='font-pregular text-[16px] text-primary-60' style={[styles.getDirectionsInactive(!props.directionsActive)]}>To Parade Grounds Station</Text>
+          <Text className='font-pregular text-[16px] text-primary-60' style={[styles.getDirectionsInactive(!props.directionsActive)]}>{props.docker?.name}</Text>
           <View className='flex-row items-center justify-start' ><View style={{backgroundColor: opened? '#449C0A' : '#DD214F'}} className='px-[12px] py-[2px] items-center text-center rounded-full'><Text className='text-neutral-10 font-pregular text-[10px]'>{opened? 'Open': 'closed'}</Text></View><Text className='font-pregular text-neutral-90'> ● </Text><Text className='font-pregular text-[12px] text-neutral-90'>Closes 10 pm</Text></View>
           </View>
 
@@ -289,8 +290,8 @@ const DockerDetails = forwardRef((props,ref) => {
             <View className='flex-row  w-full px-[8px] py-[12px] border-[1px] border-neutral-30 rounded-[12px]'>
               <View className='pr-[12px]'>
                 <View className='flex-row items-center gap-[8px] '><RidesIcon color={critical? '#DD214F': '#449C0A'} /><Text className='font-pregular text-[14px] items-center' style={{color: critical? '#DD214F': '#449C0A'}} >Bicycles Available</Text></View>
-                <Text className='text-[48px] font-pregular' style={{color: critical? '#A3072B' : '#235C04'}}>07</Text>
-                <Text className='text-[12px] font-plight'>8 Docks Free</Text>
+                <Text className='text-[48px] font-pregular' style={{color: critical? '#A3072B' : '#235C04'}}>{props.docker?.bikes_count}</Text>
+                <Text className='text-[12px] font-plight'>{props.docker?.capacity - props.docker?.bikes_count} Docks Free</Text>
 
                 <View className='flex-row gap-[4px] items-center'><RateIcon /><Text className='text-[12px] font-plight'>Rate</Text></View>
                 <Text className='text-[14px] font-pregular text-neutral-90'>GH₵0.20/min</Text>

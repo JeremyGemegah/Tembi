@@ -10,25 +10,15 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import ReserveBike from '../../components/reserveBike'
 import UnlockSuccessModal from '../../components/unlockSuccessModal'
 import { Dimensions } from 'react-native'
+import axios from 'axios'
 
 
 
-const markers = [
-  {
-    id: 0,
-    latitude: 6.6726,
-    longitude: -1.5729999
-},
-  {
-    id: 1,
-    latitude: 6.6759,
-    longitude: -1.5729999
-  }
-]
+
 
 const Home = () => {
  
-
+  const [markers, setMarkers] = useState()
   const initial_position ={"latitude": 6.673174393359494, "latitudeDelta": 0.04, "longitude": -1.5720686875283718, "longitudeDelta": 0.02, "zoom": 10}
     
     const [currentLocation, setCurrentLocation] = useState(null);
@@ -158,6 +148,39 @@ const Home = () => {
   }
   },[])
 
+  
+
+  useEffect(() => {
+
+  const getStationsData = async () => {
+      try {
+        console.log('request started')
+       await fetch('https://tembi.onrender.com/api/bikes/stations/', {
+  method: 'GET',
+  headers: {
+    'Accept': '*/*',
+    'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
+    'Authorization': 'Token b1f0a54255e502e81f535c67585d007ab0963d7e'
+  }
+})
+       .then(res => res.text())
+       .then(text => JSON.parse(text))
+       .then(data => {setMarkers(data); console.log(data)})
+      .catch(err => console.log(err)
+      )
+      
+      
+    } catch(error) {
+      console.log(error)
+    } finally {
+      console.log('request ended')
+    }
+  } 
+
+    getStationsData()
+  },[])
+
 const mapRef = useRef()
   return (
       <GestureHandlerRootView >
@@ -166,12 +189,12 @@ const mapRef = useRef()
    
         <MapView ref={mapRef} style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation={true} showsMyLocationButton={false}   >
            
-           {markers.map((marker, index) => (
+           {markers?.map((marker, index) => (
               <Marker key={index}
               
               coordinate={{
-                latitude: marker.latitude,
-                longitude: marker.longitude
+                latitude: marker.location_point?.latitude,
+                longitude: marker.location_point?.longitude
               }}
               onPress={() => handleMarkerSelect(marker.id)}
               tracksViewChanges={selectedMarker === marker.id}
@@ -182,7 +205,7 @@ const mapRef = useRef()
              </Marker>
            ))}
         </MapView>
-        <DockerDetails ref={modal} setRideActive={setRideActive} modalRegister={checkForDockerModalDisplayed} setDockerDetailsActive={setDockerDetailsActive} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive} rideActive={rideActive}  />
+        <DockerDetails ref={modal} docker={selectedMarker && markers?.find(marker => marker.id === selectedMarker)} setRideActive={setRideActive} modalRegister={checkForDockerModalDisplayed} setDockerDetailsActive={setDockerDetailsActive} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive} rideActive={rideActive}  />
         <ReserveBike ref={ReserveBikeModal} modalRegister={checkForReservationModalDisplayed} setReservationModalActive={setReservationModalActive} getDirections={getDirections} reservationActive={reservationActive} setReservationActive={setReservationActive} />
         <UnlockSuccessModal visibility={unlockModal} onClose={() => {setUnlockModal(false); modal.current.scrollTo(500); customEventEmitter.emit('modalOpened',{isOpen: true})}} />
     </View>
@@ -192,6 +215,5 @@ const mapRef = useRef()
 }
 
 export default Home
-
 
 

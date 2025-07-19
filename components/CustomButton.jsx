@@ -12,16 +12,16 @@ const CustomButton = ({title,handlePress,containerStyles,textStyles,isLoading, t
     disabled={disabled}
     style={{display: visible? 'flex': 'none'}}
     >
-        {transition && queue? (<Animated.Text 
+        {transition && queue? (<Animated.View 
           layout={layout}
           entering={FadeInDown.springify().damping(80).stiffness(200)}
           exiting={FadeOutUp.springify().damping(80).stiffness(200)}
-          key="secondTitle" className={` ${textStyles}` }>{SecondTitle}</Animated.Text>) : 
-          (<Animated.Text
-            style={{display: visible? 'flex': 'none'}}
+          key="secondTitle" className={` ${textStyles}` }><Text>{SecondTitle}</Text></Animated.View>) : 
+          (<Animated.View
+      
             entering={FadeInDown.springify().damping(80).stiffness(200)}
             exiting={animated? FadeOutUp.springify().damping(80).stiffness(200) : undefined}
-          key="title" ><View style={{ flexDirection:'row', alignItems:'center', flex:1}}>{Icon && (<View style={{paddingRight:12, display: Icon? 'flex': 'none'}}><Icon /></View>)}<Text style={{display: visible? 'flex': 'none', flex:1}} className={`font-pregular ${textStyles} ` }>{title}</Text></View></Animated.Text>) }
+          key="title" style={{ display: visible? 'flex': 'none',flexDirection:'row', alignItems:'center', justifyContent:'center', flex:1}}>{Icon && (<View style={{paddingRight:12, display: Icon? 'flex': 'none'}}><Icon /></View>)}<Animated.Text style={{display: visible? 'flex': 'none',justifyContent:'center', alignItems:'center'}} className={`font-pregular ${textStyles} ` }>{title}</Animated.Text></Animated.View>) }
     </TouchableOpacity>
   )}
 

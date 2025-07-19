@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import {EyeClosed, EyeOpen, Lock, MailIcon, PhoneIcon, Profile} from '../assets/icons/svgIcons'
 
 
-const TextField = ({type='profile', state='normal', placeholder, handleTextChange, title}) => {
+const TextField = ({type='profile', state='normal', placeholder, handleTextChange, title,text}) => {
     let borderColor ;
     let iconColor;
     let textColor;
@@ -49,6 +49,7 @@ const TextField = ({type='profile', state='normal', placeholder, handleTextChang
          placeholder= {placeholder}
          placeholderTextColor={'#5D6C87'}
          onChangeText={handleTextChange}
+         value={text}
          secureTextEntry={type === 'password' && !showPassword}
         />
       {type === 'password' && (<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
