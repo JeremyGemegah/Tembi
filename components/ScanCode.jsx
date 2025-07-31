@@ -8,41 +8,81 @@ import Svg,{Rect,Defs,Mask,Path} from 'react-native-svg'
 import { StyleSheet } from 'react-native'
 import DialogueModal from './dialogueModal'
 import { customEventEmitter } from './eventEmitters/eventEmitter'
+import { CautionIcon } from '../assets/icons/svgIcons'
+import LoaderModal from './loaderModal'
 
 const { width, height: screenHeight } = Dimensions.get('window');
 
 
 const ScanCode = ({visibility, onClose}) => {
     const [flashMode, setFlashMode] = useState(false)
-    const [modalHeight, setModalHeight] = useState(screenHeight);
     const [manualEnter, setManualEnter] = useState(false);
     const [dockerCode, setDockerCode] = useState('');
+    const [rentalError, setRentalError] = useState(false);
+    const [rentalErrorMessage, setRentalErrorMessage] = useState({tite:'',message:''})
+    const [loading, setLoading] = useState(false)
    
-    const onDialogueResponse = (res) => {
-        if(res){
-          //open next modal
-          customEventEmitter.emit('DockerCodeAccepted')
-          setManualEnter(false)
-          onClose()
-          setDockerCode('')
-        }else {
-          //close dialogue box
-          setManualEnter(false)
-          setDockerCode('')
-        }
+    const startRental = async (code) => {
+      setLoading(true)
+      setManualEnter(false)
+      const response = await fetch('https://tembi.onrender.com/api/rentals/start/', {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'User-Agent': 'BikeHiveApp/1.0', // It's good practice to have a proper user agent
+              'Authorization': 'Token fa435b767caa058d75456f724237c643ae966067'
+          },
+          body: JSON.stringify({
+              "docker": code
+          })
+      });
+
+      const responseData = await response.json();
+      setLoading(false)
+      if (!response.ok) {
+          const errorMessage = responseData.detail || responseData.error || JSON.stringify(responseData);
+          throw new Error(errorMessage);
+      }
+
+      return responseData;
+    };
+
+    const onDialogueResponse = async (scannedCode) => {
+      const code = scannedCode || dockerCode;
+      if (!code) {
+          setRentalErrorMessage({title:'No code entered', message:'You must enter or scan a code to start'})
+          setRentalError(true)
+          setManualEnter(false); // Just close the dialog
+          return;
+      }
+
+      try {
+          const data = await startRental(code);
+          console.log("Rental started:", data);
+          customEventEmitter.emit('DockerCodeAccepted');
+          onClose(); // Close the main scanner modal on success
+      } catch (error) {
+          
+          // You could show an alert to the user here
+          setRentalErrorMessage({title:'there was an error', message:error.message})
+          setRentalError(true)
+      } finally {
+          setManualEnter(false);
+          setDockerCode('');
+      }
     }
 
     useEffect(() => {
-    
-     setFlashMode(false)
-    
-      
-    }, [onClose])
+      if (!visibility) {
+        setFlashMode(false);
+      }
+    }, [visibility]);
     
 
   return (
     <View >
-      <Modal animationType='slide'  visible={visibility} style={{height:modalHeight}} onLayout={()=> setDisplay(true)}>
+      <Modal animationType='slide'  visible={visibility}>
         <CameraView facing='back'  style={{flex:1}}
             barcodeScannerSettings={{
                 barcodeTypes: ["qr"],
@@ -51,8 +91,7 @@ const ScanCode = ({visibility, onClose}) => {
           enableTorch={flashMode}  
 
           onBarcodeScanned={(bar) => {
-            console.log(bar)
-            onClose()
+            onDialogueResponse(bar.data);
           }}
           
         >
@@ -116,9 +155,10 @@ const ScanCode = ({visibility, onClose}) => {
                 <CustomButton title={"Enter code manually"} containerStyles={"bg-neutral-10"} animated={false} Icon={() => <KeypadIcon />} handlePress={() => setManualEnter(true)} />
              </View>
              </View>
-          
         </CameraView>
-        <DialogueModal visibility={manualEnter} Title={'Enter code'} centered={true} content={'Please type in the code located below the QR Code'} affirmText={'Confirm'} negativeText={'Cancel'} titleStyles={'text-neutral-90 font-pmedium text-[16px]'} negativeButtonContainerStyles={'border-[1px] border-neutral-50'} affirmButtonContainerStyles={'bg-primary-50'} affirmTextStyles={'font-pregular text-[12px] leading-2'} negativeTextStyles={'text-neutral-70 text-[12px]'} textInput={dockerCode} setTextInput={setDockerCode} onResponse={onDialogueResponse}  />
+        <DialogueModal visibility={manualEnter} Title={'Enter code'} centered={true} content={'Please type in the code located below the QR Code'} affirmText={'Confirm'} negativeText={'Cancel'} titleStyles={'text-neutral-90 font-pmedium text-[16px]'} negativeButtonContainerStyles={'border-[1px] border-neutral-50'} affirmButtonContainerStyles={'bg-primary-50'} affirmTextStyles={'font-pregular text-[12px] leading-2'} negativeTextStyles={'text-neutral-70 text-[12px]'} textInput={dockerCode} setTextInput={setDockerCode} onResponse={(confirmed) => confirmed? onDialogueResponse() : setManualEnter(false)}  />
+        <DialogueModal visibility={rentalError} Title={rentalErrorMessage.tite} content={rentalErrorMessage.message}  titleStyles={'text-critical-70 font-pmedium text-[16px]'} affirmText={'OK'} centered Icon={() => <CautionIcon/>} onResponse={() => setRentalError(false)}/>
+        <LoaderModal visibility={loading} Title={'Wait a minute...'} content={'Verifying code'} Icon={() => <LoaderIcon />} />
       </Modal>
     </View>
   )

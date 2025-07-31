@@ -84,13 +84,47 @@ const DockerDetails = forwardRef((props,ref) => {
       }
     })
     
-    const endRide = () => {
+    const endRide = async () => {
         setLoading(true)
-        loaderInterval.current = setTimeout(() => {
+      
+        try {
+
+          await fetch('https://tembi.onrender.com/api/rentals/start/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
+          'Authorization': 'Token fa435b767caa058d75456f724237c643ae966067'
+        },
+        body: JSON.stringify({
+          "docker": dockerCode
+        })
+      })
+            .then(async (res) => {
+          const errorText = await res.text();
+        return res.json();
+      })
+      .then(async (res) => {
+        const myres = await res.json()
+        if(!myres.rental_id){
+          throw new Error(err)
+        }
+      })
+            .then(data => console.log(data))
+            .catch(err => {throw new Error(err)}
+            )
+
+          
+        } catch (error) {
+          
+        } finally{
           setLoading(false)
-          setRideError(true)
-          clearInterval(loaderInterval.current)
-        },3000)
+        }
+        
+         // setRideError(true) when there is an error packing
+     
     }
 
 
@@ -327,7 +361,7 @@ const DockerDetails = forwardRef((props,ref) => {
              <View style={{width:'auto', flexGrow:2}} ><CustomButton title={'Report issue'} textStyles={'text-neutral-90'} containerStyles={'bg-neutral-30'} Icon={() => <CriticalIcon />} /></View>
             </View>
 
-            <CustomButton title={'Reserve a Bike'} containerStyles={'bg-primary-50'} Icon={() => <RidesIcon color={'#002520'} />} handlePress={props.reservebike}/>
+            <CustomButton title={'Reserve a Bike'} containerStyles={'bg-primary-50'} Icon={() => <RidesIcon color={'#002520'} />} handlePress={props.reservebike} disabled={props.docker?.bikes_count === 0}/>
           </View>
 
           <View style={[styles.getDirectionsInactive(!props.directionsActive)]}>

@@ -16,12 +16,13 @@ const MAX_TRANSLATE_Y = SCREEN_HEIGHT /1.35
 const MIN_TRANSLATE_Y = SCREEN_HEIGHT /5
 
 const ReserveBike = forwardRef((props,ref) => {
-    const [offers, setOffers] = useState([{price: 0, time: 1,active: true},{price: 0.5, time: 30,active: false},{price: 1, time: 45,active: false}])
+    const [offers, setOffers] = useState([{price: 0, time: 15,active: true},{price: 0.5, time: 30,active: false},{price: 1, time: 45,active: false}]) // dont hardcode this
     const timeInSeconds = offers.find( item => item.active === true).time * 60
     const timerRef = useRef()
     const [reservationActive, setReservationActive] = useState(false)
     const translateY = useSharedValue(0)
     const context = useSharedValue({y:0})
+    const [reservationDetails, setReservationDetails] = useState(null)
     const [dialogueVisible, setDialogueVisible] = useState(false)
 
     useImperativeHandle(ref, () => ({
@@ -105,21 +106,74 @@ const ReserveBike = forwardRef((props,ref) => {
     props.setReservationActive(false)
   }
 
-  const startReservation = () => {
+  const startReservation = async () => {
     //check if a reservation is already active and if not start a reservation
    if(!props.reservationActive){
-    props.setReservationActive(true)
-     setReservationActive(true)
-      timerRef.current?.startAnim()
+    const activeOffer = offers.find(item => item.active);
+    try {
+
+       await fetch(`https://tembi.onrender.com/api/rentals/reserve/`, {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
+    'Authorization': 'Token b1f0a54255e502e81f535c67585d007ab0963d7e'
+  },
+  body: JSON.stringify({
+    // TODO: Ensure you are passing the correct station ID from props.
+    "station": props.docker?.id || 0,
+    "duration_minutes": activeOffer?.time.toString() ?? "15"
+  })
+})
+      .then(async (res) => {
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`HTTP error! status: ${res.status}, body: ${errorText}`);
+        }
+        return res.json();
+      })
+       .then(data => {setReservationDetails(data); console.log(data)})
+      
+      
+      props.setReservationActive(true)
+       setReservationActive(true)
+        timerRef.current?.startAnim()
+      
+    } catch (error) {
+      console.log('could not start reservation'+error)
+    }
    }else{
     console.log('another reservation is active')
    }
   }
 
-  const onResponse = (boolans) => {
+  const onResponse = async (boolans) => {
     if(boolans){
-      setDialogueVisible(false)
-      cancelReservation()
+      try {
+       
+        await fetch(`https://tembi.onrender.com/api/rentals/reservations/${reservationDetails.id}/cancel/`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
+      'Authorization': 'Token b1f0a54255e502e81f535c67585d007ab0963d7e'
+    }
+  }).then(async (res) => {
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`HTTP error! status: ${res.status}, body: ${errorText}`);
+        }
+        return res.json();
+      })
+          
+        
+        setDialogueVisible(false)
+        cancelReservation()
+      } catch (error) {
+        console.log(error)
+      }
     } else{
       setDialogueVisible(false)
     }
@@ -161,16 +215,16 @@ const ReserveBike = forwardRef((props,ref) => {
                 <View className='flex-row items-center gap-[8px] '><RidesIcon color={ '#00806E'} /><Text className='font-pregular text-[14px] items-center' style={{color:'#00806E'}} >Assigned Bicycle</Text></View>
                 <View className=' justify-center' style={styles.reservationInactiveStyles(reservationActive)}>
                 <Text className='text-[12px] font-plight text-neutral-70 mt-[8px]'>BIKE ID</Text>
-                <Text className='text-[28px] font-pregular text-primary-60 ' >PGH013</Text>
+                <Text className='text-[28px] font-pregular text-primary-60 ' >{props.reservedBike?.identifier}</Text>
                 </View>
                 
                 <View className='flex-1 justify-center' style={styles.reservationActiveStyles(reservationActive)}>
                 <Text className='text-[12px] font-plight text-neutral-70 mt-[8px]'>BIKE ID</Text>
-                <Text className='text-[28px] font-pregular text-primary-60 ' >PGH013</Text>
+                <Text className='text-[28px] font-pregular text-primary-60 ' >{props.reservedBike?.identifier}</Text>
                 </View>
 
                 <View className='flex-row gap-[4px] items-center' style={styles.reservationInactiveStyles(reservationActive)}><LocationAlternativeIcon /><Text className='text-[12px] font-plight text-neutral-70'>Location</Text></View>
-                <Text className='text-[14px] font-pregular text-neutral-90' style={styles.reservationInactiveStyles(reservationActive)}>Parade Grounds Station</Text>
+                <Text className='text-[14px] font-pregular text-neutral-90' style={styles.reservationInactiveStyles(reservationActive)}>{props.reservedBike?.current_docker}</Text>
               </View>
 
 
@@ -219,7 +273,7 @@ const ReserveBike = forwardRef((props,ref) => {
             <View className='p-[8px] rounded-[12px] border-[1px] border-neutral-30 flex-row gap-[8px]' >
                         <View className='justify-center'><View className='p-[8px] rounded-[8px] border-[1px] border-neutral-30 bg-neutral-20 justify-center items-center'><LocationMarkerIcon color={'#2E3748'} dotcolor={'#FBFCFE'} /></View></View>
                         <View className='flex-1'>
-                          <Text className='font-pregular text-[14px] text-neutral-90'>College of Engineering Station</Text>
+                          <Text className='font-pregular text-[14px] text-neutral-90'>{props.reservedBike?.current_docker}</Text>
                           <View className='flex-row items-center gap-[4px]'><WalkIcon /><Text className='text-neutral-70'>300 m | 4 min walk</Text></View>
                         </View>
             

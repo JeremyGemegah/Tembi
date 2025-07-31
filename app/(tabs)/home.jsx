@@ -23,6 +23,8 @@ const Home = () => {
     
     const [currentLocation, setCurrentLocation] = useState(null);
     const [initialRegion, setInitialRegion] = useState(null);
+    const [reservedBike, setReservedBike] = useState()
+    const [fetchingDockers, setFetchingDockers] = useState(false);
     const [selectedMarker, setSelectedMarker] = useState(null)
     const [getDirectionsActive, setGetDirectionsActive] = useState(false)
     const [reservationActive, setReservationActive] = useState(false)
@@ -53,9 +55,28 @@ const Home = () => {
       modal?.current.scrollPartial()
     }
 
-    const openReserveBike = () => {
-      modal?.current.scrollDown()
-      ReserveBikeModal?.current.scrollTo()
+    const openReserveBike = async () => {
+      //get bike details to reserve
+      try {
+        await fetch(`https://tembi.onrender.com/api/bikes/bikes/${markers[0].id}`, {
+  method: 'GET',
+  headers: {
+    'Accept': '*/*',
+    'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
+    'Authorization': 'Token b1f0a54255e502e81f535c67585d007ab0963d7e'
+  }})
+      .then(res => res.text())
+       .then(text => JSON.parse(text))
+       .then(data => {setReservedBike(data); console.log(data)})
+      .catch(err => console.log(err)
+      )
+        
+        modal?.current.scrollDown()
+        ReserveBikeModal?.current.scrollTo()
+      } catch (error) {
+        
+      }
     }
 
     const onArrive = () => {
@@ -154,7 +175,7 @@ const Home = () => {
 
   const getStationsData = async () => {
       try {
-        console.log('request started')
+        setFetchingDockers(true)
        await fetch('https://tembi.onrender.com/api/bikes/stations/', {
   method: 'GET',
   headers: {
@@ -174,7 +195,7 @@ const Home = () => {
     } catch(error) {
       console.log(error)
     } finally {
-      console.log('request ended')
+      setFetchingDockers(false)
     }
   } 
 
@@ -186,6 +207,7 @@ const mapRef = useRef()
       <GestureHandlerRootView >
     <SafeAreaView>
     <View className=" w-full h-full "  >
+      <View style={{position:'absolute', top:100, zIndex:3000, justifyContent:'center', alignItems:'center', width:'100%', display: fetchingDockers? 'flex':'none'}}><View style={{flex:1, paddingVertical:6, paddingHorizontal:12}} className='bg-primary-30 border-[1px] border-primary-70' ><Text className='text-primary-90'>Loading...</Text></View></View>
    
         <MapView ref={mapRef} style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation={true} showsMyLocationButton={false}   >
            
@@ -206,7 +228,7 @@ const mapRef = useRef()
            ))}
         </MapView>
         <DockerDetails ref={modal} docker={selectedMarker && markers?.find(marker => marker.id === selectedMarker)} setRideActive={setRideActive} modalRegister={checkForDockerModalDisplayed} setDockerDetailsActive={setDockerDetailsActive} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive} rideActive={rideActive}  />
-        <ReserveBike ref={ReserveBikeModal} modalRegister={checkForReservationModalDisplayed} setReservationModalActive={setReservationModalActive} getDirections={getDirections} reservationActive={reservationActive} setReservationActive={setReservationActive} />
+        <ReserveBike ref={ReserveBikeModal} docker={selectedMarker && markers?.find(marker => marker.id === selectedMarker)} modalRegister={checkForReservationModalDisplayed} setReservationModalActive={setReservationModalActive} getDirections={getDirections} reservationActive={reservationActive} setReservationActive={setReservationActive} reservedBike={reservedBike} />
         <UnlockSuccessModal visibility={unlockModal} onClose={() => {setUnlockModal(false); modal.current.scrollTo(500); customEventEmitter.emit('modalOpened',{isOpen: true})}} />
     </View>
     </SafeAreaView>

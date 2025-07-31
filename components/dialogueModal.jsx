@@ -47,8 +47,8 @@ const DialogueModal = ({visibility,onResponse,Title, titleStyles, content,affirm
                                 </View>
                               </View>
                     </View>
-                    <View className='flex-row w-full gap-[8px]' style={{display: affirmText && negativeText? 'flex' : 'none'}}>
-                        <View style={{width:'auto', flexGrow: 2, flexShrink: 0, flex:1}} ><CustomButton title={negativeText} containerStyles={negativeButtonContainerStyles} textStyles={negativeTextStyles} handlePress={() => onResponse(false)} /></View>
+                    <View className='flex-row w-full gap-[8px]' style={{display: affirmText? 'flex' : 'none'}}>
+                        <View style={{display: negativeText? 'flex': 'none',width:'auto', flexGrow: 2, flexShrink: 0, flex:1}} ><CustomButton title={negativeText} containerStyles={negativeButtonContainerStyles} textStyles={negativeTextStyles} handlePress={() => onResponse(false)} /></View>
                         <View style={{width:'auto', flexGrow: 2, flexShrink: 0, flex:1}} ><CustomButton title={affirmText} containerStyles={affirmButtonContainerStyles} Icon={buttonIcon && buttonIcon} textStyles={affirmTextStyles} handlePress={() => onResponse(true)} /></View>
                     </View>
                 </View>
