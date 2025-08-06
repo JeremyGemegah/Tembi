@@ -16,8 +16,8 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "config":{
-        "googleMaps":{
+      "config": {
+        "googleMaps": {
           "apiKey": "AIzaSyAeyi0XeQSbqEMzKVvpFmuNpwkyVhk4W_Y"
         }
       },
@@ -38,7 +38,12 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      ["expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Allow Tembi to access your Face ID biometric data."
+        }]
     ],
     "experiments": {
       "typedRoutes": true

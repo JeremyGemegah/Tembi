@@ -6,16 +6,46 @@ import { ArrowRight, BellIcon, SettingsIcon, BackIcon, Lock, SunIcon, NightIcon,
 import { Link,router } from 'expo-router'
 import CustomSwitch from '../../../../components/customSwitch'
 import CustomRadio from '../../../../components/Customradio'
+import DialogueModal from '../../../../components/dialogueModal'
+import * as SecureStore from 'expo-secure-store'
+
+
+
+
+
 
 const Settings = () => {
       const [pnotifications,setPnotifications] = useState(false)
       const [enotifications,setEnotifications] = useState(false)
       const [isLight,setIsLight] = useState(false)
       const [isDark,setIsDark] = useState(false)
+      const [logoutModal,setLogoutModal] = useState(false)
       const [isSystemDefault,setIsSystemDefault] = useState(false)
+
+
+      async function deleteToken(key) {
+  try {
+    await SecureStore.deleteItemAsync(key)
+    console.log(`Token with key '${key}' deleted successfully!`)
+  } catch (error) {
+    console.error(`Error deleting token with key '${key}':`, error)
+  }
+}
+
+
+      const logoutModalResponse = (val) => {
+        if(val){
+          deleteToken('api_token')
+          deleteToken('user')
+          router.replace('/sign-in')
+        }
+        else{
+          setLogoutModal(false)
+        }
+      }
     
   return (
-    <SafeAreaView>
+  
     <ScrollView>
       <View className="mb-[90]">
 
@@ -89,15 +119,17 @@ const Settings = () => {
     {/* section */}
 
     <View className="px-[36px] gap-[8px]">
-    <View className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><LogoutIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#A3072B] self-center">Logout</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></View> 
+    <Pressable onPress={() => setLogoutModal(true)} className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><LogoutIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#A3072B] self-center">Logout</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable> 
     </View>
     
     
 
     </View>
     </View>
+     <DialogueModal visibility={logoutModal} Title={'Logout of account?'} content={'You can always log back in.'}  titleStyles={'text-neutral-90 font-pregular text-[16px]'} affirmText={'Logout'} negativeText={'Cancel'} buttonIcon={() => <LogoutIcon color={'#FBFCFE'} />} affirmButtonContainerStyles={'bg-critical-80'} affirmTextStyles={'text-neutral-10 font-plight text-[12px]'} negativeTextStyles={'text-neutral-90 font-plight text-[12px]'} negativeButtonContainerStyles={'border-[1px] border-neutral-60'} onResponse={logoutModalResponse} />
+        
     </ScrollView>
-    </SafeAreaView>
+ 
   )
 }
 

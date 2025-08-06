@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import {EyeClosed, EyeOpen, Lock, MailIcon, PhoneIcon, Profile} from '../assets/icons/svgIcons'
 
 
-const TextField = ({type='profile', state='normal', placeholder, handleTextChange, title,text}) => {
+const TextField = ({type='profile', state='normal', placeholder, handleTextChange, title,value,maxLength=null, onBlur, onFocus, error=false, errorMessage}) => {
     let borderColor ;
     let iconColor;
     let textColor;
@@ -29,7 +29,7 @@ const TextField = ({type='profile', state='normal', placeholder, handleTextChang
     
         default:
             borderColor = '#798AA3'
-            textColor = '#5D6C87'
+            textColor = '#002520'
             iconColor='#5D6C87'
             break;
     }
@@ -37,6 +37,7 @@ const TextField = ({type='profile', state='normal', placeholder, handleTextChang
   return (
     <View>
       <Text className="pb-[8px] text-secondary-950 font-pregular text-[14px] font-normal tracking-[-0.42px]">{title}</Text>
+    
       <View className={`border-[1px] rounded-full px-[16px] py-[12px]`} style={{borderColor:borderColor}}>
         <View className="flex-row h-[20px] w-full items-center gap-[12px]">
         
@@ -49,8 +50,12 @@ const TextField = ({type='profile', state='normal', placeholder, handleTextChang
          placeholder= {placeholder}
          placeholderTextColor={'#5D6C87'}
          onChangeText={handleTextChange}
-         value={text}
+         value={value}
+         onBlur={onBlur}
+         onFocus={onFocus}
+         maxLength={maxLength}
          secureTextEntry={type === 'password' && !showPassword}
+         keyboardType={type === 'phone' ? 'phone-pad' : type === 'email' ? 'email-address' : 'default'}
         />
       {type === 'password' && (<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
         { showPassword? <EyeOpen style={{color: iconColor}} /> : <EyeClosed style={{color: iconColor}}/> }
@@ -58,6 +63,7 @@ const TextField = ({type='profile', state='normal', placeholder, handleTextChang
 
         </View>
       </View>
+      <Text style={{display: error? 'flex': 'none'}} className="font-plight text-[12px] text-critical-70">{errorMessage}</Text>
     </View>
   )
 }

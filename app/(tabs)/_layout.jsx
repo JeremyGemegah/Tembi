@@ -120,7 +120,7 @@ const TabsLayout = () => {
     <GlobalContext.Provider value={{SCREEN_HEIGHT}} >
     <View className="flex-1" style={{position:'relative'}}>
 
-        <View style={{flexDirection:'row', justifyContent:'space-between',width:'100%', marginTop:50, position:'absolute', top:0, zIndex:1, paddingLeft:16, alignItems:'center',paddingTop:12}}>{/* top buttons */}
+        <View style={{flexDirection:'row', justifyContent:'space-between',width:'100%', marginTop:10, position:'absolute', top:0, zIndex:1, paddingLeft:16, alignItems:'center',paddingTop:12}}>{/* top buttons */}
             <View>
             <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
                 <TouchableOpacity  className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20, width:48, height:48, overflow:'hidden', justifyContent:'center', alignItems:'center'}}>

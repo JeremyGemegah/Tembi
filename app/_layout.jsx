@@ -38,6 +38,7 @@ const MainLayout = () => {
   return (
     <Stack style={styles.container}>
         <Stack.Screen name='index' options={{ headerShown: false}} />
+        <Stack.Screen name='homemain' options={{ headerShown: false}} />
         <Stack.Screen name='(onboarding)' options={{ headerShown: false}} />
         <Stack.Screen name='(auth)' options={{headerShown: false}} />
         <Stack.Screen name='(tabs)' options={{headerShown: false}} />
