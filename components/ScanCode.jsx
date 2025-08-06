@@ -10,6 +10,8 @@ import DialogueModal from './dialogueModal'
 import { customEventEmitter } from './eventEmitters/eventEmitter'
 import { CautionIcon } from '../assets/icons/svgIcons'
 import LoaderModal from './loaderModal'
+import { GlobalContext } from '../app/(tabs)/_layout'
+import { useContext } from 'react'
 
 const { width, height: screenHeight } = Dimensions.get('window');
 
@@ -21,6 +23,7 @@ const ScanCode = ({visibility, onClose}) => {
     const [rentalError, setRentalError] = useState(false);
     const [rentalErrorMessage, setRentalErrorMessage] = useState({tite:'',message:''})
     const [loading, setLoading] = useState(false)
+    const {apiToken} = useContext(GlobalContext)
    
     const startRental = async (code) => {
       setLoading(true)
@@ -31,7 +34,7 @@ const ScanCode = ({visibility, onClose}) => {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
               'User-Agent': 'BikeHiveApp/1.0', // It's good practice to have a proper user agent
-              'Authorization': 'Token fa435b767caa058d75456f724237c643ae966067'
+              'Authorization': `Token ${apiToken}`
           },
           body: JSON.stringify({
               "docker": code
@@ -102,11 +105,11 @@ const ScanCode = ({visibility, onClose}) => {
                 </Svg>
              
              
-                    <Svg style={{position:'absolute', bottom:0, left:0, right:0}}>
+                 {/*    <Svg style={{position:'absolute', bottom:0, left:0, right:0}}>
                 <Defs>
                 <Mask id="mask">
                     <Rect x="0" y="0" width="100%" height="100%" fill="white" />
-                    {/* Transparent Cutout */}
+                    
                     <Rect
                     x="85"
                     y="140"
@@ -127,7 +130,7 @@ const ScanCode = ({visibility, onClose}) => {
                 fill="rgba(0, 0, 0, 0.5)"
                 mask="url(#mask)"
                 />
-            </Svg>
+            </Svg> */}
            
 
                 <View style={{flexDirection:'row', justifyContent:'space-between'}} className="p-[16px]">

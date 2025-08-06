@@ -1,5 +1,5 @@
 import { View, Text,Pressable, TouchableOpacity, Switch } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useContext} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
 import { ArrowRight, BellIcon, SettingsIcon, BackIcon, Lock, SunIcon, NightIcon, EmailIcon, LicenseIcon, TermsIcon, ShieldIcon, SmartphoneIcon, LogoutIcon } from '../../../../assets/icons/svgIcons'
@@ -8,6 +8,7 @@ import CustomSwitch from '../../../../components/customSwitch'
 import CustomRadio from '../../../../components/Customradio'
 import DialogueModal from '../../../../components/dialogueModal'
 import * as SecureStore from 'expo-secure-store'
+import { GlobalContext } from '../../_layout'
 
 
 
@@ -20,8 +21,9 @@ const Settings = () => {
       const [isLight,setIsLight] = useState(false)
       const [isDark,setIsDark] = useState(false)
       const [logoutModal,setLogoutModal] = useState(false)
+      const [logoutError,setLogoutError] = useState(false)
       const [isSystemDefault,setIsSystemDefault] = useState(false)
-
+      const {apiToken} = useContext(GlobalContext)
 
       async function deleteToken(key) {
   try {
@@ -33,12 +35,45 @@ const Settings = () => {
 }
 
 
-      const logoutModalResponse = (val) => {
+      const logoutModalResponse = async (val) => {
         if(val){
-          deleteToken('api_token')
-          deleteToken('user')
-          router.replace('/sign-in')
+       
+          
+          try {
+                 
+                
+                  const url = 'https://tembi.onrender.com/api/users/logout/'
+                  
+          
+                  const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                      'Authorization': `Token ${apiToken}`
+                    }
+                 
+                  });
+          
+                  if (!response.ok) {
+                      throw new Error()
+          
+                    }else{
+                      setLogoutModal(false)
+                      deleteToken('api_token')
+                      deleteToken('user')
+                     
+                      router.replace('/sign-in')
+
+                    }
+                } catch (error) {
+                  
+                  setLogoutError(true)
+                
+        }finally{
+          setLogoutModal(false)
         }
+      }
         else{
           setLogoutModal(false)
         }
@@ -119,7 +154,7 @@ const Settings = () => {
     {/* section */}
 
     <View className="px-[36px] gap-[8px]">
-    <Pressable onPress={() => setLogoutModal(true)} className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><LogoutIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#A3072B] self-center">Logout</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable> 
+    <Pressable onPress={() => setLogoutModal(true)} className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><LogoutIcon  style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#A3072B] self-center">Logout</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable> 
     </View>
     
     
@@ -127,7 +162,7 @@ const Settings = () => {
     </View>
     </View>
      <DialogueModal visibility={logoutModal} Title={'Logout of account?'} content={'You can always log back in.'}  titleStyles={'text-neutral-90 font-pregular text-[16px]'} affirmText={'Logout'} negativeText={'Cancel'} buttonIcon={() => <LogoutIcon color={'#FBFCFE'} />} affirmButtonContainerStyles={'bg-critical-80'} affirmTextStyles={'text-neutral-10 font-plight text-[12px]'} negativeTextStyles={'text-neutral-90 font-plight text-[12px]'} negativeButtonContainerStyles={'border-[1px] border-neutral-60'} onResponse={logoutModalResponse} />
-        
+       <DialogueModal visibility={logoutError} onResponse={() => setLogoutError(false)} Title={'We encountered an error'} content={'Please try again another time'} affirmText={'Ok'}  affirmButtonContainerStyles={'bg-primary-50'}  affirmTextStyles={'font-pregular text-[12px] leading-2 text-secondary-950'}  titleStyles={'text-critical-70 font-pmedium text-[16px]'}/>
     </ScrollView>
  
   )

@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 import React,{useEffect} from 'react'
 import { Stack,SplashScreen } from 'expo-router'
 import { useFonts } from 'expo-font'
-import { configureReanimatedLogger,ReanimatedLogLevel } from 'react-native-reanimated'
+import { configureReanimatedLogger } from 'react-native-reanimated'
 
 
 configureReanimatedLogger({

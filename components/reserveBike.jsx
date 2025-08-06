@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
-import React,{forwardRef, useEffect, useImperativeHandle, useState, useRef} from 'react'
+import React,{forwardRef, useEffect, useImperativeHandle, useState, useRef,useContext} from 'react'
 import Animated,{ runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { BillIcon, CancelIcon, CautionIcon, CriticalIcon, DeleteIcon, DirectionsIcon, HeartIcon, InfoIcon, InfoIconAlt, LocationAlternativeIcon, LocationIcon, LocationMarkerIcon, RateIcon, RidesIcon, UnlockIcon, VideoIcon, WalkIcon } from '../assets/icons/svgIcons'
@@ -8,6 +8,7 @@ import CustomRadio from './Customradio'
 import { ScrollView } from 'react-native-gesture-handler'
 import CircleTimer from './circleTimer'
 import DialogueModal from './dialogueModal'
+import { GlobalContext } from '../app/(tabs)/_layout'
 
 
 
@@ -24,6 +25,7 @@ const ReserveBike = forwardRef((props,ref) => {
     const context = useSharedValue({y:0})
     const [reservationDetails, setReservationDetails] = useState(null)
     const [dialogueVisible, setDialogueVisible] = useState(false)
+    const {apiToken} = useContext(GlobalContext)
 
     useImperativeHandle(ref, () => ({
       scrollTo: () => {
@@ -87,10 +89,34 @@ const ReserveBike = forwardRef((props,ref) => {
         }) )
     }
    
-  const unlockBike = () => {
-    cancelReservation()
+  const unlockBike = async () => {
+    
     scrollTo(SCREEN_HEIGHT)
-    props.setReservationActive(false)
+    props.setReservationActive(false) 
+    try {
+       
+        await fetch(`https://tembi.onrender.com/api/rentals/reservations/${reservationDetails.id}/cancel/`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
+      'Authorization': `Token ${apiToken}`
+    }
+  }).then(async (res) => {
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`HTTP error! status: ${res.status}, body: ${errorText}`);
+        }
+        return res.json();
+      })
+          
+        
+        setDialogueVisible(false)
+        cancelReservation()
+      } catch (error) {
+        console.log(error)
+      }
     props.modalRegister()
   }
     
@@ -118,7 +144,7 @@ const ReserveBike = forwardRef((props,ref) => {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-    'Authorization': 'Token b1f0a54255e502e81f535c67585d007ab0963d7e'
+    'Authorization': `Token ${apiToken}`
   },
   body: JSON.stringify({
     // TODO: Ensure you are passing the correct station ID from props.
@@ -158,7 +184,7 @@ const ReserveBike = forwardRef((props,ref) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-      'Authorization': 'Token b1f0a54255e502e81f535c67585d007ab0963d7e'
+      'Authorization': `Token ${apiToken}`
     }
   }).then(async (res) => {
         if (!res.ok) {

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React,{useRef, useState, useEffect} from 'react'
+import React,{useRef, useState, useEffect, useContext} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView, { PROVIDER_GOOGLE ,Marker} from 'react-native-maps'
 import * as Location from 'expo-location'
@@ -11,13 +11,15 @@ import ReserveBike from '../../components/reserveBike'
 import UnlockSuccessModal from '../../components/unlockSuccessModal'
 import { Dimensions } from 'react-native'
 import axios from 'axios'
+import { router } from 'expo-router'
+import { GlobalContext } from './_layout'
 
 
 
 
 
 const Home = () => {
- 
+ const {apiToken} = useContext(GlobalContext)
   const [markers, setMarkers] = useState()
   const initial_position ={"latitude": 6.673174393359494, "latitudeDelta": 0.04, "longitude": -1.5720686875283718, "longitudeDelta": 0.02, "zoom": 10}
     
@@ -51,31 +53,42 @@ const Home = () => {
     
     const getDirections = () => {
       setGetDirectionsActive(true)
-      ReserveBikeModal?.current.scrollDown()
+      // ReserveBikeModal?.current.scrollDown()
       modal?.current.scrollPartial()
     }
 
     const openReserveBike = async () => {
       //get bike details to reserve
+      if (!apiToken || !selectedMarker) {
+        console.error("Cannot reserve bike: missing token or selected marker.");
+        return;
+      }
+      // NOTE: The endpoint `/api/bikes/bikes/{id}` seems to expect a bike ID, 
+      // but you are passing a station ID (`selectedMarker`). You may need to adjust your logic 
+      // to get an available bike ID from the selected station first.
+      const bikeIdToReserve = selectedMarker; // This is likely incorrect, it should be a bike ID.
+
       try {
-        await fetch(`https://tembi.onrender.com/api/bikes/bikes/${markers[0].id}`, {
-  method: 'GET',
-  headers: {
-    'Accept': '*/*',
-    'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-    'Authorization': 'Token b1f0a54255e502e81f535c67585d007ab0963d7e'
-  }})
-      .then(res => res.text())
-       .then(text => JSON.parse(text))
-       .then(data => {setReservedBike(data); console.log(data)})
-      .catch(err => console.log(err)
-      )
-        
+        const response = await fetch(`https://tembi.onrender.com/api/bikes/bikes/${bikeIdToReserve}`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Token ${apiToken}`
+          }
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to reserve bike: ${response.status} ${errorText}`);
+        }
+
+        const data = await response.json();
+        setReservedBike(data);
+
         modal?.current.scrollDown()
         ReserveBikeModal?.current.scrollTo()
       } catch (error) {
-        
+        console.log(error)
       }
     }
 
@@ -173,34 +186,41 @@ const Home = () => {
 
   useEffect(() => {
 
-  const getStationsData = async () => {
+    const getStationsData = async () => {
+      if (!apiToken) {
+        return; // Don't fetch if token is not available yet
+      }
       try {
-        setFetchingDockers(true)
-       await fetch('https://tembi.onrender.com/api/bikes/stations/', {
-  method: 'GET',
-  headers: {
-    'Accept': '*/*',
-    'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-    'Authorization': 'Token b1f0a54255e502e81f535c67585d007ab0963d7e'
-  }
-})
-       .then(res => res.text())
-       .then(text => JSON.parse(text))
-       .then(data => {setMarkers(data); console.log(data)})
-      .catch(err => console.log(err)
-      )
-      
-      
-    } catch(error) {
-      console.log(error)
-    } finally {
-      setFetchingDockers(false)
-    }
-  } 
+        setFetchingDockers(true);
+        const response = await fetch('https://tembi.onrender.com/api/bikes/stations/', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Token ${apiToken}`
+          }
+        });
 
-    getStationsData()
-  },[])
+        if (!response.ok) {
+          const error = new Error('Failed to fetch stations');
+          error.status = response.status;
+          throw error;
+        }
+
+        const data = await response.json();
+        setMarkers(data);
+
+      } catch (error) {
+        console.error('Error fetching stations:', error);
+        if (error.status === 401 || error.status === 403) {
+          router.replace('/sign-in');
+        }
+      } finally {
+        setFetchingDockers(false);
+      }
+    }
+
+    getStationsData();
+  }, [apiToken]); // Re-run this effect when apiToken changes
 
 const mapRef = useRef()
   return (
@@ -237,5 +257,3 @@ const mapRef = useRef()
 }
 
 export default Home
-
-

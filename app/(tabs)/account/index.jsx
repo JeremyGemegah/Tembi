@@ -1,11 +1,14 @@
 import { View, Text, Image, Pressable } from 'react-native'
-import React from 'react'
+import React,{useContext} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
+import { GlobalContext } from '../_layout'
 import { AccountIcon, ArrowRight, BellIcon, BillIcon, HeartIcon, InfoIcon, RidesIcon, SettingsIcon, WarningIcon } from '../../../assets/icons/svgIcons'
 import { Link } from 'expo-router'
 
 const Account = () => {
+  const {userData} = useContext(GlobalContext)
+  console.log(userData)
   return (
     <SafeAreaView>
     <ScrollView>
@@ -13,13 +16,13 @@ const Account = () => {
     
     <View className="items-center pt-[36px] pb-[24px]">
       <Image
-        source={require('../../../assets/images/profile.jpg')}
+        source={userData?.avatar || require('../../../assets/images/profile.jpg')}
         resizeMode='contain'
         style={{width:80, height:80}}
         className="rounded-full"
       />
-      <Text className="font-pmedium text-[#C18700] text-[16px] pt-[8px] "> Jeremy Gemegah</Text>
-      <Text className="font-pregular text-[#5D6C87] text-[12px] "> jeremygemegah@gmail.com</Text>
+      <Text className="font-pmedium text-[#C18700] text-[16px] pt-[8px] ">{userData?.name}</Text>
+      <Text className="font-pregular text-[#5D6C87] text-[12px] "> {userData?.email}</Text>
     </View>
 
     <View className="gap-[20px]">

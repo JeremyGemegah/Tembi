@@ -7,6 +7,8 @@ import GoogleSigninButton from '../../components/GoogleSigninButton'
 import CustomButton from '../../components/CustomButton'
 import { router } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
+import { LoaderIcon } from '../../assets/icons/svgIcons'
+import LoaderModal from '../../components/loaderModal'
 
 
 const SignIn = () => {
@@ -17,6 +19,7 @@ const SignIn = () => {
     });
     const [formState, setFormState] = useState({email:{state:'normal', message:'',error:false},password:{state:'normal', message:'',error:false}})
     const [displayMessages, setDisplayMessages] = useState(false)
+    const [loading, setLoading] = useState(false)
 
    const handleFormChange = (fieldName, value) => {
 
@@ -64,6 +67,7 @@ const SignIn = () => {
     
    
     if(validInputs){
+      setLoading(true)
       try {
         console.log(form)
         setDisplayMessages(false)
@@ -104,18 +108,22 @@ const SignIn = () => {
           throw new Error(errorMessage);
         } else {
           const responseData = await response.json();
-          console.log('login successful', responseData);
+          
+          
 
-          const userData = JSON.stringify({
+          const userData = {
             name: responseData.user?.full_name,
-            token: responseData.token,
+            token: responseData?.token,
             avatar: responseData.user?.avatar,
             phone: responseData.user?.phone_number,
             email: responseData.user?.email,
-          });
+          };
+          
 
-          await saveToken('user', userData);
-          await saveToken('api_token', responseData.token)
+          console.log(userData.token)
+
+          await saveToken('user', JSON.stringify(userData));
+          await saveToken('api_token', userData.token)
           await saveToken('displayedOnboarding', 'true')
           router.replace('/(tabs)/home');
         }
@@ -123,6 +131,8 @@ const SignIn = () => {
         setDisplayMessages(true)
         console.log('Error:', error.message);
        
+      }finally{
+        setLoading(false)
       }
     }
   
@@ -197,6 +207,7 @@ const SignIn = () => {
               </View>
            
           </View>
+          <LoaderModal visibility={loading} Title={'Wait a minute...'} content={'Logging you in.'} Icon={() => <LoaderIcon />} />
         </View>
       </ScrollView>
     </SafeAreaView>

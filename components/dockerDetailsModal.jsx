@@ -7,6 +7,8 @@ import CustomButton from './CustomButton'
 import LoaderModal from './loaderModal'
 import DialogueModal from './dialogueModal'
 import RideCompleteModal from './rideCompleteModal'
+import { GlobalContext } from '../app/(tabs)/_layout'
+import { useContext } from 'react'
 
 
 
@@ -35,6 +37,7 @@ const DockerDetails = forwardRef((props,ref) => {
   const MIN_TRANSLATE_X = 0.85*MAX_TRANSLATE_X
   const timerInterval = useRef(null)
   const loaderInterval = useRef(null)
+  const {apiToken} = useContext(GlobalContext)
   
     useImperativeHandle(ref, () => ({
       scrollTo: () => {
@@ -96,22 +99,19 @@ const DockerDetails = forwardRef((props,ref) => {
           'Content-Type': 'application/json',
           'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-          'Authorization': 'Token fa435b767caa058d75456f724237c643ae966067'
+          'Authorization': `Token ${apiToken}`
         },
         body: JSON.stringify({
           "docker": dockerCode
         })
       })
-            .then(async (res) => {
-          const errorText = await res.text();
-        return res.json();
-      })
-      .then(async (res) => {
-        const myres = await res.json()
-        if(!myres.rental_id){
-          throw new Error(err)
-        }
-      })
+            .then(data => data.text())
+            .then((data) => {
+              if (!data.rental_id) {
+                throw new Error(errorText);
+              }
+              return data.json();
+            })
             .then(data => console.log(data))
             .catch(err => {throw new Error(err)}
             )

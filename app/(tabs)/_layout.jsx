@@ -1,6 +1,6 @@
 import { View, Text, Pressable, TouchableOpacity, Animated, Dimensions } from 'react-native'
 import React, { useEffect, useState,useRef, createContext, useContext } from 'react'
-import { Tabs } from 'expo-router'
+import { router, Tabs } from 'expo-router'
 import { AccountIcon, BellIcon, HeartIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon, SearchIcon } from '../../assets/icons/svgIcons'
 import { useCameraPermissions } from 'expo-camera'
 import ScanCode from '../../components/ScanCode'
@@ -8,6 +8,7 @@ import { EventEmitter } from 'expo'
 import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
 import { Image } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
+import { checkLoggedIn, getAPIToken, getUserData } from '../../components/functions/functions'
 
 //Icons for the various tabs
 const HomeTabIcon = ({color,name,focused, highlightColor}) => {
@@ -21,7 +22,7 @@ const HomeTabIcon = ({color,name,focused, highlightColor}) => {
     )
 }
 
-const GlobalContext = createContext()
+export const GlobalContext = createContext()
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('screen')
 
@@ -37,7 +38,7 @@ const RidesTabIcon = ({color,name,focused}) => {
     )
 }
 
-export const useGlobal = () => useContext(GlobalContext)
+
 const myeventEmitter = new EventEmitter()
 
 const AccountTabIcon = ({color,name, focused}) => {
@@ -56,6 +57,8 @@ const AccountTabIcon = ({color,name, focused}) => {
 const TabsLayout = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const [modalOpened, setModalOpened] = useState(false)
+    const [userData, setUserData] = useState()
+    const [apiToken, setAPIToken] = useState()
     const [permission, requestPermission] = useCameraPermissions()
     const scaleAnim = useRef(new Animated.Value(1)).current; 
    
@@ -81,6 +84,30 @@ const TabsLayout = () => {
     }
       
     }, [])
+
+    useEffect(() => {
+      const checkAuthStatus = async () => {
+        const loggedIn = await checkLoggedIn();
+        if (!loggedIn) {
+          router.replace('/sign-in');
+        } else {
+          try {
+            const userD = await getUserData();
+            const userToken = await getAPIToken();
+            if (userD) {
+              // You can now use the parsed user data
+              const mydata = JSON.parse(userD)
+              setUserData(mydata)
+              setAPIToken(userToken)
+              
+            }
+          } catch (e) {
+            console.error('Failed to parse user data:', e);
+          }
+        }
+      };
+      checkAuthStatus();
+    }, []);
     
 
     
@@ -117,7 +144,7 @@ const TabsLayout = () => {
 
   return (
 
-    <GlobalContext.Provider value={{SCREEN_HEIGHT}} >
+    <GlobalContext.Provider value={{SCREEN_HEIGHT,userData,apiToken}} >
     <View className="flex-1" style={{position:'relative'}}>
 
         <View style={{flexDirection:'row', justifyContent:'space-between',width:'100%', marginTop:10, position:'absolute', top:0, zIndex:1, paddingLeft:16, alignItems:'center',paddingTop:12}}>{/* top buttons */}
@@ -125,7 +152,7 @@ const TabsLayout = () => {
             <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
                 <TouchableOpacity  className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20, width:48, height:48, overflow:'hidden', justifyContent:'center', alignItems:'center'}}>
                     <Image 
-                    source={require('../../assets/images/profile.jpg')}
+                    source={userData?.avatar || require('../../assets/images/profile.jpg')}
                     resizeMode='contain'
                     style={{width:58, height:58}}
                    
