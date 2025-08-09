@@ -13,7 +13,11 @@ import { Modal } from "react-native"
 
 
 
-const RideDetails = ({visibility,onClose,title}) => {
+const RideDetails = ({visibility,onClose,ride}) => {
+
+    const rideStartDate = new Date(ride?.start_time);
+    const rideEndDate = ride.end_time? new Date(ride?.end_time): null;
+    const price = ride?.cost ? parseFloat(ride.cost).toFixed(2) : 0.00;
     const [destination, setDestination] = useState({
         latitude: 6.5792,
         longitude: 79.9629,})
@@ -33,8 +37,8 @@ const RideDetails = ({visibility,onClose,title}) => {
                 <BackIcon/>
             </TouchableOpacity>
             <View className="justify-center">
-            <Text className="text-[18px]  font-pregular">{title}</Text>
-            <Text className="text-[12px]  font-plight ">Mon, 3 Feb 2025</Text>
+            <Text className="text-[18px]  font-pregular">{ride.start_docker.split(' | ').pop().trim() }</Text>
+            <Text className="text-[12px]  font-plight ">{rideStartDate.toLocaleDateString([],  { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</Text>
             </View>
         </View>
 
@@ -71,8 +75,8 @@ const RideDetails = ({visibility,onClose,title}) => {
                     </View>
                     </View>
                     <View>
-                        <Text className='font-pregular text-[16px] text-neutral-90'>Brunei Station</Text>
-                        <Text className='font-plight text-[12px]'>07:38 AM</Text>
+                        <Text className='font-pregular text-[16px] text-neutral-90'>{ride.start_docker.split(' | ').pop().trim() }</Text>
+                        <Text className='font-plight text-[12px]'>{rideStartDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
                     </View>
                 </View>
                 <View>
@@ -92,8 +96,8 @@ const RideDetails = ({visibility,onClose,title}) => {
                     </View>
                     </View>
                     <View>
-                        <Text className='font-pregular text-[16px] text-neutral-90'>Engineering Station</Text>
-                        <Text className='font-plight text-[12px]'>07:45 AM</Text>
+                        <Text className='font-pregular text-[16px] text-neutral-90'>{ride.end_docker?.split(' | ').pop().trim() || 'Unknown Station'}</Text>
+                        <Text className='font-plight text-[12px]'>{rideEndDate?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) || 'Unknown Time'}</Text>
                     </View>
                 </View>
                    
@@ -104,18 +108,18 @@ const RideDetails = ({visibility,onClose,title}) => {
                 <View className='px-[8px] mt-[20px] gap-[8px]'>
                     <View className='px-[8px] flex-row justify-between'>
                         <Text className='text-secondary-800 font-pregular text-[16px]'>Subtotal</Text>
-                        <Text className='text-secondary-800 font-pregular text-[16px]'>GH₵0.78</Text>
+                        <Text className='text-secondary-800 font-pregular text-[16px]'>GH₵  {parseFloat(price-(0.078 * price)).toFixed(2)}</Text>
                     </View>
                     <View className='px-[8px] flex-row justify-between pb-[8px] border-b border-neutral-30'>
                         <View className='flex-row gap-[8px]'><Text className='text-secondary-800 font-pregular text-[16px]'>Tax</Text><View className='px-[12px] py-[2px] border rounded-full border-primary-20 bg-primary-10'><Text className='text-primary-60'>7.8%</Text></View></View>
-                        <Text className='text-secondary-800 font-pregular text-[16px]'>GH₵0.78</Text>
+                        <Text className='text-secondary-800 font-pregular text-[16px]'>GH₵ {parseFloat(0.078 * price).toFixed(2)}</Text>
                     </View>
 
                     {/* border */}
 
                     <View  className='px-[8px] flex-row justify-between pt-[4px]'>
                         <Text className=' font-pregular text-[16px]'>Total:</Text>
-                        <Text className=' font-pregular text-[16px]'>GH₵0.88</Text>
+                        <Text className=' font-pregular text-[16px]'>GH₵ { price }</Text>
                     </View>
                 </View>
             </View>

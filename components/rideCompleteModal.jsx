@@ -14,10 +14,15 @@ import CustomButton from "./CustomButton"
 
 
 
-const RideCompleteModal = ({visibility,onClose}) => {
+const RideCompleteModal = ({visibility,onClose,rideDetails}) => {
     const [destination, setDestination] = useState({
         latitude: 6.5792,
         longitude: 79.9629,})
+
+        const rideStartDate = new Date(rideDetails?.start_time)
+        const rideEndDate =new Date(rideDetails?.end_time)
+        const price = rideDetails?.cost ? parseFloat(rideDetails.cost).toFixed(2) : 0.00
+
 
     const [origin, setOrigin] = useState({
                 latitude: 6.9271,
@@ -54,8 +59,8 @@ const RideCompleteModal = ({visibility,onClose}) => {
                     </View>
                     </View>
                     <View>
-                        <Text className='font-pregular text-[16px] text-neutral-90'>Brunei Station</Text>
-                        <Text className='font-plight text-[12px]'>07:38 AM</Text>
+                        <Text className='font-pregular text-[16px] text-neutral-90'>{rideDetails?.start_docker?.split(' | ').pop().trim() }</Text>
+                        <Text className='font-plight text-[12px]'>{rideStartDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
                     </View>
                 </View>
                 <View>
@@ -75,8 +80,8 @@ const RideCompleteModal = ({visibility,onClose}) => {
                     </View>
                     </View>
                     <View>
-                        <Text className='font-pregular text-[16px] text-neutral-90'>Engineering Station</Text>
-                        <Text className='font-plight text-[12px]'>07:45 AM</Text>
+                        <Text className='font-pregular text-[16px] text-neutral-90'>{rideDetails?.end_docker?.split(' | ').pop().trim() || 'Unknown Station'}</Text>
+                        <Text className='font-plight text-[12px]'>{rideEndDate?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) || 'Unknown Time'}</Text>
                     </View>
                 </View>
                    
@@ -89,7 +94,7 @@ const RideCompleteModal = ({visibility,onClose}) => {
 
                     <View  className='px-[8px] flex-row justify-between '>
                         <Text className='text-secondary-800 font-pregular text-[18px]'>Total:</Text>
-                        <Text className=' font-pregular text-[16px]'>GH₵0.88</Text>
+                        <Text className=' font-pregular text-[16px]'>GH₵ { price }</Text>
                     
                     </View>
                     <CustomButton title={'Return Home'} containerStyles={'bg-primary-50'} handlePress={onClose} />

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, TextInput } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, TextInput, Alert } from 'react-native'
 import React,{forwardRef, useEffect, useImperativeHandle, useRef, useState} from 'react'
 import Animated,{ runOnJS, useAnimatedStyle, useSharedValue, withSpring,withClamp } from 'react-native-reanimated'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
@@ -9,7 +9,7 @@ import DialogueModal from './dialogueModal'
 import RideCompleteModal from './rideCompleteModal'
 import { GlobalContext } from '../app/(tabs)/_layout'
 import { useContext } from 'react'
-
+import { sendPushNotification } from './functions/functions'
 
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window')
@@ -30,14 +30,15 @@ const DockerDetails = forwardRef((props,ref) => {
   const [opened, setOpened] = useState(true)
   const [sliderWidth, setSliderWidth] = useState()
   const [favourite, setFavourite] = useState(false)
-
+  const [completedRide, setCompletedRide] = useState()
   const [count, setCount] = useState(0)
   const [videoNotification, setVideoNotification] = useState(true)
   const MAX_TRANSLATE_X = sliderWidth - 52
   const MIN_TRANSLATE_X = 0.85*MAX_TRANSLATE_X
   const timerInterval = useRef(null)
   const loaderInterval = useRef(null)
-  const {apiToken} = useContext(GlobalContext)
+  const {apiToken, expoPushToken} = useContext(GlobalContext)
+  
   
     useImperativeHandle(ref, () => ({
       scrollTo: () => {
@@ -54,6 +55,9 @@ const DockerDetails = forwardRef((props,ref) => {
       },
       startTimer: () => {
         startRideTiming()
+      },
+      endAndPayRide: (message) => {
+        endAndPayRide(message)
       }
       
     }))
@@ -88,42 +92,65 @@ const DockerDetails = forwardRef((props,ref) => {
     })
     
     const endRide = async () => {
+      console.log('ending ride')
         setLoading(true)
       
         try {
+          const response = await fetch('https://tembi.onrender.com/api/rentals/', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
+          'User-Agent': 'Mozilla/5  .0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
+          'Authorization': `Token ${apiToken}`
+        }
+    
+      })
 
-          await fetch('https://tembi.onrender.com/api/rentals/start/', {
-        method: 'POST',
+      const data = await response.json()
+      
+
+          await fetch(`https://tembi.onrender.com/api/rentals/${data[0].id}/`, {
+        method: 'GET',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
           'Authorization': `Token ${apiToken}`
-        },
-        body: JSON.stringify({
-          "docker": dockerCode
-        })
+        }
+    
       })
-            .then(data => data.text())
+            .then(data => {return data.json()})
             .then((data) => {
-              if (!data.rental_id) {
-                throw new Error(errorText);
+              if (!data.id) {
+                throw new Error(data);
               }
-              return data.json();
+              return data;
             })
-            .then(data => console.log(data))
+            .then(data => {
+              if (data.status === 'completed') {
+                setCompletedRide(data)
+                console.log('Ride ended successfully:', data);
+                endAndPayRide()
+              }else{
+                throw new Error()
+              }
+            })
             .catch(err => {throw new Error(err)}
             )
 
           
         } catch (error) {
-          
+          setRideError(true) //when there is an error packing
+          console.log('Error ending ride:', error)
         } finally{
+          
           setLoading(false)
         }
         
-         // setRideError(true) when there is an error packing
+         
      
     }
 
@@ -191,11 +218,24 @@ const DockerDetails = forwardRef((props,ref) => {
       'worklet'
       translateY.value = withSpring(destination, {damping: damping})
     }
-    
 
-    const onResponse = (response) => {
-      if(response){
-        props.setRideActive(false)
+    const endAndPayRide = async (message) => {
+      sendPushNotification(expoPushToken,title='Ride Ended', body=message || 'Your ride has ended successfully. Thank you for using Tembi!')
+
+    await fetch('https://tembi.onrender.com/api/rentals/', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
+          'User-Agent': 'Mozilla/5  .0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
+          'Authorization': `Token ${apiToken}`
+        }
+    
+      }).then(response => {return response.json()})
+      .then(data => { setCompletedRide(data[0])})
+
+      props.setRideActive(false)
         clearInterval(timerInterval.current)
         setRideError(false)
         setCount(0)
@@ -211,7 +251,16 @@ const DockerDetails = forwardRef((props,ref) => {
 
         //modal
         setRideComplete(true)
-      } else {
+      
+    }
+    
+
+    const onResponse = (response) => {
+      if(response){
+        setRideError(false)
+        setRideComplete(false)
+        endRide()
+        } else {
         setRideError(false)
         sliderTranslateX.value = withSpring(0, {
           mass: 0.5,
@@ -371,7 +420,7 @@ const DockerDetails = forwardRef((props,ref) => {
     <LoaderModal visibility={loading} Title={'Ending ride...'} content={'Confirming return of bike'} Icon={() => <LoaderIcon />} />
     <DialogueModal visibility={rideError} onResponse={onResponse} Title={'Bike not detected!'} content={'You will need to properly place bike in docker to end ride.'} affirmText={'Try Again'} negativeText={'Continue Ride'} affirmButtonContainerStyles={'bg-primary-50'} negativeButtonContainerStyles={'border-[1px] border-neutral-50'} affirmTextStyles={'font-pregular text-[12px] leading-2 text-secondary-950'} negativeTextStyles={'text-neutral-70 text-[12px]'} titleStyles={'text-critical-70 font-pmedium text-[16px]'}/>
     <DialogueModal visibility={outofBounds} Title={'You’ve left KNUST!'} content={'Bike use is limited to campus. Please return to continue riding.'}  titleStyles={'text-critical-70 font-pmedium text-[16px]'} centered Icon={() => <CautionIcon/>}/>
-    <RideCompleteModal visibility={rideComplete} onClose={completeRide}  />
+    <RideCompleteModal visibility={rideComplete} onClose={completeRide} rideDetails={completedRide}  />
     </Animated.View>
   
     </GestureDetector>

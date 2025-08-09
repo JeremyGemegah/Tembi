@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import {EyeClosed, EyeOpen, Lock, MailIcon, PhoneIcon, Profile} from '../assets/icons/svgIcons'
 
 
-const TextField = ({type='profile', state='normal', placeholder, handleTextChange, title,value,maxLength=null, onBlur, onFocus, error=false, errorMessage}) => {
+const TextField = ({type='profile', state='normal', placeholder, handleTextChange, title,value,maxLength=null, onBlur, onFocus, error=false, errorMessage,disabled}) => {
     let borderColor ;
     let iconColor;
     let textColor;
@@ -52,6 +52,7 @@ const TextField = ({type='profile', state='normal', placeholder, handleTextChang
          onChangeText={handleTextChange}
          value={value}
          onBlur={onBlur}
+          editable={!disabled}         
          onFocus={onFocus}
          maxLength={maxLength}
          secureTextEntry={type === 'password' && !showPassword}

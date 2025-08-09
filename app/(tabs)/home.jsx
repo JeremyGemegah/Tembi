@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React,{useRef, useState, useEffect, useContext} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView, { PROVIDER_GOOGLE ,Marker} from 'react-native-maps'
@@ -12,7 +12,9 @@ import UnlockSuccessModal from '../../components/unlockSuccessModal'
 import { Dimensions } from 'react-native'
 import axios from 'axios'
 import { router } from 'expo-router'
-import { GlobalContext } from './_layout'
+import { GlobalContext } from './_layout';
+import { getSocket } from '../../components/functions/socket';
+
 
 
 
@@ -22,7 +24,8 @@ const Home = () => {
  const {apiToken} = useContext(GlobalContext)
   const [markers, setMarkers] = useState()
   const initial_position ={"latitude": 6.673174393359494, "latitudeDelta": 0.04, "longitude": -1.5720686875283718, "longitudeDelta": 0.02, "zoom": 10}
-    
+
+    const ws = useRef(null)
     const [currentLocation, setCurrentLocation] = useState(null);
     const [initialRegion, setInitialRegion] = useState(null);
     const [reservedBike, setReservedBike] = useState()
@@ -36,8 +39,7 @@ const Home = () => {
     const [unlockModal, setUnlockModal] = useState(false) // tracks whether the modal for docker code acception is opened
     const modal = useRef()
     const ReserveBikeModal = useRef()
-  
-
+    
 
     const handleMarkerSelect = (markerId) => {
       //this should be a toggle effect rather **************************************************************
@@ -157,6 +159,16 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    // When a ride is no longer active, close the WebSocket connection.
+    if (!rideActive && ws.current) {
+      console.log('Ride ended, closing WebSocket connection.');
+      ws.current.close();
+      ws.current = null;
+    }
+  }, [rideActive]);
+
+
+  useEffect(() => {
     
     const listener = customEventEmitter.addListener('FindLocationFired', async () => {
       await Location.getCurrentPositionAsync({})
@@ -170,17 +182,71 @@ const Home = () => {
       })
     })
     
-    const scanCode = customEventEmitter.addListener('DockerCodeAccepted',() => {
-      setUnlockModal(true)
-      setRideActive(true)
-      modal.current.startTimer()
+    const scanCode = customEventEmitter.addListener('DockerCodeAccepted', (callback, rentalData) => {
+      // The callback is the function passed from ScanCode.jsx
+      try {
+        setUnlockModal(true)
+        setRideActive(true)
+        modal.current.startTimer()
+        
+        // --- START: WebSocket connection logic ---
+        if (ws.current) {
+          ws.current.close();
+        }
+
+        if (!apiToken) {
+          const authError = new Error("Could not connect to real-time service. Please log in again.");
+          if (callback) callback(authError);
+          return;
+        }
+
+        console.log('Attempting to establish WebSocket connection...');
+        ws.current = new WebSocket(`wss://tembi.onrender.com/ws/notifications/?token=${apiToken}`);
+        
+        ws.current.onopen = () => {
+          console.log('Native WebSocket connection established.');
+          // Use the callback to signal success to the ScanCode component
+          if (callback) callback(null);
+        };
+        
+        ws.current.onmessage = e => {
+          
+          const data = JSON.parse(e.data);
+          if(data?.data?.status === 'completed'){
+            console.log(e)
+            setRideActive(false)
+            setUnlockModal(false)
+            modal.current.endAndPayRide(data?.data?.message);
+          }
+          
+        };
+        
+        ws.current.onerror = e => {
+          console.log('WebSocket error:', e);
+          // Use the callback to report an error
+          const wsError = new Error('Real-time connection failed. Please try again.');
+          if (callback) callback(wsError);
+        };
+        
+        ws.current.onclose = e => {
+          console.log('WebSocket closed:', e.code, e);
+          ws.current = null; // Nullify the ref on close
+        };
+        // --- END: WebSocket connection logic ---
+      } catch (error) {
+        // Catch any other synchronous errors and report them
+        if (callback) callback(error);
+      }
     })
 
     return () => {
       listener.remove()
-    scanCode.remove()
+      scanCode.remove()
+      if (ws.current) {
+        ws.current.close();
+      }
   }
-  },[])
+  },[apiToken])
 
   
 
@@ -247,7 +313,7 @@ const mapRef = useRef()
              </Marker>
            ))}
         </MapView>
-        <DockerDetails ref={modal} docker={selectedMarker && markers?.find(marker => marker.id === selectedMarker)} setRideActive={setRideActive} modalRegister={checkForDockerModalDisplayed} setDockerDetailsActive={setDockerDetailsActive} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive} rideActive={rideActive}  />
+        <DockerDetails ref={modal}  docker={selectedMarker && markers?.find(marker => marker.id === selectedMarker)} setRideActive={setRideActive} modalRegister={checkForDockerModalDisplayed} setDockerDetailsActive={setDockerDetailsActive} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive} rideActive={rideActive}  />
         <ReserveBike ref={ReserveBikeModal} docker={selectedMarker && markers?.find(marker => marker.id === selectedMarker)} modalRegister={checkForReservationModalDisplayed} setReservationModalActive={setReservationModalActive} getDirections={getDirections} reservationActive={reservationActive} setReservationActive={setReservationActive} reservedBike={reservedBike} />
         <UnlockSuccessModal visibility={unlockModal} onClose={() => {setUnlockModal(false); modal.current.scrollTo(500); customEventEmitter.emit('modalOpened',{isOpen: true})}} />
     </View>

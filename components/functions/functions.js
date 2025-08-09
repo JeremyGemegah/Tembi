@@ -40,3 +40,56 @@ export async function getUserData() {
     return null;
   }
 }
+
+export async function apiCall(endpoint,token, method = 'GET', body = null) {
+  const apiToken = token || await getAPIToken();
+  
+
+  const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'User-Agent': 'BikeHiveApp/1.0',
+    'Authorization': `Token ${apiToken}`
+  };
+
+  const options = {
+    method,
+    headers
+  };
+
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
+
+  const response = await fetch(`https://tembi.onrender.com/api/${endpoint}`, options);
+  
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || errorData.error || 'API call failed');
+  }
+
+  return response.json();
+}
+
+//sends a push notification
+
+export async function sendPushNotification(expoPushToken, title='BikeHive Notification', body='You have a new notification!') {
+    console.log('Sending push notification to:', expoPushToken)
+  const message = {
+    to: expoPushToken,
+    sound: 'default',
+    title: title,
+    body: body,
+    data: { someData: 'goes here' },
+  }
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  }).then(res => console.log('Push notification response:', res))
+}

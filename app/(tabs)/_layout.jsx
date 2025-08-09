@@ -1,6 +1,6 @@
 import { View, Text, Pressable, TouchableOpacity, Animated, Dimensions } from 'react-native'
 import React, { useEffect, useState,useRef, createContext, useContext } from 'react'
-import { router, Tabs } from 'expo-router'
+import { router, Tabs, usePathname } from 'expo-router'
 import { AccountIcon, BellIcon, HeartIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon, SearchIcon } from '../../assets/icons/svgIcons'
 import { useCameraPermissions } from 'expo-camera'
 import ScanCode from '../../components/ScanCode'
@@ -9,6 +9,27 @@ import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
 import { Image } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { checkLoggedIn, getAPIToken, getUserData } from '../../components/functions/functions'
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+import { Platform } from 'react-native';
+import {registerForPushNotificationsAsync} from '../../utils/registerForPushNotificationsAsync'
+
+
+
+//push notifications configuration
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
+
+
+
+
 
 //Icons for the various tabs
 const HomeTabIcon = ({color,name,focused, highlightColor}) => {
@@ -57,11 +78,35 @@ const AccountTabIcon = ({color,name, focused}) => {
 const TabsLayout = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const [modalOpened, setModalOpened] = useState(false)
+    const [displayIcons, setDisplayIcons] = useState(false)
     const [userData, setUserData] = useState()
     const [apiToken, setAPIToken] = useState()
     const [permission, requestPermission] = useCameraPermissions()
     const scaleAnim = useRef(new Animated.Value(1)).current; 
-   
+   const pathname = usePathname()
+   const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(undefined);
+
+
+
+   useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then(token => setExpoPushToken(token ?? ''))
+      .catch((error) => setExpoPushToken(`${error}`));
+
+    const notificationListener = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      notificationListener.remove();
+      responseListener.remove();
+    };
+  }, []);
     
     useEffect(() => {
       const navigateAction = myeventEmitter.addListener('customTabPress', (e) => {
@@ -108,6 +153,16 @@ const TabsLayout = () => {
       };
       checkAuthStatus();
     }, []);
+
+     useEffect(() => {
+      // This effect will run whenever the user navigates.
+      // The icons should only be visible on the home screen.
+      if (pathname === '/home') {
+        setDisplayIcons(true);
+      } else {
+        setDisplayIcons(false);
+      }
+    }, [pathname])
     
 
     
@@ -144,13 +199,13 @@ const TabsLayout = () => {
 
   return (
 
-    <GlobalContext.Provider value={{SCREEN_HEIGHT,userData,apiToken}} >
+    <GlobalContext.Provider value={{SCREEN_HEIGHT,userData,apiToken,expoPushToken}} >
     <View className="flex-1" style={{position:'relative'}}>
 
         <View style={{flexDirection:'row', justifyContent:'space-between',width:'100%', marginTop:10, position:'absolute', top:0, zIndex:1, paddingLeft:16, alignItems:'center',paddingTop:12}}>{/* top buttons */}
             <View>
             <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
-                <TouchableOpacity  className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20, width:48, height:48, overflow:'hidden', justifyContent:'center', alignItems:'center'}}>
+                <TouchableOpacity  className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20, width:48, height:48, overflow:'hidden', justifyContent:'center', alignItems:'center', display:displayIcons? 'flex': 'none'}} onPress={() => router.push('/account/profile')}>
                     <Image 
                     source={userData?.avatar || require('../../assets/images/profile.jpg')}
                     resizeMode='contain'
@@ -167,19 +222,19 @@ const TabsLayout = () => {
 
             <View style={{flexDirection:'row', gap:8, paddingRight: 16}}>
             <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
-                <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}}>  
+                <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}} >  
                     <SearchIcon />
                 </TouchableOpacity>
             </Animated.View>
 
             <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
-               <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}}>
+               <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}} onPress={() => router.push('/account/favourites')}>
                 <HeartIcon />
                </TouchableOpacity>
             </Animated.View>
             
             <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
-                <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}}>
+                <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}} onPress={() => router.push('/account/notifications')}>
                     <BellIcon/>
                 </TouchableOpacity>
                 <View style={{width:24, height: 24, position: 'absolute', top:'-20%', right:'-10%', zIndex:2, justifyContent:'center', alignItems:'center'}} className="bg-primary-50 rounded-full "><Text>3</Text></View>

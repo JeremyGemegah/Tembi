@@ -38,7 +38,7 @@ export default function App() {
   } else {
     // Handle the case where the token is not found
     getToken('displayedOnboarding').then((displayedOnboarding) => {
-      if (displayedOnboarding) {
+      if (displayedOnboarding === 'true') {
         router.replace('/sign-in')
       } else {
         router.replace('/homemain')
