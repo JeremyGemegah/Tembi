@@ -177,7 +177,7 @@ const ResetPassword = () => {
               handleTextChange={(text) => handleFormChange('confirm_password', text)}
             />
             
-            <CustomButton title={"Reset Password"} containerStyles={"mt-[24px]"} handlePress={handleSubmit} />
+            <CustomButton title={"Reset Password"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleSubmit} />
       
           </View>
         </View>

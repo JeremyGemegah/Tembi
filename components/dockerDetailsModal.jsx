@@ -326,7 +326,7 @@ const DockerDetails = forwardRef((props,ref) => {
             
             <View className='px-[8px] py-[4px] flex-1 '>
               <View className='flex-row gap-[4px] justify-center'><TimeIcon/><Text className='font-plight text-primary-60 text-[12px] text-center' >Speed</Text></View>
-              <View className='flex-row justify-center'><Text className='font-pregular text-[20px] text-secondary-800 text-center' >42 km/h</Text></View>
+              <View className='flex-row justify-center'><Text className='font-pregular text-[20px] text-secondary-800 text-center' >8 km/h</Text></View>
             </View>
             
             <View className='px-[8px] py-[4px] flex-1 self-start'>

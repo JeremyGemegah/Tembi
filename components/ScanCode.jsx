@@ -24,7 +24,7 @@ const ScanCode = ({visibility, onClose}) => {
     const [rentalError, setRentalError] = useState(false);
     const [rentalErrorMessage, setRentalErrorMessage] = useState({tite:'',message:''})
     const [loading, setLoading] = useState(false)
-    const {apiToken} = useContext(GlobalContext)
+    const {apiToken, expoPushToken} = useContext(GlobalContext)
    
     const startRental = async (code) => {
       setLoading(true)
@@ -41,7 +41,8 @@ const ScanCode = ({visibility, onClose}) => {
               'Authorization': `Token ${apiToken}`
           },
           body: JSON.stringify({
-              "docker": code
+              "docker": code,
+              "expo_push_token": expoPushToken
           })
       });
 

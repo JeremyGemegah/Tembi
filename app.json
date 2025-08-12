@@ -16,6 +16,25 @@
       "supportsTablet": true
     },
     "android": {
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "megahdevs.site",
+              "pathPrefix": "/sign-in"
+            },
+            {
+              "scheme": "https",
+              "host": "tembi.onrender.com",
+              "pathPrefix": "/api/users/sign-in"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"

@@ -134,7 +134,7 @@ async function saveToken(key, value) {
           await saveToken('signedup', 'true');
           await saveToken('verified', 'false');
           await saveToken('displayedOnboarding', 'true');
-          router.push('/sign-in');
+         
         } else {
           const errorData = await response.json();
           const errorMessage = Object.values(errorData).flat().join('\n') || 'Registration failed. Please try again.';
@@ -165,7 +165,7 @@ async function saveToken(key, value) {
               error={formState.full_name.error && displayMessages}
               errorMessage={formState.full_name.message}
               type={'profile'} 
-              placeholder={'eg. Enoch Bekor'} 
+              placeholder={'eg. John Doe'} 
               title={'Full Name'}
               maxLength={255}
               onFocus={() => setFormState((prevFormState) => ({
@@ -181,7 +181,7 @@ async function saveToken(key, value) {
               error={formState.email.error && displayMessages}
               errorMessage={formState.email.message}
               type={'email'} 
-              placeholder={'eg. ebecks419@gmail.com'} 
+              placeholder={'eg. johndoe@example.com'} 
               title={'Email'}
               onFocus={() => setFormState((prevFormState) => ({
                 ...prevFormState,
@@ -241,8 +241,8 @@ async function saveToken(key, value) {
               handleTextChange={(text) => handleFormChange('confirm_password', text)}
             />
             
-            <CustomButton title={"Create Account"} containerStyles={"mt-[24px]"} handlePress={handleRegister} />
-            <View className="flex-1 items-center flex-row">
+            <CustomButton title={"Create Account"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleRegister} />
+            {/* <View className="flex-1 items-center flex-row">
               <View className="h-[1px] flex-1 bg-neutral-50 ">
 
               </View>
@@ -251,7 +251,7 @@ async function saveToken(key, value) {
 
               </View>
             </View>
-            <GoogleSigninButton title={'Sign in with Google'}/>
+            <GoogleSigninButton title={'Sign in with Google'}/> */}
 
             <View className="flex-1 items-center ">
             <Text >Already have an account? <Text className="text-primary-60" onPress={() => router.push('/sign-in')}>Sign In</Text></Text>

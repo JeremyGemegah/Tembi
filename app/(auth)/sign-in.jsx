@@ -1,14 +1,16 @@
-import { View, Text, Alert } from 'react-native'
-import React,{useState} from 'react'
+import { View, Text, Alert, ActivityIndicator } from 'react-native'
+import React,{useState, useEffect} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
 import TextField from '../../components/TextField'
 import GoogleSigninButton from '../../components/GoogleSigninButton'
 import CustomButton from '../../components/CustomButton'
-import { router } from 'expo-router'
-import * as SecureStore from 'expo-secure-store'
+import { router,useLocalSearchParams } from 'expo-router'
+import * as SecureStore from 'expo-secure-store';
 import { LoaderIcon } from '../../assets/icons/svgIcons'
 import LoaderModal from '../../components/loaderModal'
+import { getAPIToken } from '../../components/functions/functions'
+
 
 
 const SignIn = () => {
@@ -20,6 +22,71 @@ const SignIn = () => {
     const [formState, setFormState] = useState({email:{state:'normal', message:'',error:false},password:{state:'normal', message:'',error:false}})
     const [displayMessages, setDisplayMessages] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [checkingSignin, setCheckSignin] = useState(false)
+    
+
+
+
+      const params = useLocalSearchParams();
+      console.log(params)
+     
+
+      
+
+      useEffect(() => {
+
+        const handleActivation = async (codea, codeb) => {
+      
+          try {
+            const response = await fetch(`https://tembi.onrender.com/api/users/activate/${codea}/${codeb}/`, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'User-Agent': 'BikeHiveApp/1.0'
+              },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.detail || data.error || 'Account activation failed.');
+            }
+            
+            console.log('Activation success:', data);
+            Alert.alert(
+              'Account Activated',
+              'Your account has been successfully activated. You can now sign in.'
+            );
+          } catch (error) {
+            
+            Alert.alert('Activation Error', error.message);
+          } finally {
+            setLoading(false);
+            setCheckSignin(false);
+            // Clear the deep link params from the URL by replacing the current route.
+            router.replace('/(auth)/sign-in');
+          }
+        };
+
+        const authCheck = async () => {
+          setCheckSignin(true);
+          const token = await getAPIToken();
+          if (token) {  
+            setCheckSignin(false)
+            router.replace('/(tabs)/home');
+          } else if (params.codea && params.codeb) {
+            handleActivation(params.codea, params.codeb);
+          }else{
+            setCheckSignin(false)
+          }
+          
+        };
+
+        authCheck();
+      },[params.codea, params.codeb, router])
+
+
 
    const handleFormChange = (fieldName, value) => {
 
@@ -144,70 +211,72 @@ const SignIn = () => {
     <SafeAreaView>
       <ScrollView>
         <View className="px-[16px] pt-[73px] pb-[31px]">
-          <View className="flex-1 items-center  pb-[48px]">
-          <Text className="text-[32px] font-comfortaa mb-[1px] text-primary-90">Tembi</Text>
-          <Text className="text-[24px] text-secondary-950">Welcome Back!</Text>
-          <Text className="text-[14px] text-neutral-70">Sign in to your account</Text>
-          </View>
-          
-          <View className="flex-1 gap-[16px]"> 
+            {checkingSignin ? (
+              <ActivityIndicator size="large" color="#FADD99" />
+            ) : (
+              <>
+                <View className="flex-1 items-center  pb-[48px]">
+                  <Text className="text-[32px] font-comfortaa mb-[1px] text-primary-90">Tembi</Text>
+                  <Text className="text-[24px] text-secondary-950">Welcome Back!</Text>
+                  <Text className="text-[14px] text-neutral-70">Sign in to your account</Text>
+                </View>
+                
+                <View className="flex-1 gap-[16px]"> 
 
-            <TextField 
-              state={formState.email.state} 
-              error={formState.email.error && displayMessages}
-              errorMessage={formState.email.message}
-              type={'email'} 
-              placeholder={'eg. ebecks419@gmail.com'} 
-              title={'Email'}
-              onFocus={() => setFormState((prevFormState) => ({
-                ...prevFormState,
-                email: { state: 'warning', message: '' },
-              }))}
-              maxLength={255}
-              value={form.email}
-               onBlur={() => validateFormElement('email')}
-              handleTextChange={(text) => handleFormChange('email', text)}
-            />
+                  <TextField 
+                    state={formState.email.state} 
+                    error={formState.email.error && displayMessages}
+                    errorMessage={formState.email.message}
+                    type={'email'} 
+                    placeholder={'eg. johndoe@example.com'} 
+                    title={'Email'}
+                    onFocus={() => setFormState((prevFormState) => ({
+                      ...prevFormState,
+                      email: { state: 'warning', message: '' },
+                    }))}
+                    maxLength={255}
+                    value={form.email}
+                    onBlur={() => validateFormElement('email')}
+                    handleTextChange={(text) => handleFormChange('email', text)}
+                  />
 
 
-                        <TextField 
-              state={formState.password.state}
-              error={formState.password.error && displayMessages}
-              errorMessage={formState.password.message} 
-              type={'password'} 
-              placeholder={'minimum 8 characters'} 
-              title={'Password'}
-              value={form.password}
-              onFocus={() => setFormState((prevFormState) => ({
-                ...prevFormState,
-                password: { state: 'warning', message: '', error: false },
-              }))}
-               onBlur={() => validateFormElement('password')}
-              handleTextChange={(text) => handleFormChange('password', text)}
-            />
+                  <TextField 
+                    state={formState.password.state}
+                    error={formState.password.error && displayMessages}
+                    errorMessage={formState.password.message} 
+                    type={'password'} 
+                    placeholder={'minimum 8 characters'} 
+                    title={'Password'}
+                    value={form.password}
+                    onFocus={() => setFormState((prevFormState) => ({
+                      ...prevFormState,
+                      password: { state: 'warning', message: '', error: false },
+                    }))}
+                    onBlur={() => validateFormElement('password')}
+                    handleTextChange={(text) => handleFormChange('password', text)}
+                  />
 
-            <Text className="text-primary-60 text-center" onPress={() => router.push('/forgot-password')}>Forgot Password</Text>
-            
-            <CustomButton title={"Sign in"} containerStyles={"mt-[24px]"} handlePress={handleSubmit} />
-            
-              <View className="flex-1 items-center flex-row">
-                            <View className="h-[1px] flex-1 bg-neutral-50 ">
-              
-                            </View>
-                          <Text className="px-[24px] text-neutral-70">OR</Text>
-                          <View className="h-[1px] flex-1 bg-neutral-50">
-              
-                            </View>
-                          </View>
+                  <Text className="text-primary-60 text-center" onPress={() => router.push('/forgot-password')}>Forgot Password</Text>
+                  
+                  <CustomButton title={"Sign in"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleSubmit} />
+                  {/* 
+                    <View className="flex-1 items-center flex-row">
+                                  <View className="h-[1px] flex-1 bg-neutral-50 "></View>
+                                <Text className="px-[24px] text-neutral-70">OR</Text>
+                                <View className="h-[1px] flex-1 bg-neutral-50"></View>
+                                </View>
 
-            <GoogleSigninButton title={'Sign in with Google'}/>
+                  <GoogleSigninButton title={'Sign in with Google'}/> */}
 
-            <View className="flex-1 items-center ">
-            <Text >Don't have an account? <Text className="text-primary-60" onPress={() => router.push('/sign-up')}>Register</Text></Text>
-              </View>
-           
-          </View>
-          <LoaderModal visibility={loading} Title={'Wait a minute...'} content={'Logging you in.'} Icon={() => <LoaderIcon />} />
+                  <View className="flex-1 items-center ">
+                  <Text >Don't have an account? <Text className="text-primary-60" onPress={() => router.push('/sign-up')}>Register</Text></Text>
+                    </View>
+                  
+                </View>
+                <LoaderModal visibility={loading} Title={'Wait a minute...'} content={'Logging you in.'} Icon={() => <LoaderIcon />} />
+              </>
+            )}
         </View>
       </ScrollView>
     </SafeAreaView>

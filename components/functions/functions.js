@@ -93,3 +93,36 @@ export async function sendPushNotification(expoPushToken, title='BikeHive Notifi
     body: JSON.stringify(message),
   }).then(res => console.log('Push notification response:', res))
 }
+
+
+export async function handleDeepLink(url,navigation) {
+    try {
+      // Example: myapp://domain.com/code1/code2
+      const path = Linking.parse(url).path; // returns "code1/code2"
+      if (!path) return;
+
+      const parts = path.split('/');
+      if (parts.length < 2) {
+        Alert.alert('Invalid link format');
+        return;
+      }
+
+      const code1 = parts[0];
+      const code2 = parts[1];
+      console.log('Deep link codes:', code1, code2);
+      // Check login status
+      const token = await getAPIToken();
+      if (!token) {
+        navigation.navigate('Sign-in'); // Redirect to sign in
+      }
+
+      
+
+
+    } catch (err) {
+      console.error(err);
+    
+    }
+  }
+
+

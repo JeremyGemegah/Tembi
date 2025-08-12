@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font'
 import { configureReanimatedLogger } from 'react-native-reanimated'
 
 
+
 configureReanimatedLogger({
   strict: false,
 })
@@ -31,6 +32,9 @@ const MainLayout = () => {
 
     if(fontsLoaded) SplashScreen.hideAsync();
   },[fontsLoaded, error])
+
+
+
 
   if(!fontsLoaded && !error) return null;
 

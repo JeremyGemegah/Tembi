@@ -116,7 +116,7 @@ saveToken('verified', 'false') */
                           error={formState.email.error && displayMessages}
                           errorMessage={formState.email.message}
                           type={'email'} 
-                          placeholder={'eg. ebecks419@gmail.com'} 
+                          placeholder={'eg. johndoe@example.com'} 
                           title={'Email'}
                           onFocus={() => setFormState((prevFormState) => ({
                             ...prevFormState,
@@ -128,7 +128,7 @@ saveToken('verified', 'false') */
                           handleTextChange={(text) => handleFormChange('email', text)}
                         />
             
-            <CustomButton title={"Continue"} containerStyles={"mt-[24px]"} handlePress={handleSubmit}/>
+            <CustomButton title={"Continue"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleSubmit}/>
 
           </View>
         </View>

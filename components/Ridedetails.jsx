@@ -18,14 +18,9 @@ const RideDetails = ({visibility,onClose,ride}) => {
     const rideStartDate = new Date(ride?.start_time);
     const rideEndDate = ride.end_time? new Date(ride?.end_time): null;
     const price = ride?.cost ? parseFloat(ride.cost).toFixed(2) : 0.00;
-    const [destination, setDestination] = useState({
-        latitude: 6.5792,
-        longitude: 79.9629,})
+    const [destination, setDestination] = useState({latitude: 37.771707, longitude: -122.4053769})
 
-    const [origin, setOrigin] = useState({
-                latitude: 6.9271,
-                longitude: 79.8612,
-                })
+    const [origin, setOrigin] = useState({latitude: 37.3318456, longitude: -122.0296002})
 
     return(
         <Modal animationIn="slideInLeft"  visible={visibility}  onLayout={()=> setDisplay(true)}>
@@ -49,20 +44,19 @@ const RideDetails = ({visibility,onClose,ride}) => {
             <MapView
             style={{flex:1}}
                 initialRegion={{
-                        latitude: 7.8731,
-                        longitude: 80.7718,
-                        latitudeDelta: 5,
-                        longitudeDelta: 1,
+                        latitude: 37.3318456, longitude: -122.0296002,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421
                     }}>
                         <MapViewDirections
                             origin={origin}
                             destination={destination}
-                            strokeWidth={4}
+                            strokeWidth={3}
                             apikey="AIzaSyAeyi0XeQSbqEMzKVvpFmuNpwkyVhk4W_Y"
-                            strokeColor="red"
+                            strokeColor="#f2a900"
                         />
 
-                        <Marker coordinate={origin} title="starting point" />
+                        <Marker coordinate={origin} title="starting point"  />
                         <Marker coordinate={destination} title="end point" />
             </MapView>
         </View>

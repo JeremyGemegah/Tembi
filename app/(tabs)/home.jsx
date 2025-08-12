@@ -86,6 +86,7 @@ const Home = () => {
 
         const data = await response.json();
         setReservedBike(data);
+        
 
         modal?.current.scrollDown()
         ReserveBikeModal?.current.scrollTo()

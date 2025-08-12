@@ -82,7 +82,7 @@ const Rides = () => {
   
   // Categorize rides whenever the fetched data changes
   useEffect(() => {
-    if (!allRides || allRides.length === 0) {
+    if (!allRides || allRides?.length === 0) {
       setCategorizedRides({});
       return;
     }
@@ -99,7 +99,7 @@ const Rides = () => {
       older: [],
     };
 
-    allRides.forEach(ride => {
+    allRides.length > 0 && allRides.forEach(ride => {
       const rideDate = new Date(ride.start_time);
       
       if (rideDate >= todayStart) {
@@ -124,7 +124,7 @@ const Rides = () => {
           
           {loading ? (
             <ActivityIndicator size="large" color="#FADD99" className="mt-8" />
-          ) : allRides.length === 0 ? (
+          ) : !(allRides?.length > 0) ? (
             <Text className="text-center text-neutral-500 mt-8">You have no past rides.</Text>
           ) : (
             <View>

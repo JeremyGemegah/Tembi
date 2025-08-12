@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.gemegs.tembi",
+      "sha256_cert_fingerprints": [
+        "2B:0A:AB:E7:70:E6:F1:49:F2:19:EB:ED:35:B1:BE:DD:64:BB:A4:C6:F4:6F:27:B8:5A:21:BF:C0:1C:A8:EE:96"
+      ]
+    }
+  }
+]
