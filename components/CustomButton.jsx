@@ -3,14 +3,14 @@ import React from 'react'
 import Animated,{FadeInDown, FadeOutUp} from 'react-native-reanimated'
 
 const CustomButton = ({title,handlePress,containerStyles,textStyles,isLoading, transition,queue, SecondTitle="no second text",animated=true,Icon,disabled, visible=true, layout={}}) => {
- 
+
   return (
     <TouchableOpacity
     activeOpacity={0.7}
     onPress={handlePress}
     className={`rounded-full min-h-[48px] flex-row justify-center items-center ${containerStyles} ${isLoading? 'opacity-50': ''}`}
     disabled={disabled}
-    style={[{display: visible? 'flex': 'none'}]}
+    style={[{display: visible? 'flex': 'none'}, disabled && styles.disabledColor]}
     >
         {transition && queue? (<Animated.View 
           layout={layout}
@@ -28,3 +28,8 @@ const CustomButton = ({title,handlePress,containerStyles,textStyles,isLoading, t
 
 export default CustomButton
 
+const styles = StyleSheet.create({
+  disabledColor: {
+    backgroundColor: '#A8B9CA'
+  }
+})

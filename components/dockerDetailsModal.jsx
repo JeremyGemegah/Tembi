@@ -13,11 +13,11 @@ import { sendPushNotification } from './functions/functions'
 
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window')
-const MAX_TRANSLATE_Y = SCREEN_HEIGHT /1.26
-const MIN_TRANSLATE_Y = SCREEN_HEIGHT /5
 
 //fix the height of modal dynamically **********************************************************************************************
 const DockerDetails = forwardRef((props,ref) => {
+  let MAX_TRANSLATE_Y = props.rideActive? SCREEN_HEIGHT /1.26 -290 : SCREEN_HEIGHT /1.26
+  let MIN_TRANSLATE_Y = SCREEN_HEIGHT /5
   const [modal, setModal] = useState(true)
   const [loading, setLoading] = useState(false)
   const [rideError, setRideError] = useState(false)

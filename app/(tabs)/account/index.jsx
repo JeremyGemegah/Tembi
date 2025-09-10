@@ -33,7 +33,7 @@ const Account = () => {
       
       <View className="px-[36px] gap-[8px]">
         <Link href="/account/profile" push asChild><Pressable  className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><AccountIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Profile Management</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable></Link>
-        <View className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><BillIcon style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Payment Details</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></View>
+        <Link href="/account/payment" push asChild><Pressable className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><BillIcon style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Payment Details</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></Pressable></Link>
         <View className="flex-row items-center w-full py-[8px]"><View className=" self-start mr-[12px]"><RidesIcon color={'#00806E'} style={{ alignItems:'flex-start'}}/></View><Text className="font-pregular text-[14px] text-[#002520] self-center">Ride History</Text><View style={{ marginLeft:'auto'}}><ArrowRight color={'#5D6C87'}/></View></View>
      
       </View>

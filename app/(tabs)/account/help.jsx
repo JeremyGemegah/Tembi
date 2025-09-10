@@ -4,6 +4,7 @@ import { BackIcon, LocationIcon, LocationMarkerIcon } from "../../../assets/icon
 import { router } from "expo-router"
 import { LinearGradient } from "expo-linear-gradient"
 import MapView, {Marker} from "react-native-maps"
+/* import MapView from "@googlemaps/react-native-navigation-sdk" */
 import MapViewDirections from "react-native-maps-directions"
 import { useState } from "react"
 

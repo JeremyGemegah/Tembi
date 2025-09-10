@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React,{useRef, useState, useEffect, useContext} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import MapView, { PROVIDER_GOOGLE ,Marker} from 'react-native-maps'
+import MapView,{PROVIDER_GOOGLE ,Marker} from 'react-native-maps'
+/* import {MapView,PROVIDER_GOOGLE ,Marker, NavigationView} from '@googlemaps/react-native-navigation-sdk' */
 import * as Location from 'expo-location'
 import { customEventEmitter } from '../../components/eventEmitters/eventEmitter'
 import CustomMarker from '../../components/customMarker'
@@ -96,15 +97,15 @@ const Home = () => {
     }
 
     const onArrive = () => {
-      //change variables
       setGetDirectionsActive(false)
       
-      //open right modal
+      // The call to `scrollTo()` without a value was an error.
       if(reservationActive){
         ReserveBikeModal?.current.scrollTo()
         modal?.current.scrollDown()
       }else{
-        modal?.current.scrollTo()
+        // Show the docker details again on arrival.
+        modal?.current.scrollTo(500) // Or use a dynamic height
         ReserveBikeModal?.current.scrollDown()
       }
     }
@@ -296,9 +297,9 @@ const mapRef = useRef()
     <View className=" w-full h-full "  >
       <View style={{position:'absolute', top:100, zIndex:3000, justifyContent:'center', alignItems:'center', width:'100%', display: fetchingDockers? 'flex':'none'}}><View style={{flex:1, paddingVertical:6, paddingHorizontal:12}} className='bg-primary-30 border-[1px] border-primary-70' ><Text className='text-primary-90'>Loading...</Text></View></View>
    
-        <MapView ref={mapRef} style={StyleSheet.absoluteFill} initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation={true} showsMyLocationButton={false}   >
+        <MapView  ref={mapRef}  style={StyleSheet.absoluteFill}  initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation={true} showsMyLocationButton={false}    >
            
-           {markers?.map((marker, index) => (
+            {markers?.map((marker, index) => (
               <Marker key={index}
               
               coordinate={{
@@ -312,7 +313,7 @@ const mapRef = useRef()
               <CustomMarker focus={selectedMarker === marker.id} />
               
              </Marker>
-           ))}
+           ))} 
         </MapView>
         <DockerDetails ref={modal}  docker={selectedMarker && markers?.find(marker => marker.id === selectedMarker)} setRideActive={setRideActive} modalRegister={checkForDockerModalDisplayed} setDockerDetailsActive={setDockerDetailsActive} reservebike={openReserveBike} getDirections={getDirections} directionsActive={getDirectionsActive} onArrive={onArrive} rideActive={rideActive}  />
         <ReserveBike ref={ReserveBikeModal} docker={selectedMarker && markers?.find(marker => marker.id === selectedMarker)} modalRegister={checkForReservationModalDisplayed} setReservationModalActive={setReservationModalActive} getDirections={getDirections} reservationActive={reservationActive} setReservationActive={setReservationActive} reservedBike={reservedBike} />

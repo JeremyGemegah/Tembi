@@ -3,8 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { BackIcon, LocationIcon, LocationMarkerIcon } from '../assets/icons/svgIcons'
 import { router } from "expo-router"
 import { LinearGradient } from "expo-linear-gradient"
-import MapView, {Marker} from "react-native-maps"
-import MapViewDirections from "react-native-maps-directions"
 import { useState } from "react"
 import { Modal } from "react-native"
 import CustomButton from "./CustomButton"

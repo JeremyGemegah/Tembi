@@ -13,7 +13,7 @@ import { GlobalContext } from '../app/(tabs)/_layout'
 
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window')
-const MAX_TRANSLATE_Y = SCREEN_HEIGHT /1.35
+const MAX_TRANSLATE_Y = SCREEN_HEIGHT /1.35 
 const MIN_TRANSLATE_Y = SCREEN_HEIGHT /5
 
 const ReserveBike = forwardRef((props,ref) => {

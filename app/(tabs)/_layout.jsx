@@ -1,7 +1,7 @@
 import { View, Text, Pressable, TouchableOpacity, Animated, Dimensions } from 'react-native'
 import React, { useEffect, useState,useRef, createContext, useContext } from 'react'
 import { router, Tabs, usePathname } from 'expo-router'
-import { AccountIcon, BellIcon, HeartIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon, SearchIcon } from '../../assets/icons/svgIcons'
+import { AccountIcon, BellIcon, HeartIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon, SearchIcon, WalletIcon, WalletTabIcon } from '../../assets/icons/svgIcons'
 import { useCameraPermissions } from 'expo-camera'
 import ScanCode from '../../components/ScanCode'
 import { EventEmitter } from 'expo'
@@ -53,6 +53,17 @@ const RidesTabIcon = ({color,name,focused}) => {
         <View className=" gap-2  items-center justify-start h-full">
             <View className={`p-[10px]  ${focused? `bg-primary-50`: ``} rounded-[10px] w-full`}>
             <RidesIcon color={color} />
+            </View>
+            <Text className="text-secondary-950 text-nowrap w-full font-pregular text-[12px] " style={{color:color}}>{name}</Text>
+        </View>
+    )
+}
+
+const PaymentTabIcon = ({color,name,focused}) => {
+    return(
+        <View className=" gap-2  items-center justify-start h-full">
+            <View className={`p-[10px]  ${focused? `bg-primary-50`: ``} rounded-[10px] w-full`}>
+            <WalletTabIcon color={color} />
             </View>
             <Text className="text-secondary-950 text-nowrap w-full font-pregular text-[12px] " style={{color:color}}>{name}</Text>
         </View>
@@ -325,6 +336,24 @@ const TabsLayout = () => {
                 )
             }}
         />
+
+
+
+
+       {/*Wallet screen*/}
+        <Tabs.Screen 
+            name='payment'
+            options={{
+                title:'Wallet',
+                headerShown: false,
+                tabBarIcon: ({color, focused}) => (
+                    <PaymentTabIcon color={color} name={'Wallet'} focused={focused} />
+                )
+            }}
+        />
+
+
+
         
        {/*  account tab */}
         <Tabs.Screen 

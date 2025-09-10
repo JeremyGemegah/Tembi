@@ -65,6 +65,8 @@ const ScanCode = ({visibility, onClose}) => {
 
     const handleScan = async (scannedCode) => {
       const code = scannedCode || dockerCode;
+      if(loading) return; // Prevent multiple scans while loading
+
       if (!code) {
           setRentalErrorMessage({title:'No code entered', message:'You must enter or scan a code to start'})
           setRentalError(true)
@@ -121,7 +123,7 @@ const ScanCode = ({visibility, onClose}) => {
           enableTorch={flashMode}  
 
           onBarcodeScanned={(bar) => {
-            handleScan(bar.data);
+           handleScan(bar.data);
           }}
           
         >
