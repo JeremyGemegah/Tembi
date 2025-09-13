@@ -12,7 +12,7 @@ const DiscountCard = () => {
     }
 
   return (
-    <View style={{margin:20}}>
+    <View >
       <View style={{flex:1, borderRadius: 16, borderColor: colors.border, borderWidth: 1, backgroundColor: colors.background}} className='px-[24px] py-[20px]'>
         <Text style={{color: colors.secondary}} className='font-pregular text-[12px]'>2 hour ride</Text>
         <View style={{display:'flex', flexDirection:'row', gap:4}}>

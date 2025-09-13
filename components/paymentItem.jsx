@@ -4,7 +4,7 @@ import { RidesIcon, WalletIcon } from '../assets/icons/svgIcons'
 
 const PaymentItem = () => {
   return (
-    <View style={{margin:20}}>
+    <View >
         <View style={{flex:1, flexDirection:'row', gap: 12}}>
             <View className='bg-secondary-800 rounded-full p-[12px]' >
                 {/* <RidesIcon color={'white'} /> */}

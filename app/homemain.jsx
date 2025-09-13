@@ -30,7 +30,7 @@ export default function HomeMain(){
         getToken('api_token').then((token) => {
       if (token) {
         // Use the token
-        router.replace('/(tabs)/home')
+        router.replace('/(tabs)/home') //change this to home ******************************************************************************************
       } 
     })
     
