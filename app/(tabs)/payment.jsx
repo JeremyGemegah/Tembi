@@ -17,6 +17,8 @@ const payment = () => {
   const [deposit, setDeposit] = useState()
   const [addscreen, setAddscreen] = useState(false)
   const [balance, setBalance] = useState()
+  const [transactions, setTransactions] = useState()
+
 
    const handleSuccessClose = () => {
     setPaymentSuccess(false)
@@ -30,6 +32,8 @@ const payment = () => {
   }
 
   useEffect(() => {
+
+    
     const checkBalance = async () => {
       apiCall('payments/wallet/')
       .then(response => {
@@ -44,7 +48,23 @@ const payment = () => {
       })
     }
 
+
+    const checkTransactions = async () => {
+      apiCall('payments/wallet/transactions/')
+      .then(response => {
+        console.log('transactions response:', response)
+
+        // Handle the response data here
+        setTransactions(response)
+      })
+      .catch(error => {
+        console.error('transactions error:', error)
+        // Handle any errors here
+      })
+    }
+
     checkBalance()
+    checkTransactions()
   
     return () => {
       // Cleanup if needed
@@ -89,7 +109,7 @@ const payment = () => {
             <View style={{display:addscreen? 'none': 'flex', gap:40}}>
              {/*  wallet */}
               <View>
-                <Text>Wallet</Text>
+                <Text className="font-pregular text-[18px] text-neutral-950 py-[8px]">Wallet</Text>
                 <AccountBalance addoption={true} onAdd={() => setAddscreen(true)} balance={balance} />
 
               </View>
@@ -110,8 +130,16 @@ const payment = () => {
                 <Text className="text-[16px] font-pregular text-neutral-950">Recent Transactions</Text>
                 <TouchableOpacity><Text className="font-pregular text-[14px] text-neutral-70">See all ›</Text></TouchableOpacity>
                 </View>
-                <View className='mt-[8px] px-[8px]'>
-                <PaymentItem />
+                <View className='mt-[8px] px-[8px] gap-[8px]'>
+                  {transactions && transactions.length === 0 ? (
+                     <Text className='text-neutral-70'>No recent transactions</Text>)
+                    : 
+                    transactions && transactions.map((item, index) => (
+                      <PaymentItem key={index} item={item} />
+                    ))
+                  }
+
+
                 </View>
               </View>
               </View>

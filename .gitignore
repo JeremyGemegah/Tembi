@@ -31,7 +31,9 @@ yarn-error.*
 
 # local env files
 .env*.local
-tembi-94439-firebase-adminsdk-fbsvc-d4491db1c9.jsongoogle-services.json
+tembi-94439-firebase-adminsdk-fbsvc-d4491db1c9.json
+google-services.json
+tembi-94439-firebase-adminsdk-fbsvc-d4491db1c9.json
 
 # typescript
 *.tsbuildinfo
