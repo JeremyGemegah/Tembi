@@ -749,3 +749,13 @@ export const LockIcon = ({color,style}) => {
         <SvgXml xml={xml} style={style} />
     )
 }
+
+export const FireIcon = ({color,style}) => {
+ const mycolor = color || "#5D6C87"
+    const xml = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 12 14" fill="none">
+  <path d="M7.2373 13.6668C15.3854 11.6668 10.8225 3.66683 5.28175 0.333496C4.63012 2.66683 3.65217 3.3335 1.69656 5.66683C-0.892605 8.75609 0.392919 12.3335 3.97804 13.6668C3.43485 13.0002 2.03297 11.6007 2.99992 9.66683C3.33325 9.00016 3.99992 8.3335 3.66659 7.00016C4.31844 7.3335 5.66659 7.66683 5.99992 9.3335C6.54309 8.66683 7.10688 7.26683 6.58545 5.66683C10.6666 8.66683 8.99992 11.6668 7.2373 13.6668Z" fill="#FBFCFE"/>
+</svg>`
+    return(
+        <SvgXml xml={xml} style={style} />
+    )
+}

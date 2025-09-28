@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator } from 'react-native'
+import { View, Text, ActivityIndicator,Image } from 'react-native'
 import React, { useEffect, useState, useContext } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
@@ -125,7 +125,19 @@ const Rides = () => {
           {loading ? (
             <ActivityIndicator size="large" color="#FADD99" className="mt-8" />
           ) : !(allRides?.length > 0) ? (
-            <Text className="text-center text-neutral-500 mt-8">You have no past rides.</Text>
+            <View className="items-center justify-center" style={{flex:1}}>
+              <View className='mt-[70px]'>
+              <Image
+                source={require('../../assets/images/noRides.png')}
+                resizeMode="contain"
+                className="h-[248px] self-center"
+              />
+              <View className="items-center">
+                <Text className="font-pmedium text-[18px]">Ready for Your First Ride?</Text>
+            <Text className="text-center text-neutral-70 text-[14px]">You don’t have any rides yet. Unlock a bike and start your journey!</Text>
+                </View>
+            </View>
+            </View>
           ) : (
             <View>
               <RideSection title="Today" rides={categorizedRides.today} openModal={openModal} />

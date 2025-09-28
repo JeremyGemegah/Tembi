@@ -11,7 +11,7 @@ import { customEventEmitter } from './eventEmitters/eventEmitter'
 import { CautionIcon } from '../assets/icons/svgIcons'
 import LoaderModal from './loaderModal'
 import { GlobalContext } from '../app/(tabs)/_layout'
-
+import Insufficientbalance from './insufficientbalance'
 import { useContext } from 'react'
 
 const { width, height: screenHeight } = Dimensions.get('window');
@@ -24,6 +24,7 @@ const ScanCode = ({visibility, onClose}) => {
     const [rentalError, setRentalError] = useState(false);
     const [rentalErrorMessage, setRentalErrorMessage] = useState({tite:'',message:''})
     const [loading, setLoading] = useState(false)
+    const [balanceModal, setBalanceModal] = useState(false)
     const {apiToken, expoPushToken} = useContext(GlobalContext)
    
     const startRental = async (code) => {
@@ -58,6 +59,7 @@ const ScanCode = ({visibility, onClose}) => {
     
   } catch (error) {
       setLoading(false)
+      setBalanceModal(true)
       console.log('Error starting rental:', error)
       throw error; // Re-throw the error to be handled by the calling function
   }
@@ -191,6 +193,7 @@ const ScanCode = ({visibility, onClose}) => {
         <DialogueModal visibility={manualEnter} Title={'Enter code'} centered={true} content={'Please type in the code located below the QR Code'} affirmText={'Confirm'} negativeText={'Cancel'} titleStyles={'text-neutral-90 font-pmedium text-[16px]'} negativeButtonContainerStyles={'border-[1px] border-neutral-50'} affirmButtonContainerStyles={'bg-primary-50'} affirmTextStyles={'font-pregular text-[12px] leading-2'} negativeTextStyles={'text-neutral-70 text-[12px]'} textInput={dockerCode} setTextInput={setDockerCode} onResponse={(confirmed) => confirmed? handleScan() : setManualEnter(false)}  />
         <DialogueModal visibility={rentalError} Title={rentalErrorMessage.tite} content={rentalErrorMessage.message}  titleStyles={'text-critical-70 font-pmedium text-[16px]'} affirmText={'OK'} centered Icon={() => <CautionIcon/>} onResponse={() => setRentalError(false)}/>
         <LoaderModal visibility={loading} Title={'Wait a minute...'} content={'Verifying code'} Icon={() => <LoaderIcon />} />
+        <Insufficientbalance visibility={balanceModal} onClose={() => setBalanceModal(false)} />
       </Modal>
     </View>
   )

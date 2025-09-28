@@ -1,6 +1,6 @@
 import { View, Text, Pressable, TouchableOpacity, Animated, Dimensions } from 'react-native'
 import React, { useEffect, useState,useRef, createContext, useContext } from 'react'
-import { router, Tabs, usePathname } from 'expo-router'
+import { Link, router, Tabs, usePathname } from 'expo-router'
 import { AccountIcon, BellIcon, HeartIcon, HomeIcon, LocationIcon, QRIcon, RidesIcon, SearchIcon, WalletIcon, WalletTabIcon } from '../../assets/icons/svgIcons'
 import { useCameraPermissions } from 'expo-camera'
 import ScanCode from '../../components/ScanCode'
@@ -232,11 +232,7 @@ const TabsLayout = () => {
 
 
             <View style={{flexDirection:'row', gap:8, paddingRight: 16}}>
-            <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
-                <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}} >  
-                    <SearchIcon />
-                </TouchableOpacity>
-            </Animated.View>
+           
 
             <Animated.View style={{transform: [{ scale: scaleAnim }]}}>
                <TouchableOpacity className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20}} onPress={() => router.push('/account/favourites')}>
@@ -367,6 +363,8 @@ const TabsLayout = () => {
                 )
             }}
         />
+    
+
 
     </Tabs>
     </View>

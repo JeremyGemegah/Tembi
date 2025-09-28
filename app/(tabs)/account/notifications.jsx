@@ -1,4 +1,4 @@
-import { ScrollView, Text,View, TouchableOpacity,ActivityIndicator } from "react-native"
+import { ScrollView, Text,View, TouchableOpacity,ActivityIndicator, Image } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import NotificationItem from "../../../components/NotificationItem"
 import { BackIcon } from "../../../assets/icons/svgIcons"
@@ -115,7 +115,19 @@ const Notifications = () => {
             {loading ? (
                 <ActivityIndicator size="large" color="#FADD99" className="mt-8" />
             ) : allNotifications.length === 0 ? (
-                <Text className="text-center text-neutral-500 mt-8">You have no notifications.</Text>
+                 <View className="items-center justify-center" style={{flex:1}}>
+                                              <View className='mt-[70px]'>
+                                              <Image
+                                                source={require('../../../assets/images/noNotifications.png')}
+                                                resizeMode="contain"
+                                                className="h-[248px] self-center"
+                                              />
+                                              <View className="items-center">
+                                                <Text className="font-pmedium text-[18px]">No Notifications Yet</Text>
+                                            <Text className="text-center text-neutral-70 text-[14px]">You’ll see updates about your rides and activity here.</Text>
+                                                </View>
+                                            </View>
+                                            </View>
             ) : (
                 <>
                     <View className="gap-[8px]">

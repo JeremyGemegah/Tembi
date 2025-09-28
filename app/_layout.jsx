@@ -46,6 +46,7 @@ const MainLayout = () => {
         <Stack.Screen name='(onboarding)' options={{ headerShown: false}} />
         <Stack.Screen name='(auth)' options={{headerShown: false}} />
         <Stack.Screen name='(tabs)' options={{headerShown: false}} />
+        <Stack.Screen name='search' options={{headerShown: false, presentation: 'transparentModal', animation: 'fade'}} />
     </Stack> 
   )
 }

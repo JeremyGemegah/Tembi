@@ -3,11 +3,13 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { BackIcon, LocationIcon, LocationMarkerIcon } from '../assets/icons/svgIcons'
 import { router } from "expo-router"
 import { LinearGradient } from "expo-linear-gradient"
+import { ActivityIndicator } from "react-native"
 /* import MapView, {Marker} from "@googlemaps/react-native-navigation-sdk" */
 import MapView, {Marker} from "react-native-maps"
 import MapViewDirections from "react-native-maps-directions"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Modal } from "react-native"
+import { apiCall } from "./functions/functions"
 
 
 
@@ -20,13 +22,46 @@ const RideDetails = ({visibility,onClose,ride}) => {
     const rideEndDate = ride.end_time? new Date(ride?.end_time): null;
     const price = ride?.cost ? parseFloat(ride.cost).toFixed(2) : 0.00;
     const [destination, setDestination] = useState({latitude: 37.771707, longitude: -122.4053769})
-
+    const [loading, setLoading] = useState(false)
     const [origin, setOrigin] = useState({latitude: 37.3318456, longitude: -122.0296002})
 
+    useEffect(() => {
+      const getStations = async() => {
+        try {
+            const response = await apiCall('bikes/stations/');
+            return response;
+        }catch(error) {
+          console.error("Error fetching station ID:", error);
+        }
+      
+    }
+
+    const findLocations = async()=>{
+        setLoading(true);
+        const stations = getStations();
+        const startStation = (await stations).find(station => station.name === ride.start_docker.split(' | ')[1].trim());
+        const endStation = (await stations).find(station => station.name === ride.end_docker?.split(' | ')[1].trim());
+        console.log(startStation, endStation);
+        if (startStation) {
+
+            setOrigin({latitude: parseFloat(startStation?.location_point?.latitude), longitude: parseFloat(startStation?.location_point?.longitude)});
+            
+        }
+        if (endStation) {
+            setDestination({latitude: parseFloat(endStation?.location_point?.latitude), longitude: parseFloat(endStation?.location_point?.longitude)});
+          
+        }
+        setLoading(false);
+    }
+    findLocations();
+    
+    }, [])
+    
+
     return(
-        <Modal animationIn="slideInLeft"  visible={visibility}  onLayout={()=> setDisplay(true)}>
+        <Modal animationType="slide" visible={visibility} onRequestClose={onClose}>
         <SafeAreaView>
-        <ScrollView className="h-full bg-neutral-10 w-full" >
+        <ScrollView >
      
         <View  className="flex-row pt-[15px]">
             <TouchableOpacity onPress={() => onClose()} className="w-16 h-16 items-center justify-center">
@@ -42,12 +77,14 @@ const RideDetails = ({visibility,onClose,ride}) => {
         <View className='px-[16px] pb-[120]'>
             
         <View className='border-[2px] border-neutral-30 mb-[20px] mt-[16px] h-[260px] rounded-[12px]'>
+             {loading ? <ActivityIndicator size="large" color="#FADD99" style={{flex: 1}} /> : (
             <MapView
             style={{flex:1}}
                 initialRegion={{
-                        latitude: 37.3318456, longitude: -122.0296002,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421
+                        latitude: origin.latitude,
+                        longitude: origin.longitude,
+                        latitudeDelta: 0.00199,
+                        longitudeDelta: 0.0156
                     }}>
                         <MapViewDirections
                             origin={origin}
@@ -60,6 +97,7 @@ const RideDetails = ({visibility,onClose,ride}) => {
                         <Marker coordinate={origin} title="starting point"  />
                         <Marker coordinate={destination} title="end point" />
             </MapView>
+             )}
         </View>
 
             <View className='px-[12px]'>

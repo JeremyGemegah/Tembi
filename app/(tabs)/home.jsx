@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Pressable } from 'react-native'
 import React,{useRef, useState, useEffect, useContext} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView,{PROVIDER_GOOGLE ,Marker} from 'react-native-maps'
@@ -15,6 +15,9 @@ import axios from 'axios'
 import { router } from 'expo-router'
 import { GlobalContext } from './_layout';
 import { getSocket } from '../../components/functions/socket';
+import Animated,{withTiming, SharedTransition,SharedTransitionType} from 'react-native-reanimated'
+import { Link } from 'expo-router'
+import { SearchIcon } from '../../assets/icons/svgIcons'
 
 
 
@@ -41,6 +44,7 @@ const Home = () => {
     const modal = useRef()
     const ReserveBikeModal = useRef()
     
+   
 
     const handleMarkerSelect = (markerId) => {
       //this should be a toggle effect rather **************************************************************
@@ -296,6 +300,15 @@ const mapRef = useRef()
     <SafeAreaView>
     <View className=" w-full h-full "  >
       <View style={{position:'absolute', top:100, zIndex:3000, justifyContent:'center', alignItems:'center', width:'100%', display: fetchingDockers? 'flex':'none'}}><View style={{flex:1, paddingVertical:6, paddingHorizontal:12}} className='bg-primary-30 border-[1px] border-primary-70' ><Text className='text-primary-90'>Loading...</Text></View></View>
+ 
+                      <Link href={'/search'} asChild>
+                      <Pressable style={{top:100, zIndex:3000,flexDirection:'row', alignItems:'center'}}>
+                      <Animated.View sharedTransitionTag='searchTag'  className="p-[12px] rounded-full bg-neutral-10" style={{ shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.5)', shadowOpacity: 1,shadowRadius: 64, elevation: 20,left:16, right:200}} >  
+                                          <SearchIcon />
+                                      </Animated.View>
+                      </Pressable>
+                      </Link>
+                  
    
         <MapView  ref={mapRef}  style={StyleSheet.absoluteFill}  initialRegion={initial_position} provider={PROVIDER_GOOGLE}  showsUserLocation={true} showsMyLocationButton={false}    >
            

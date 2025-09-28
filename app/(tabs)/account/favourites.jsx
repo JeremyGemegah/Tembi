@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native"
+import { Text, TouchableOpacity, View, Image } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { BackIcon } from "../../../assets/icons/svgIcons"
 import { router } from "expo-router"
@@ -6,7 +6,7 @@ import FavouriteListing from "../../../components/FavouriteListing"
 import { ScrollView } from "react-native"
 
 const data = [
-    {
+/*     {
         location: "Parade Grounds Station",
         distance: 300,
         bikes: 7
@@ -19,7 +19,7 @@ const data = [
         location: "Pharmacy Building Station",
         distance: 989,
         bikes: 3
-    }
+    } */
 ]
 const Favourites = () => {
     return(
@@ -38,7 +38,20 @@ const Favourites = () => {
             <View className="px-[16px] gap-[16px] pt-[24px]">
             {data.length > 0 ? data.map((dock,index) => (
                     <FavouriteListing title={dock.location} distance={dock.distance} bikes={dock.bikes} key={index} />
-                )) : <Text className="text-center font-pregular">No Favourites yet</Text>}              
+                )) : <View className="items-center justify-center" style={{flex:1}}>
+                              <View className='mt-[70px]'>
+                              <Image
+                                source={require('../../../assets/images/noFavourites.png')}
+                                resizeMode="contain"
+                                className="h-[248px] self-center"
+                              />
+                              <View className="items-center">
+                                <Text className="font-pmedium text-[18px]">Nothing Saved</Text>
+                            <Text className="text-center text-neutral-70 text-[14px]">Keep your best spots close! Favourite a bike or station to see it here.</Text>
+                                </View>
+                            </View>
+                            </View>
+                }              
             </View>
         </ScrollView>
         </SafeAreaView>
