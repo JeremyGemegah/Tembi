@@ -13,6 +13,7 @@ import LoaderModal from './loaderModal'
 import { GlobalContext } from '../app/(tabs)/_layout'
 import Insufficientbalance from './insufficientbalance'
 import { useContext } from 'react'
+import { apiCall } from './functions/functions'
 
 const { width, height: screenHeight } = Dimensions.get('window');
 
@@ -29,34 +30,16 @@ const ScanCode = ({visibility, onClose}) => {
    
     const startRental = async (code) => {
       setLoading(true)
-      setManualEnter(false)
 
       try{
+/*         const jsonData = JSON.parse(code);
+ */        console.log(code)
+    
+        const response = await apiCall('rentals/start/', null, 'POST', JSON.parse(code));
         
-      const response = await fetch('https://tembi.onrender.com/api/rentals/start/', {
-          method: 'POST',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'User-Agent': 'BikeHiveApp/1.0', // It's good practice to have a proper user agent
-              'Authorization': `Token ${apiToken}`
-          },
-          body: JSON.stringify({
-              "docker": code,
-              "expo_push_token": expoPushToken
-          })
-      });
-
-      const responseData = await response.json();
-      setLoading(false)
-      if (!response.ok) {
-          const errorMessage = responseData.detail || responseData.error || JSON.stringify(responseData);
-          throw new Error(errorMessage);
-      }
-
-      return responseData;
-    
-    
+        setLoading(false);
+        setManualEnter(false);
+        return response;
   } catch (error) {
       setLoading(false)
       setBalanceModal(true)
@@ -68,6 +51,7 @@ const ScanCode = ({visibility, onClose}) => {
     const handleScan = async (scannedCode) => {
       const code = scannedCode || dockerCode;
       if(loading) return; // Prevent multiple scans while loading
+      
 
       if (!code) {
           setRentalErrorMessage({title:'No code entered', message:'You must enter or scan a code to start'})
@@ -93,6 +77,7 @@ const ScanCode = ({visibility, onClose}) => {
 
       try {
           setLoading(true);
+          // Pass the raw code string to startRental
           const data = await startRental(code);
           console.log("Rental started (API):", data);
           // Pass the callback to the listener. It will be called to confirm success/failure.

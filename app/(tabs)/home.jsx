@@ -18,6 +18,7 @@ import { getSocket } from '../../components/functions/socket';
 import Animated,{withTiming, SharedTransition,SharedTransitionType} from 'react-native-reanimated'
 import { Link } from 'expo-router'
 import { SearchIcon } from '../../assets/icons/svgIcons'
+import { apiCall } from '../../components/functions/functions'
 
 
 
@@ -43,6 +44,7 @@ const Home = () => {
     const [unlockModal, setUnlockModal] = useState(false) // tracks whether the modal for docker code acception is opened
     const modal = useRef()
     const ReserveBikeModal = useRef()
+    const reconnectAttempt = useRef(0);
     
    
 
@@ -76,7 +78,7 @@ const Home = () => {
       const bikeIdToReserve = selectedMarker; // This is likely incorrect, it should be a bike ID.
 
       try {
-        const response = await fetch(`https://tembi.onrender.com/api/bikes/bikes/${bikeIdToReserve}`, {
+        /* const response = await fetch(`https://tembi.onrender.com/api/bikes/bikes/${bikeIdToReserve}`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
@@ -89,7 +91,9 @@ const Home = () => {
           throw new Error(`Failed to reserve bike: ${response.status} ${errorText}`);
         }
 
-        const data = await response.json();
+        const data = await response.json(); */
+
+        const data = apiCall(`bikes/bikes/${bikeIdToReserve}`, null, 'GET');
         setReservedBike(data);
         
 
@@ -194,51 +198,63 @@ const Home = () => {
         setUnlockModal(true)
         setRideActive(true)
         modal.current.startTimer()
-        
-        // --- START: WebSocket connection logic ---
-        if (ws.current) {
-          ws.current.close();
-        }
 
-        if (!apiToken) {
-          const authError = new Error("Could not connect to real-time service. Please log in again.");
-          if (callback) callback(authError);
-          return;
-        }
-
-        console.log('Attempting to establish WebSocket connection...');
-        ws.current = new WebSocket(`wss://tembi.onrender.com/ws/notifications/?token=${apiToken}`);
-        
-        ws.current.onopen = () => {
-          console.log('Native WebSocket connection established.');
-          // Use the callback to signal success to the ScanCode component
-          if (callback) callback(null);
-        };
-        
-        ws.current.onmessage = e => {
-          
-          const data = JSON.parse(e.data);
-          if(data?.data?.status === 'completed'){
-            console.log(e)
-            setRideActive(false)
-            setUnlockModal(false)
-            modal.current.endAndPayRide(data?.data?.message);
+        const connectWebSocket = (cb) => {
+          if (ws.current) {
+            ws.current.close();
           }
+  
+          if (!apiToken) {
+            const authError = new Error("Could not connect to real-time service. Please log in again.");
+            if (cb) cb(authError);
+            return;
+          }
+  
+          console.log('Attempting to establish WebSocket connection...');
+          ws.current = new WebSocket(`wss://tembi.onrender.com/ws/notifications/?token=${apiToken}`);
           
-        };
-        
-        ws.current.onerror = e => {
-          console.log('WebSocket error:', e);
-          // Use the callback to report an error
-          const wsError = new Error('Real-time connection failed. Please try again.');
-          if (callback) callback(wsError);
-        };
-        
-        ws.current.onclose = e => {
-          console.log('WebSocket closed:', e.code, e);
-          ws.current = null; // Nullify the ref on close
-        };
-        // --- END: WebSocket connection logic ---
+          ws.current.onopen = () => {
+            console.log('Native WebSocket connection established.');
+            reconnectAttempt.current = 0; // Reset on successful connection
+            // Use the callback to signal success to the ScanCode component
+            if (cb) cb(null);
+          };
+          
+          ws.current.onmessage = e => {
+            const data = JSON.parse(e.data);
+            if(data?.data?.status === 'completed'){
+              console.log('Ride completed message received:', e.data);
+              setRideActive(false);
+              setUnlockModal(false);
+              modal.current.endAndPayRide(data?.data?.message);
+            }
+          };
+          
+          ws.current.onerror = e => {
+            console.log('WebSocket error:', e.message);
+            // The onclose event will be fired next, which will handle reconnection.
+            const wsError = new Error('Real-time connection failed. Please try again.');
+            if (cb) cb(wsError);
+          };
+          
+          ws.current.onclose = e => {
+            console.log('WebSocket closed:', e.code, e.reason);
+            ws.current = null; // Nullify the ref on close
+            if (rideActive) { // Only reconnect if the ride is supposed to be active
+              reconnectAttempt.current += 1;
+              const delay = Math.min(30000, (2 ** reconnectAttempt.current) * 1000); // Exponential backoff
+              console.log(`WebSocket disconnected. Attempting to reconnect in ${delay / 1000}s...`);
+              setTimeout(() => {
+                if (rideActive) { // Double-check if ride is still active before reconnecting
+                  connectWebSocket(); // Reconnect without the initial callback
+                }
+              }, delay);
+            }
+          };
+        }
+
+        // Initial connection
+        connectWebSocket(callback);
       } catch (error) {
         // Catch any other synchronous errors and report them
         if (callback) callback(error);
@@ -264,21 +280,7 @@ const Home = () => {
       }
       try {
         setFetchingDockers(true);
-        const response = await fetch('https://tembi.onrender.com/api/bikes/stations/', {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': `Token ${apiToken}`
-          }
-        });
-
-        if (!response.ok) {
-          const error = new Error('Failed to fetch stations');
-          error.status = response.status;
-          throw error;
-        }
-
-        const data = await response.json();
+        const data = await apiCall('bikes/stations', null, 'GET');
         setMarkers(data);
 
       } catch (error) {
