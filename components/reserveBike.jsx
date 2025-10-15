@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import CircleTimer from './circleTimer'
 import DialogueModal from './dialogueModal'
 import { GlobalContext } from '../app/(tabs)/_layout'
-
+import { apiCall } from './functions/functions'
 
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window')
@@ -94,28 +94,14 @@ const ReserveBike = forwardRef((props,ref) => {
     scrollTo(SCREEN_HEIGHT)
     props.setReservationActive(false) 
     try {
-       
-        await fetch(`https://tembi.onrender.com/api/rentals/reservations/${reservationDetails.id}/cancel/`, {
-    method: 'PATCH',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-      'Authorization': `Token ${apiToken}`
-    }
-  }).then(async (res) => {
-        if (!res.ok) {
-          const errorText = await res.text();
-          throw new Error(`HTTP error! status: ${res.status}, body: ${errorText}`);
+        if (!reservationDetails?.id) {
+          throw new Error("No reservation details found to unlock bike.");
         }
-        return res.json();
-      })
-          
-        
+        await apiCall(`rentals/reservations/${reservationDetails.id}/cancel/`, null, 'PATCH');
         setDialogueVisible(false)
         cancelReservation()
       } catch (error) {
-        console.log(error)
+        console.error("Failed to unlock bike by canceling reservation:", error);
       }
     props.modalRegister()
   }
@@ -137,35 +123,20 @@ const ReserveBike = forwardRef((props,ref) => {
    if(!props.reservationActive){
     const activeOffer = offers.find(item => item.active);
     try {
+      const payload = {
+        "station": props.docker?.id || 0,
+        "duration_minutes": activeOffer?.time.toString() ?? "15"
+      };
 
-       await fetch(`https://tembi.onrender.com/api/rentals/reserve/`, {
-  method: 'POST',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-    'Authorization': `Token ${apiToken}`
-  },
-  body: JSON.stringify({
-    // TODO: Ensure you are passing the correct station ID from props.
-    "station": props.docker?.id || 0,
-    "duration_minutes": activeOffer?.time.toString() ?? "15"
-  })
-})
-      .then(async (res) => {
-        if (!res.ok) {
-          const errorText = await res.text();
-          throw new Error(`HTTP error! status: ${res.status}, body: ${errorText}`);
-        }
-        return res.json();
-      })
-       .then(data => {setReservationDetails(data); console.log(data)})
-      
-      
-      props.setReservationActive(true)
-       setReservationActive(true)
-        timerRef.current?.startAnim()
-      
+      const data = await apiCall('rentals/reserve/', null, 'POST', payload);
+
+      setReservationDetails(data);
+      console.log("Reservation started:", data);
+
+      props.setReservationActive(true);
+      setReservationActive(true);
+      timerRef.current?.startAnim();
+
     } catch (error) {
       console.log('could not start reservation'+error)
     }
@@ -177,28 +148,15 @@ const ReserveBike = forwardRef((props,ref) => {
   const onResponse = async (boolans) => {
     if(boolans){
       try {
-       
-        await fetch(`https://tembi.onrender.com/api/rentals/reservations/${reservationDetails.id}/cancel/`, {
-    method: 'PATCH',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-      'Authorization': `Token ${apiToken}`
-    }
-  }).then(async (res) => {
-        if (!res.ok) {
-          const errorText = await res.text();
-          throw new Error(`HTTP error! status: ${res.status}, body: ${errorText}`);
+        if (!reservationDetails?.id) {
+          throw new Error("No reservation details found to cancel.");
         }
-        return res.json();
-      })
-          
-        
+        await apiCall(`rentals/reservations/${reservationDetails.id}/cancel/`, null, 'PATCH');
         setDialogueVisible(false)
         cancelReservation()
       } catch (error) {
-        console.log(error)
+        console.error("Failed to cancel reservation:", error);
+        // Optionally show an alert to the user
       }
     } else{
       setDialogueVisible(false)

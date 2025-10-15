@@ -9,7 +9,7 @@ import DialogueModal from './dialogueModal'
 import RideCompleteModal from './rideCompleteModal'
 import { GlobalContext } from '../app/(tabs)/_layout'
 import { useContext } from 'react'
-import { sendPushNotification } from './functions/functions'
+import { apiCall, sendPushNotification } from './functions/functions'
 
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window')
@@ -96,51 +96,23 @@ const DockerDetails = forwardRef((props,ref) => {
         setLoading(true)
       
         try {
-          const response = await fetch('https://tembi.onrender.com/api/rentals/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
-          'User-Agent': 'Mozilla/5  .0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-          'Authorization': `Token ${apiToken}`
-        }
-    
-      })
+          // First, get the list of current rentals to find the active one.
+          const rentals = await apiCall('rentals/', null, 'GET');
+          if (!rentals || rentals.length === 0) {
+            throw new Error("No active rental found.");
+          }
+          const activeRentalId = rentals[0].id;
 
-      const data = await response.json()
-      
+          // Then, send the request to end the specific rental.
+          const endedRental = await apiCall(`rentals/${activeRentalId}/`, null, 'GET');
 
-          await fetch(`https://tembi.onrender.com/api/rentals/${data[0].id}/`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-          'Authorization': `Token ${apiToken}`
-        }
-    
-      })
-            .then(data => {return data.json()})
-            .then((data) => {
-              if (!data.id) {
-                throw new Error(data);
-              }
-              return data;
-            })
-            .then(data => {
-              if (data.status === 'completed') {
-                setCompletedRide(data)
-                console.log('Ride ended successfully:', data);
-                endAndPayRide()
-              }else{
-                throw new Error()
-              }
-            })
-            .catch(err => {throw new Error(err)}
-            )
-
+          if (endedRental.status === 'completed') {
+            setCompletedRide(endedRental);
+            console.log('Ride ended successfully:', endedRental);
+            endAndPayRide();
+          } else {
+            throw new Error("Failed to confirm ride completion from the server.");
+          }
           
         } catch (error) {
           setRideError(true) //when there is an error packing
@@ -222,19 +194,12 @@ const DockerDetails = forwardRef((props,ref) => {
     const endAndPayRide = async (message) => {
       sendPushNotification(expoPushToken,title='Ride Ended', body=message || 'Your ride has ended successfully. Thank you for using Tembi!')
 
-    await fetch('https://tembi.onrender.com/api/rentals/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Accept-Encoding': 'deflate, gzip', // Note: This is usually handled automatically by the browser
-          'User-Agent': 'Mozilla/5  .0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-          'Authorization': `Token ${apiToken}`
-        }
-    
-      }).then(response => {return response.json()})
-      .then(data => { setCompletedRide(data[0])})
-
+      try {
+        const rentals = await apiCall('rentals/', null, 'GET');
+        setCompletedRide(rentals[0]);
+      } catch (error) {
+        console.error("Could not fetch final ride details:", error);
+      }
       props.setRideActive(false)
         clearInterval(timerInterval.current)
         setRideError(false)

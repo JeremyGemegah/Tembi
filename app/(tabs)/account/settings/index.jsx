@@ -9,6 +9,7 @@ import CustomRadio from '../../../../components/Customradio'
 import DialogueModal from '../../../../components/dialogueModal'
 import * as SecureStore from 'expo-secure-store'
 import { GlobalContext } from '../../_layout'
+import { apiCall } from '../../../../components/functions/functions'
 
 
 
@@ -37,42 +38,21 @@ const Settings = () => {
 
       const logoutModalResponse = async (val) => {
         if(val){
-       
-          
           try {
-                 
-                
-                  const url = 'https://tembi.onrender.com/api/users/logout/'
+                  // Use the apiCall function for the logout request.
+                  await apiCall('users/logout/', null, 'POST');
                   
-          
-                  const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                      'Accept': 'application/json',
-                      'Content-Type': 'application/json',
-                      'Authorization': `Token ${apiToken}`
-                    }
-                 
-                  });
-          
-                  if (!response.ok) {
-                      throw new Error()
-          
-                    }else{
-                      setLogoutModal(false)
-                      deleteToken('api_token')
-                      deleteToken('user')
-                     
-                      router.replace('/sign-in')
-
-                    }
+                  setLogoutModal(false);
+                  deleteToken('api_token');
+                  deleteToken('user');
+                  
+                  router.replace('/sign-in');
                 } catch (error) {
-                  
-                  setLogoutError(true)
-                
-        }finally{
-          setLogoutModal(false)
-        }
+                  console.error('Logout failed:', error);
+                  setLogoutError(true);
+                } finally {
+                  setLogoutModal(false);
+                }
       }
         else{
           setLogoutModal(false)

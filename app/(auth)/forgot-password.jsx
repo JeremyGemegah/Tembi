@@ -5,7 +5,8 @@ import { ScrollView } from 'react-native'
 import TextField from '../../components/TextField'
 import CustomButton from '../../components/CustomButton'
 import { router } from 'expo-router'
-import { BackIcon } from '../../assets/icons/svgIcons'
+import { BackIcon, LoaderIcon } from '../../assets/icons/svgIcons'
+import { apiCall } from '../../components/functions/functions'
 
 
 
@@ -16,6 +17,7 @@ const ForgotPassword = () => {
       });
       const [formState, setFormState] = useState({email:{state:'normal', message:'',error:false}})
       const [displayMessages, setDisplayMessages] = useState(false)
+      const [loading, setLoading] = useState(false)
   
      const handleFormChange = (fieldName, value) => {
   
@@ -47,49 +49,26 @@ const ForgotPassword = () => {
     
    
     if(validInputs){
+      setLoading(true)
       try {
-        console.log(form)
         setDisplayMessages(false)
-      const url = 'https://tembi.onrender.com/api/users/forgot-password/';
-      
-      const data = `{
-  "email": "${form.email}"
-}`;
-
-const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-        "accept": "application/json",
-        "Content-Type": "application/json"
-      
-    },
-    body: data
-});
-
-
-
-if(!response.ok){
-  const text = await response.text()
-  throw new Error(text)
-}else{
-  //tell user to check their email
-  const text = await response.text()
-  console.log("login successful",text)
-  router.push('/reset-password')
-
-
-
-/* 
-saveToken('signedup', 'true')
-saveToken('verified', 'false') */
-}
-
-
-} catch (error) {
-      console.error('Error:', error) 
-      //handle error
+        const response = await apiCall('users/forgot-password/', null, 'POST', { email: form.email });
+        console.log("Password reset email sent:", response);
+        // Navigate to a confirmation screen or the next step
+        router.push('/reset-password');
+      } catch (error) {
+        console.error('Forgot password error:', error);
+        // You can add more specific error handling here if needed
+        setFormState((prev) => ({
+          ...prev,
+          email: { state: 'error', message: 'An error occurred. Please try again.', error: true }
+        }));
+        setDisplayMessages(true);
+      } finally {
+        setLoading(false);
+      }
     }
-  }else{
+   else{
     setDisplayMessages(true)
   }
 }
@@ -128,7 +107,7 @@ saveToken('verified', 'false') */
                           handleTextChange={(text) => handleFormChange('email', text)}
                         />
             
-            <CustomButton title={"Continue"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleSubmit}/>
+            <CustomButton title={"Continue"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleSubmit} isLoading={loading} />
 
           </View>
         </View>

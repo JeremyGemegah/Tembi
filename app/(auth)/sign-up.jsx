@@ -7,6 +7,7 @@ import GoogleSigninButton from '../../components/GoogleSigninButton'
 import CustomButton from '../../components/CustomButton'
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store'
+import { apiCall } from '../../components/functions/functions';
 
 
 
@@ -21,6 +22,7 @@ const SignUp = () => {
   });
   const [formState, setFormState] = useState({full_name:{state:'normal', message:'',error:false},email:{state:'normal', message:'',error:false},phone:{state:'normal', message:'',error:false},password:{state:'normal', message:'',error:false},confirm_password:{state:'normal', message:'',error:false}})
   const [displayMessages, setDisplayMessages] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleFormChange = (fieldName, value) => {
     const processedValue = fieldName === 'phone' ? value.replace(/[^0-9]/g, '') : value;
@@ -105,9 +107,8 @@ async function saveToken(key, value) {
 
     if (validInputs) {
       setDisplayMessages(false);
+      setLoading(true);
       try {
-        const url = 'https://tembi.onrender.com/api/users/register/';
-
         const payload = {
           email: form.email,
           full_name: form.full_name,
@@ -115,34 +116,25 @@ async function saveToken(key, value) {
           password: form.password,
           confirm_password: form.confirm_password,
         };
+        
+        await apiCall('users/register/', null, 'POST', payload);
 
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
+        Alert.alert(
+          'Registration Successful',
+          'Please check your email to verify your account.'
+        );
+        await saveToken('signedup', 'true');
+        await saveToken('verified', 'false');
+        await saveToken('displayedOnboarding', 'true');
+        
+        // Optionally, navigate the user to the sign-in screen
+        router.push('/sign-in');
 
-        if (response.ok) {
-          await response.json();
-          Alert.alert(
-            'Registration Successful',
-            'Please check your email to verify your account.'
-          );
-          await saveToken('signedup', 'true');
-          await saveToken('verified', 'false');
-          await saveToken('displayedOnboarding', 'true');
-         
-        } else {
-          const errorData = await response.json();
-          const errorMessage = Object.values(errorData).flat().join('\n') || 'Registration failed. Please try again.';
-          throw new Error(errorMessage);
-        }
       } catch (error) {
         console.error('Error:', error);
         Alert.alert('Registration Error', error.message);
+      } finally {
+        setLoading(false);
       }
     } else {
       setDisplayMessages(true);
@@ -241,7 +233,7 @@ async function saveToken(key, value) {
               handleTextChange={(text) => handleFormChange('confirm_password', text)}
             />
             
-            <CustomButton title={"Create Account"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleRegister} />
+            <CustomButton title={"Create Account"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleRegister} isLoading={loading} />
             {/* <View className="flex-1 items-center flex-row">
               <View className="h-[1px] flex-1 bg-neutral-50 ">
 

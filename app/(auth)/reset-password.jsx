@@ -1,12 +1,12 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React,{useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
 import TextField from '../../components/TextField'
-import GoogleSigninButton from '../../components/GoogleSigninButton'
 import CustomButton from '../../components/CustomButton'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { BackIcon } from '../../assets/icons/svgIcons'
+import { apiCall } from '../../components/functions/functions'
 
 
 const ResetPassword = () => {
@@ -18,6 +18,8 @@ const ResetPassword = () => {
     });
     const [formState, setFormState] = useState({password:{state:'normal', message:'',error:false},confirm_password:{state:'normal', message:'',error:false}})
     const [displayMessages, setDisplayMessages] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const params = useLocalSearchParams();
 
     const handleFormChange = (fieldName, value) => {
     const processedValue = fieldName === 'phone' ? value.replace(/[^0-9]/g, '') : value;
@@ -88,41 +90,34 @@ const ResetPassword = () => {
       
           if (validInputs) {
             setDisplayMessages(false);
+            setLoading(true);
             try {
-              const url = 'https://tembi.onrender.com/api/users/reset-password/uid/token/';
-      
-              const payload = {
+              const { uid, token } = params;
+              if (!uid || !token) {
+                throw new Error("Invalid or expired password reset link.");
+              }
 
+              const endpoint = `users/reset-password/${uid}/${token}/`;
+              const payload = {
                 password: form.password,
                 confirm_password: form.confirm_password
               };
       
-              const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-              });
-      
-              if (response.ok) {
-                await response.json();
-                Alert.alert(
-                  'Registration Successful',
-                  'Please check your email to verify your account.'
-                );
-               /*  await saveToken('signedup', 'true');
-                await saveToken('verified', 'false'); */
-                router.push('/sign-in');
-              } else {
-                const errorData = await response.json();
-                const errorMessage = Object.values(errorData).flat().join('\n') || 'Registration failed. Please try again.';
-                throw new Error(errorMessage);
-              }
+              await apiCall(endpoint, null, 'POST', payload);
+
+              Alert.alert(
+                'Password Reset',
+                'Your password has been successfully reset. You can now sign in.'
+              );
+              router.replace('/sign-in');
+
             } catch (error) {
               console.error('Error:', error);
-              Alert.alert('Registration Error', error.message);
+              // Display specific backend errors if available
+              Alert.alert('Reset Error', error.message || 'Could not reset password. Please try again.');
+              setDisplayMessages(true);
+            } finally {
+              setLoading(false);
             }
           } else {
             setDisplayMessages(true);
@@ -177,7 +172,7 @@ const ResetPassword = () => {
               handleTextChange={(text) => handleFormChange('confirm_password', text)}
             />
             
-            <CustomButton title={"Reset Password"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleSubmit} />
+            <CustomButton title={"Reset Password"} containerStyles={"mt-[24px] bg-primary-50"} handlePress={handleSubmit} isLoading={loading} />
       
           </View>
         </View>
