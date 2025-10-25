@@ -54,7 +54,7 @@ const payment = () => {
     return () => {
       // Cleanup if needed
     }
-  }, [])
+  }, [addscreen])
   
 
 

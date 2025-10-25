@@ -67,8 +67,8 @@ const ScanCode = ({visibility, onClose}) => {
         if (error) {
           // The listener in home.jsx reported an error.
           setRentalErrorMessage({ title: 'Session Error', message: error.message });
-          throw error; // Re-throw the error to be caught by the catch block below
           setRentalError(true);
+          throw error; // Re-throw the error to be caught by the catch block below
         } else {
           // Success! The listener is ready, so we can close the scanner.
           onClose();

@@ -42,8 +42,8 @@ export async function getUserData() {
 }
 
 export async function apiCall(endpoint,token, method = 'GET', body = null) {
-  /* const apiToken = token || await getAPIToken(); */
-  const apiToken = '9f9552b07eb9521393560f2930828a41fe3ad97a'
+  const apiToken = token || await getAPIToken();
+  
 
 
   const headers = {
@@ -62,8 +62,8 @@ export async function apiCall(endpoint,token, method = 'GET', body = null) {
     options.body = JSON.stringify(body);
   }
 
-  /* const response = await fetch(`https://tembi.onrender.com/api/${endpoint}`, options); */
-  const response = await fetch(`https://cautious-space-cod-wrrrgqjx9xxh996j-8000.app.github.dev/api/${endpoint}`, options);
+  const response = await fetch(`https://tembi.onrender.com/api/${endpoint}`, options);
+  /* const response = await fetch(`https://cautious-space-cod-wrrrgqjx9xxh996j-8000.app.github.dev/api/${endpoint}`, options); */
   
   if (!response.ok) {
     

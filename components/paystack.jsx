@@ -46,13 +46,16 @@ const Paystack = ({visible, onClose, uri, onPaymentComplete, onPaymentStatus}) =
         try {
           const message = JSON.parse(e.data);
           // IMPORTANT: Adjust this condition based on the actual message from your backend
-          if (message?.type === 'payment_update' && message?.data?.status) {
+          if (message?.type === 'payment_update' && message?.data?.status === "success") {
             console.log('Payment status received:', message.data.status);
             if (onPaymentStatus) {
               onPaymentStatus(message.data.status); // e.g., 'successful' or 'failed'
             }
-            ws.current.close(); // Close connection after getting the status
-          }
+            ws.current.close();
+            onClose();
+          } // Close connection after getting the status
+            
+          
         } catch (error) {
           console.error('Error parsing WebSocket message:', error);
         }

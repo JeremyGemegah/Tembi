@@ -55,7 +55,7 @@ const AddCustomAmount = ({visibility, onClose}) => {
         return () => {
           // Cleanup if needed
         }
-      }, [])
+      }, [modal, addscreen])
       
     
     
